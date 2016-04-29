@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import teamten.tacoma.uw.edu.doit.model.DummyContent;
+import teamten.tacoma.uw.edu.doit.model.DoItListCollection;
 
 public class DoItStationActivity extends AppCompatActivity implements DoItStationFragment.OnDoItStationFragmentInteractionListener {
 
@@ -30,7 +30,7 @@ public class DoItStationActivity extends AppCompatActivity implements DoItStatio
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(DoItListCollection.DoItList item) {
 
     }
 }
