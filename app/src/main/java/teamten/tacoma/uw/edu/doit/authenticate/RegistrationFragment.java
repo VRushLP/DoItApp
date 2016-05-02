@@ -80,6 +80,8 @@ public class RegistrationFragment extends Fragment {
                 ((AuthenticationActivity) getActivity()).login(userId, pwd);
             }
         });
+
+        getActivity().setTitle("Register New Account");
         return v;
     }
 
