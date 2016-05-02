@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import teamten.tacoma.uw.edu.doit.model.DummyContent;
-import teamten.tacoma.uw.edu.doit.model.DummyContent.DummyItem;
+import teamten.tacoma.uw.edu.doit.model.DoItListCollection;
+import teamten.tacoma.uw.edu.doit.model.DoItListCollection.DoItList;
 
 /**
  * A fragment representing a list of Items.
@@ -67,7 +67,8 @@ public class DoItStationFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItListCollection.ITEMS, mListener));
         }
         return view;
     }
@@ -101,6 +102,7 @@ public class DoItStationFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDoItStationFragmentInteractionListener {
-        void onListFragmentInteraction(DummyItem item);
+
+        void onListFragmentInteraction(DoItList item);
     }
 }
