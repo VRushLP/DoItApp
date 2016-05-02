@@ -11,9 +11,10 @@ import android.widget.Toast;
 
 import java.io.OutputStreamWriter;
 
+import teamten.tacoma.uw.edu.doit.DoItStationActivity;
 import teamten.tacoma.uw.edu.doit.R;
 
-public class AuthenticationActivity extends AppCompatActivity implements LogInFragment.LoginInteractionListener {
+public class AuthenticationActivity extends AppCompatActivity implements LogInFragment.LoginInteractionListener, RegistrationFragment.RegistrationInteractionListener{
 
     private SharedPreferences mSharedPreferences;
 
@@ -22,21 +23,20 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_authentication_login_and_reg, new LogInFragment() )
+                .add(R.id.authentication_activity, new LogInFragment() )
                 .commit();
 
-        mSharedPreferences = getSharedPreferences(getString(R.string)
+        mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
         if (!mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.login_fragment_container, new LoginFragment())
+                    .add(R.id.authentication_activity, new LogInFragment())
                     .commit();
         } else {
-            Intent i = new Intent(this, CourseActivity.class);
+            Intent i = new Intent(this, DoItStationActivity.class);
             startActivity(i);
             finish();
         }
-
     }
 
     @Override
@@ -72,9 +72,13 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 .putBoolean(getString(R.string.LOGGEDIN), true)
                 .commit();
 
-        Intent i = new Intent(this, CourseActivity.class);
+        Intent i = new Intent(this, DoItStationActivity.class);
         startActivity(i);
         finish();
     }
 
+    @Override
+    public void register() {
+
+    }
 }

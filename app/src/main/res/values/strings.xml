@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">DoIt</string>
-    <string name="title_activity_do_it_stationa">DoItStationaActivity</string>
+    <string name="title_activity_do_it_station">DoItStationaActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_logout">Logout</string>
+    <string name="LOGGEDIN">loggedin</string>
+
+    <string name="LOGIN_PREFS">edu.uw.tacoma.teamten.doit.PREFS</string>
+    <string name="LOGIN_FILE"> edu.uw.tacoma.teamten.doit.LOGIN_FILE</string>
+
 </resources>

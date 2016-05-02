@@ -4,35 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="teamten.tacoma.uw.edu.doit.authenticate.RegistrationFragment">
+
     <EditText
-        android:id="@+id/email_edittext_input"
+        android:id="@+id/register_edit_text_userid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="email" />
+        android:hint="Enter your userid"
+        android:layout_gravity="top"/>
     <EditText
-        android:id="@+id/firstName_edittext_input"
+        android:id="@+id/register_edit_text_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="first name (optional)" />
+        android:inputType="textPassword"
+        android:hint="Enter your password"
+        android:layout_gravity="top"/>
     <EditText
-        android:id="@+id/lastName_edittext_input"
+        android:id="@+id/register_edit_text_password_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="last name (optional)" />
-    <EditText
-        android:id="@+id/password_edittext_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="password" />
+        android:inputType="textPassword"
+        android:hint="Enter the same password"
+        android:layout_gravity="top"/>
+
     <Button
-        android:id="@+id/register_button"
-        android:text="Register"
+        android:id="@+id/finish_button"
+        android:text="Finish registering"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"/>
-
+        android:layout_gravity="left"/>
 </LinearLayout>

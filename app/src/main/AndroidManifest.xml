@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".DoItStationActivity"
-            android:label="@string/title_activity_do_it_stationa"
+            android:label="@string/title_activity_do_it_station"
             android:parentActivityName=".authenticate.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

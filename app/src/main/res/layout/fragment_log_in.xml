@@ -6,20 +6,37 @@
     tools:context="teamten.tacoma.uw.edu.doit.authenticate.LogInFragment">
 
     <EditText
+        android:id="@+id/signin_edit_text_userid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="email" />
+        android:hint="Enter your userid"
+        android:layout_gravity="top"/>
     <EditText
+        android:id="@+id/signin_edit_text_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="password" />
-    <Button
-        android:id="@+id/signin_button"
-        android:text="Sign In"
-        android:layout_width="wrap_content"
+        android:inputType="textPassword"
+        android:hint="Enter your password"
+        android:layout_gravity="top"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"/>
+        android:layout_gravity="bottom">
+        <Button
+            android:id="@+id/registration_button"
+            android:text="Register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"/>
+
+        <Button
+            android:id="@+id/signin_button"
+            android:text="Sign In"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"/>
+    </LinearLayout>
 
 </LinearLayout>
