@@ -3,9 +3,13 @@ package teamten.tacoma.uw.edu.doit.authenticate;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import teamten.tacoma.uw.edu.doit.R;
 
@@ -23,8 +27,64 @@ public class RegistrationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration, container, false);
+// Inflate the layout for this fragment
+        View v =  inflater.inflate(R.layout.fragment_log_in, container, false);
+        final EditText userIdText = (EditText) v.findViewById(R.id.register_edit_text_userid);
+        final EditText pwdText = (EditText) v.findViewById(R.id.register_edit_text_password);
+        final EditText pwdConfirm = (EditText) v.findViewById(R.id.register_edit_text_password_confirm);
+        Button finishRegisterButton = (Button) v.findViewById(R.id.finish_button);
+
+        finishRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userId = userIdText.getText().toString();
+                String pwd = pwdText.getText().toString();
+                if (TextUtils.isEmpty(userId)) {
+                    Toast.makeText(v.getContext(), "Enter userid"
+                            , Toast.LENGTH_SHORT)
+                            .show();
+                    userIdText.requestFocus();
+                    return;
+                }
+                if (!userId.contains("@")) {
+                    Toast.makeText(v.getContext(), "Enter a valid email address"
+                            , Toast.LENGTH_SHORT)
+                            .show();
+                    userIdText.requestFocus();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(pwd)) {
+                    Toast.makeText(v.getContext(), "Enter password"
+                            , Toast.LENGTH_SHORT)
+                            .show();
+                    pwdText.requestFocus();
+                    return;
+                }
+                if (pwd.length() < 6) {
+                    Toast.makeText(v.getContext(), "Enter password of at least 6 characters"
+                            , Toast.LENGTH_SHORT)
+                            .show();
+                    pwdText.requestFocus();
+                    return;
+                }
+
+                if(!pwd.equals(pwdConfirm)){
+                    Toast.makeText(v.getContext(), "Your password fields must match",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                    pwdConfirm.requestFocus();
+                    return;
+                }
+
+                ((AuthenticationActivity) getActivity()).login(userId, pwd);
+            }
+        });
+        return v;
     }
 
+
+    public interface RegistrationInteractionListener {
+        public void register();
+    }
 }
