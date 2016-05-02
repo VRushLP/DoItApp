@@ -1,13 +1,37 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="teamten.tacoma.uw.edu.doit.authenticate.RegistrationFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <EditText
+        android:id="@+id/register_edit_text_userid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="Enter your userid"
+        android:layout_gravity="top"/>
+    <EditText
+        android:id="@+id/register_edit_text_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="Enter your password"
+        android:layout_gravity="top"/>
+    <EditText
+        android:id="@+id/register_edit_text_password_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="Enter the same password"
+        android:layout_gravity="top"/>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/finish_button"
+        android:text="Finish registering"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"/>
+
+</LinearLayout>
