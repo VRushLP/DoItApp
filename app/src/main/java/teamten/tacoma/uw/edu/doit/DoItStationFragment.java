@@ -67,6 +67,7 @@ public class DoItStationFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
             recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItListCollection.ITEMS, mListener));
         }
         return view;
@@ -101,6 +102,7 @@ public class DoItStationFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDoItStationFragmentInteractionListener {
+
         void onListFragmentInteraction(DoItList item);
     }
 }

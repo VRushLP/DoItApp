@@ -6,16 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
+import teamten.tacoma.uw.edu.doit.DoItStationFragment.OnDoItStationFragmentInteractionListener;
+
 import teamten.tacoma.uw.edu.doit.model.DoItListCollection.DoItList;
+
 
 import java.util.List;
 
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
+
     private final List<DoItList> mValues;
     private final DoItStationFragment.OnDoItStationFragmentInteractionListener mListener;
 
     public MyDoItListRecyclerViewAdapter(List<DoItList> items, DoItStationFragment.OnDoItStationFragmentInteractionListener listener) {
+
         mValues = items;
         mListener = listener;
     }
@@ -54,6 +60,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
+
         public DoItList mItem;
 
         public ViewHolder(View view) {

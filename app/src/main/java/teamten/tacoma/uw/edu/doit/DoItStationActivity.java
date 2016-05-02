@@ -9,6 +9,7 @@ import android.view.View;
 
 import teamten.tacoma.uw.edu.doit.model.DoItListCollection;
 
+
 public class DoItStationActivity extends AppCompatActivity implements DoItStationFragment.OnDoItStationFragmentInteractionListener {
 
     @Override
