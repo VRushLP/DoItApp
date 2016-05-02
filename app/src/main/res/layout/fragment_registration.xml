@@ -5,21 +5,25 @@
     android:layout_height="match_parent"
     tools:context="teamten.tacoma.uw.edu.doit.authenticate.RegistrationFragment">
     <EditText
+        android:id="@+id/email_edittext_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="email" />
     <EditText
+        android:id="@+id/firstName_edittext_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="first name (optional)" />
     <EditText
+        android:id="@+id/lastName_edittext_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="last name (optional)" />
     <EditText
+        android:id="@+id/password_edittext_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"

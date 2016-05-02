@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import teamten.tacoma.uw.edu.doit.DoItStationFragment.OnDoItStationFragmentInteractionListener;
-
 import teamten.tacoma.uw.edu.doit.model.DoItListCollection.DoItList;
 
 
