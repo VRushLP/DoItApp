@@ -4,6 +4,7 @@ package teamten.tacoma.uw.edu.doit.authenticate;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import teamten.tacoma.uw.edu.doit.R;
  */
 public class LogInFragment extends Fragment {
 
+    private final static String USER_LOGIN_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm10/android/login.php?";
 
     public LogInFragment() {
         // Required empty public constructor
@@ -25,29 +28,30 @@ public class LogInFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_log_in, container, false);
-        final EditText userIdText = (EditText) v.findViewById(R.id.signin_edit_text_userid);
+
+        final EditText emailText = (EditText) v.findViewById(R.id.signin_edit_text_user_email);
         final EditText pwdText = (EditText) v.findViewById(R.id.signin_edit_text_password);
         Button signInButton = (Button) v.findViewById(R.id.signin_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userId = userIdText.getText().toString();
+                String userEmail = emailText.getText().toString();
                 String pwd = pwdText.getText().toString();
-                if (TextUtils.isEmpty(userId))  {
-                    Toast.makeText(v.getContext(), "Enter userid"
+                if (TextUtils.isEmpty(userEmail))  {
+                    Toast.makeText(v.getContext(), "Enter email"
                             , Toast.LENGTH_SHORT)
                             .show();
-                    userIdText.requestFocus();
+                    emailText.requestFocus();
                     return;
                 }
-                if (!userId.contains("@")) {
+                if (!userEmail.contains("@")) {
                     Toast.makeText(v.getContext(), "Enter a valid email address"
                             , Toast.LENGTH_SHORT)
                             .show();
-                    userIdText.requestFocus();
+                    emailText.requestFocus();
                     return;
                 }
 
@@ -68,7 +72,21 @@ public class LogInFragment extends Fragment {
 
                 //TODO check against webservices to authenticate user
 
-                ((AuthenticationActivity) getActivity()).login(userId, pwd);
+                ((AuthenticationActivity) getActivity()).login(userEmail, pwd);
+            }
+        });
+
+        Button regButton = (Button) v.findViewById(R.id.registration_button);
+        regButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("LoginFragment", "Register button clicked");
+                RegistrationFragment fragment = new RegistrationFragment();
+                getFragmentManager()
+                        .beginTransaction() //launch fragment
+                        .replace(R.id.authentication_activity_container, fragment, "fragment")
+                        .addToBackStack(null) //be able to go back
+                        .commit();
             }
         });
 
@@ -79,6 +97,6 @@ public class LogInFragment extends Fragment {
 
 
     public interface LoginInteractionListener {
-        public void login(String userId, String pwd);
+        public void login(String email, String pwd);
     }
 }

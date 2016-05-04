@@ -3,28 +3,29 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/registration_fragment_container"
     tools:context="teamten.tacoma.uw.edu.doit.authenticate.RegistrationFragment">
 
     <EditText
-        android:id="@+id/register_edit_text_userid"
+        android:id="@+id/register_edit_text_user_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Enter your userid"
+        android:hint="Enter your email"
         android:layout_gravity="top"/>
     <EditText
         android:id="@+id/register_edit_text_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Enter your password"
+        android:hint="Enter password"
         android:layout_gravity="top"/>
     <EditText
         android:id="@+id/register_edit_text_password_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Enter the same password"
+        android:hint="Re-enter password"
         android:layout_gravity="top"/>
 
     <Button
