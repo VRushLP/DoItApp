@@ -99,6 +99,8 @@ public class RegistrationFragment extends Fragment {
                 ((AuthenticationActivity) getActivity()).register(email, pwd);
             }
         });
+
+        getActivity().setTitle("Register New Account");
         return v;
     }
 

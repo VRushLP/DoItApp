@@ -33,6 +33,8 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                     .add(R.id.authentication_activity, new LogInFragment())
                     .commit();
         } else {
+            //TODO They are logged in already,
+            //so check db against the name and pw of the logged in user to return the correct lists.
             Intent i = new Intent(this, DoItStationActivity.class);
             startActivity(i);
             finish();
