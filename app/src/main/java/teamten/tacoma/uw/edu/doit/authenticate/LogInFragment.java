@@ -1,10 +1,10 @@
 package teamten.tacoma.uw.edu.doit.authenticate;
 
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +28,10 @@ public class LogInFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_log_in, container, false);
+
         final EditText emailText = (EditText) v.findViewById(R.id.signin_edit_text_user_email);
         final EditText pwdText = (EditText) v.findViewById(R.id.signin_edit_text_password);
         Button signInButton = (Button) v.findViewById(R.id.signin_button);
@@ -72,6 +73,20 @@ public class LogInFragment extends Fragment {
                 //TODO check against webservices to authenticate user
 
                 ((AuthenticationActivity) getActivity()).login(userEmail, pwd);
+            }
+        });
+
+        Button regButton = (Button) v.findViewById(R.id.registration_button);
+        regButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("LoginFragment", "Register button clicked");
+                RegistrationFragment fragment = new RegistrationFragment();
+                getFragmentManager()
+                        .beginTransaction() //launch fragment
+                        .replace(R.id.authentication_activity_container, fragment, "fragment")
+                        .addToBackStack(null) //be able to go back
+                        .commit();
             }
         });
 
