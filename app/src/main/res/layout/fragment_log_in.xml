@@ -6,18 +6,18 @@
     tools:context="teamten.tacoma.uw.edu.doit.authenticate.LogInFragment">
 
     <EditText
-        android:id="@+id/signin_edit_text_userid"
+        android:id="@+id/signin_edit_text_user_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:hint="Enter your userid"
+        android:hint="Enter email"
         android:layout_gravity="top"/>
     <EditText
         android:id="@+id/signin_edit_text_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Enter your password"
+        android:hint="Enter password"
         android:layout_gravity="top"/>
 
     <LinearLayout

@@ -40,7 +40,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
     }
 
     @Override
-    public void login(String userId, String pwd) {
+    public void login(String email, String pwd) {
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -51,7 +51,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
                         openFileOutput(getString(R.string.LOGIN_FILE)
                                 , Context.MODE_PRIVATE));
-                outputStreamWriter.write("email = " + userId + ";");
+                outputStreamWriter.write("email = " + email + ";");
                 outputStreamWriter.write("password = " + pwd);
                 outputStreamWriter.close();
                 Toast.makeText(this, "Stored in File Successfully!", Toast.LENGTH_LONG)
@@ -72,13 +72,60 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 .putBoolean(getString(R.string.LOGGEDIN), true)
                 .commit();
 
+        // sets login credentials within sharedPreferences
+        // putting the key of the sharedPref into a string resource
+        // will allow universal access to the key to then obtain value
+        mSharedPreferences.edit().putString("@string/userEmail", email);
+        mSharedPreferences.edit().putString("@string/userPassword", pwd);
+
+
         Intent i = new Intent(this, DoItStationActivity.class);
         startActivity(i);
         finish();
     }
 
     @Override
-    public void register() {
+    public void register(String email, String pwd) {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            //Check if the login and password are valid
+            //new LoginTask().execute(url);
+            try {
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+                        openFileOutput(getString(R.string.LOGIN_FILE)
+                                , Context.MODE_PRIVATE));
+                outputStreamWriter.write("email = " + email + ";");
+                outputStreamWriter.write("password = " + pwd);
+                outputStreamWriter.close();
+                Toast.makeText(this, "Stored in File Successfully!", Toast.LENGTH_LONG)
+                        .show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+        }
+        else {
+            Toast.makeText(this, "No network connection available. Cannot authenticate user",
+                    Toast.LENGTH_SHORT) .show();
+            return;
+        }
+
+        mSharedPreferences
+                .edit()
+                .putBoolean(getString(R.string.LOGGEDIN), true)
+                .commit();
+
+        // sets login credentials within sharedPreferences
+        // putting the key of the sharedPref into a string resource
+        // will allow universal access to the key to then obtain value
+        mSharedPreferences.edit().putString("@string/userEmail", email);
+        mSharedPreferences.edit().putString("@string/userPassword", pwd);
+
+
+        Intent i = new Intent(this, DoItStationActivity.class);
+        startActivity(i);
+        finish();
     }
 }
