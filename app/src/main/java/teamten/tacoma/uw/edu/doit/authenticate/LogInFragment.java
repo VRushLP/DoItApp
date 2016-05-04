@@ -15,7 +15,7 @@ import android.widget.Toast;
 import teamten.tacoma.uw.edu.doit.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * LogInFragment allows user to access their account.
  */
 public class LogInFragment extends Fragment {
 

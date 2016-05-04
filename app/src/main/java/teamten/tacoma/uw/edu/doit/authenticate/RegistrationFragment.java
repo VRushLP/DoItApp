@@ -18,11 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -30,14 +27,18 @@ import java.net.URLEncoder;
 import teamten.tacoma.uw.edu.doit.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * RegistrationFragment allows users to register a new account.
  */
 public class RegistrationFragment extends Fragment {
 
-    EditText mEmailText;
-    EditText mPwdText;
-    EditText mPwdConfirmText;
-    String url;
+    /* text edit view for email */
+    private EditText mEmailText;
+    /* text edit view for password */
+    private EditText mPwdText;
+    /* text edit view for confirmed password */
+    private EditText mPwdConfirmText;
+    /* URL  */
+    private String url;
 
 
 
@@ -118,6 +119,12 @@ public class RegistrationFragment extends Fragment {
     private final static String USER_ADD_URL =
             "http://cssgate.insttech.washington.edu/~_450atm10/android/addUser.php?";
 
+    /**
+     * Given URL, build a url string for an http connection.
+     *
+     * @param v the view
+     * @return string of composed url
+     */
     private String buildNewUserURL(View v) {
 
         StringBuilder sb = new StringBuilder(USER_ADD_URL);
@@ -142,11 +149,17 @@ public class RegistrationFragment extends Fragment {
         return sb.toString();
     }
 
+    /**
+     * Event listener for registering users.
+     */
     public interface RegistrationInteractionListener {
         public void register(String url);
     }
 
 
+    /**
+     * Web service for registering users by POST method
+     */
     private class RegisterUserTask extends AsyncTask<String, Void, String> {
 
         /* For easy Log tracking */

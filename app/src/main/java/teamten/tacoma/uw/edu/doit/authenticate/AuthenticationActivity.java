@@ -1,34 +1,27 @@
 package teamten.tacoma.uw.edu.doit.authenticate;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import teamten.tacoma.uw.edu.doit.DoItStationActivity;
 import teamten.tacoma.uw.edu.doit.R;
 
+/**
+ * AuthenticationActivity is mainly used for the login and registration fragments
+ * it helps in identifying if a user is already logged in or needs to log-in and
+ * it also
+ */
 public class AuthenticationActivity extends AppCompatActivity implements LogInFragment.LoginInteractionListener, RegistrationFragment.RegistrationInteractionListener{
 
+    /* holds the applications preferences */
     private SharedPreferences mSharedPreferences;
 
     @Override
@@ -54,6 +47,11 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         }
     }
 
+    /**
+     *
+     * @param email
+     * @param pwd
+     */
     @Override
     public void login(String email, String pwd) {
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -99,22 +97,6 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         finish();
     }
 
-//    public void authen_register(View v){
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        RegistrationFragment fragment = new RegistrationFragment();
-//        fragmentTransaction.add(R.id.registration_fragment_container, fragment);
-//        fragmentTransaction.commit();
-//    }
-//
-//    public void authen_login(View v){
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        RegistrationFragment fragment = new RegistrationFragment();
-//        fragmentTransaction.add(R.id.login_fragment_container, fragment);
-//        fragmentTransaction.commit();
-//    }
-
     @Override
     public void register(String url) {
 //        RegisterUserTask task = new RegisterUserTask();
@@ -123,98 +105,5 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
 //        // Takes you back to the previous fragment by popping the current fragment out.
 //        getSupportFragmentManager().popBackStackImmediate();
     }
-
-
-//    @Override
-//    public void register(String email, String pwd) {
-//        ConnectivityManager connMgr = (ConnectivityManager)
-//                getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-//        if (networkInfo != null && networkInfo.isConnected()) {
-//            //Check if the login and password are valid
-//            //new LoginTask().execute(url);
-//            try {
-//                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
-//                        openFileOutput(getString(R.string.LOGIN_FILE)
-//                                , Context.MODE_PRIVATE));
-//                outputStreamWriter.write("email = " + email + ";");
-//                outputStreamWriter.write("password = " + pwd);
-//                outputStreamWriter.close();
-//                Toast.makeText(this, "Stored in File Successfully!", Toast.LENGTH_LONG)
-//                        .show();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//        else {
-//            Toast.makeText(this, "No network connection available. Cannot register user",
-//                    Toast.LENGTH_SHORT) .show();
-//            return;
-//        }
-//
-//        Intent i = new Intent(this, LogInFragment.class);
-//        startActivity(i);
-//        finish();
-//
-//        mSharedPreferences
-//                .edit()
-//                .putBoolean(getString(R.string.LOGGEDIN), true)
-//                .commit();
-//
-//        // sets login credentials within sharedPreferences
-//        // putting the key of the sharedPref into a string resource
-//        // will allow universal access to the key to then obtain value
-//        mSharedPreferences.edit().putString("@string/userEmail", email);
-//        mSharedPreferences.edit().putString("@string/userPassword", pwd);
-//
-//
-//        Intent j = new Intent(this, DoItStationActivity.class);
-//        startActivity(j);
-//        finish();
-//    }
-
-//    private final static String USER_ADD_URL =
-//            "http://cssgate.insttech.washington.edu/~_450atm10/android/addUser.php";
-//
-//    class RegisterUserTask extends AsyncTask<String, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(String... urls) {
-//            String response = "";
-//            HttpURLConnection urlConnection = null;
-//            for (String url : urls) {
-//                try {
-//                    URL urlObject = new URL(url);
-//                    urlConnection = (HttpURLConnection) urlObject.openConnection();
-//
-//                    InputStream content = urlConnection.getInputStream();
-//
-//                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-//                    String s = "";
-//                    while ((s = buffer.readLine()) != null) {
-//                        response += s;
-//                    }
-//
-//                } catch (Exception e) {
-//                    response = "Unable to add course, Reason: "
-//                            + e.getMessage();
-//                    Log.wtf("wtf", e.getMessage());
-//                } finally {
-//                    if (urlConnection != null)
-//                        urlConnection.disconnect();
-//                }
-//            }
-//            return response;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            if(s.equals("")){
-//                s="Data saved successfully.";
-//            }
-//            Toast.makeText(AuthenticationActivity.this, s, Toast.LENGTH_LONG).show();
-//        }
-//    }
 
 }
