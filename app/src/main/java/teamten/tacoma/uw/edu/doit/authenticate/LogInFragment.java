@@ -71,6 +71,9 @@ public class LogInFragment extends Fragment {
                 ((AuthenticationActivity) getActivity()).login(userId, pwd);
             }
         });
+
+        getActivity().setTitle("Log In");
+
         return v;
     }
 
