@@ -25,7 +25,7 @@ public class DoItStationFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 2;
-    private OnDoItStationFragmentInteractionListener mListener;
+    private OnDoItStationFragmentInteractionListener mDoItStationListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -68,7 +68,7 @@ public class DoItStationFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItListCollection.ITEMS, mListener));
+            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItListCollection.ITEMS, mDoItStationListener));
         }
         return view;
     }
@@ -78,7 +78,7 @@ public class DoItStationFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnDoItStationFragmentInteractionListener) {
-            mListener = (OnDoItStationFragmentInteractionListener) context;
+            mDoItStationListener = (OnDoItStationFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnDoItStationFragmentInteractionListener");
@@ -88,7 +88,7 @@ public class DoItStationFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mDoItStationListener = null;
     }
 
     /**
@@ -102,7 +102,6 @@ public class DoItStationFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDoItStationFragmentInteractionListener {
-
         void onListFragmentInteraction(DoItList item);
     }
 }

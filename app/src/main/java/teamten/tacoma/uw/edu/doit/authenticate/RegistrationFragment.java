@@ -1,7 +1,5 @@
 package teamten.tacoma.uw.edu.doit.authenticate;
 
-
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,11 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -39,12 +34,9 @@ public class RegistrationFragment extends Fragment {
     EditText mPwdConfirmText;
     String url;
 
-
-
     public RegistrationFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,11 +111,9 @@ public class RegistrationFragment extends Fragment {
             "http://cssgate.insttech.washington.edu/~_450atm10/android/addUser.php?";
 
     private String buildNewUserURL(View v) {
-
         StringBuilder sb = new StringBuilder(USER_ADD_URL);
 
         try {
-
             String email = mEmailText.getText().toString();
             sb.append("email=");
             sb.append(email);
@@ -133,7 +123,6 @@ public class RegistrationFragment extends Fragment {
             sb.append(URLEncoder.encode(pwd, "UTF-8"));
 
             Log.i("RegistrationFragment", sb.toString());
-
         }
         catch(Exception e) {
             Toast.makeText(v.getContext(), "Something wrong with the url" + e.getMessage(), Toast.LENGTH_LONG)
@@ -145,7 +134,6 @@ public class RegistrationFragment extends Fragment {
     public interface RegistrationInteractionListener {
         public void register(String url);
     }
-
 
     private class RegisterUserTask extends AsyncTask<String, Void, String> {
 
@@ -192,11 +180,8 @@ public class RegistrationFragment extends Fragment {
             return response;
         }
 
-
-
-
         /**
-         * It checks to see if there was a problem with the URL(Network) which is when an
+         * Checks to see if there was a problem with the URL(Network) which is when an
          * exception is caught. It tries to call the parse Method and checks to see if it was successful.
          * If not, it displays the exception.
          *
@@ -224,7 +209,4 @@ public class RegistrationFragment extends Fragment {
             }
         }
     }
-
-
-
 }

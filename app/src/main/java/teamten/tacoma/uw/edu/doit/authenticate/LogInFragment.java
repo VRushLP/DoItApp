@@ -1,6 +1,5 @@
 package teamten.tacoma.uw.edu.doit.authenticate;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -71,7 +70,6 @@ public class LogInFragment extends Fragment {
                 }
 
                 //TODO check against webservices to authenticate user
-
                 ((AuthenticationActivity) getActivity()).login(userEmail, pwd);
             }
         });
