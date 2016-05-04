@@ -10,11 +10,14 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -112,104 +115,106 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
 //        fragmentTransaction.commit();
 //    }
 
-
-
     @Override
-    public void register(String email, String pwd) {
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            //Check if the login and password are valid
-            //new LoginTask().execute(url);
-            try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
-                        openFileOutput(getString(R.string.LOGIN_FILE)
-                                , Context.MODE_PRIVATE));
-                outputStreamWriter.write("email = " + email + ";");
-                outputStreamWriter.write("password = " + pwd);
-                outputStreamWriter.close();
-                Toast.makeText(this, "Stored in File Successfully!", Toast.LENGTH_LONG)
-                        .show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-        else {
-            Toast.makeText(this, "No network connection available. Cannot register user",
-                    Toast.LENGTH_SHORT) .show();
-            return;
-        }
-
-        Intent i = new Intent(this, LogInFragment.class);
-        startActivity(i);
-        finish();
-
-        mSharedPreferences
-                .edit()
-                .putBoolean(getString(R.string.LOGGEDIN), true)
-                .commit();
-
-        // sets login credentials within sharedPreferences
-        // putting the key of the sharedPref into a string resource
-        // will allow universal access to the key to then obtain value
-        mSharedPreferences.edit().putString("@string/userEmail", email);
-        mSharedPreferences.edit().putString("@string/userPassword", pwd);
-
-
-        Intent j = new Intent(this, DoItStationActivity.class);
-        startActivity(j);
-        finish();
+    public void register(String url) {
+//        RegisterUserTask task = new RegisterUserTask();
+//        task.execute(new String[]{url.toString()});
+//
+//        // Takes you back to the previous fragment by popping the current fragment out.
+//        getSupportFragmentManager().popBackStackImmediate();
     }
 
-    private final static String USER_ADD_URL =
-            "http://cssgate.insttech.washington.edu/~_450atm10/android/addUser.php";
 
-    class RegisterUserTask extends AsyncTask<String, String, String> {
+//    @Override
+//    public void register(String email, String pwd) {
+//        ConnectivityManager connMgr = (ConnectivityManager)
+//                getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+//        if (networkInfo != null && networkInfo.isConnected()) {
+//            //Check if the login and password are valid
+//            //new LoginTask().execute(url);
+//            try {
+//                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+//                        openFileOutput(getString(R.string.LOGIN_FILE)
+//                                , Context.MODE_PRIVATE));
+//                outputStreamWriter.write("email = " + email + ";");
+//                outputStreamWriter.write("password = " + pwd);
+//                outputStreamWriter.close();
+//                Toast.makeText(this, "Stored in File Successfully!", Toast.LENGTH_LONG)
+//                        .show();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        else {
+//            Toast.makeText(this, "No network connection available. Cannot register user",
+//                    Toast.LENGTH_SHORT) .show();
+//            return;
+//        }
+//
+//        Intent i = new Intent(this, LogInFragment.class);
+//        startActivity(i);
+//        finish();
+//
+//        mSharedPreferences
+//                .edit()
+//                .putBoolean(getString(R.string.LOGGEDIN), true)
+//                .commit();
+//
+//        // sets login credentials within sharedPreferences
+//        // putting the key of the sharedPref into a string resource
+//        // will allow universal access to the key to then obtain value
+//        mSharedPreferences.edit().putString("@string/userEmail", email);
+//        mSharedPreferences.edit().putString("@string/userPassword", pwd);
+//
+//
+//        Intent j = new Intent(this, DoItStationActivity.class);
+//        startActivity(j);
+//        finish();
+//    }
 
-        @Override
-        protected String doInBackground(String... params) {
-            String email = params[0];
-            String password = params[1];
-            String data = "";
-            int tmp;
-
-            try {
-                URL url = new URL(USER_ADD_URL);
-                String urlParams = "email="+email+"&password="+password;
-
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setDoOutput(true);
-                OutputStream os = httpURLConnection.getOutputStream();
-                os.write(urlParams.getBytes());
-                os.flush();
-                os.close();
-                InputStream is = httpURLConnection.getInputStream();
-                while((tmp=is.read())!=-1){
-                    data+= (char)tmp;
-                }
-                is.close();
-                httpURLConnection.disconnect();
-
-                return data;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                return "Exception: "+e.getMessage();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "Exception: "+e.getMessage();
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            if(s.equals("")){
-                s="Data saved successfully.";
-            }
-            Toast.makeText(AuthenticationActivity.this, s, Toast.LENGTH_LONG).show();
-        }
-    }
+//    private final static String USER_ADD_URL =
+//            "http://cssgate.insttech.washington.edu/~_450atm10/android/addUser.php";
+//
+//    class RegisterUserTask extends AsyncTask<String, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(String... urls) {
+//            String response = "";
+//            HttpURLConnection urlConnection = null;
+//            for (String url : urls) {
+//                try {
+//                    URL urlObject = new URL(url);
+//                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+//
+//                    InputStream content = urlConnection.getInputStream();
+//
+//                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+//                    String s = "";
+//                    while ((s = buffer.readLine()) != null) {
+//                        response += s;
+//                    }
+//
+//                } catch (Exception e) {
+//                    response = "Unable to add course, Reason: "
+//                            + e.getMessage();
+//                    Log.wtf("wtf", e.getMessage());
+//                } finally {
+//                    if (urlConnection != null)
+//                        urlConnection.disconnect();
+//                }
+//            }
+//            return response;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            if(s.equals("")){
+//                s="Data saved successfully.";
+//            }
+//            Toast.makeText(AuthenticationActivity.this, s, Toast.LENGTH_LONG).show();
+//        }
+//    }
 
 }
