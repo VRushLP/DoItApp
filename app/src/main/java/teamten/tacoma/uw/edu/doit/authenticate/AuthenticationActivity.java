@@ -11,13 +11,12 @@ import android.widget.Toast;
 
 import java.io.OutputStreamWriter;
 
-import teamten.tacoma.uw.edu.doit.DoItStationActivity;
+import teamten.tacoma.uw.edu.doit.StationActivity;
 import teamten.tacoma.uw.edu.doit.R;
 
 /**
- * AuthenticationActivity is mainly used for the login and registration fragments
- * it helps in identifying if a user is already logged in or needs to log-in and
- * it also
+ * AuthenticationActivity determines if a user is already logged in or
+ * needs to log-in. Also, this activity houses the login and registration fragments.
  */
 public class AuthenticationActivity extends AppCompatActivity implements LogInFragment.LoginInteractionListener, RegistrationFragment.RegistrationInteractionListener{
 
@@ -41,7 +40,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         } else {
             //TODO They are logged in already,
             //so check db against the name and pw of the logged in user to return the correct lists.
-            Intent i = new Intent(this, DoItStationActivity.class);
+            Intent i = new Intent(this, StationActivity.class);
             startActivity(i);
             finish();
         }
@@ -88,11 +87,10 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         // sets login credentials within sharedPreferences
         // putting the key of the sharedPref into a string resource
         // will allow universal access to the key to then obtain value
-        mSharedPreferences.edit().putString("@string/userEmail", email);
-        mSharedPreferences.edit().putString("@string/userPassword", pwd);
+        mSharedPreferences.edit().putString("@string/userEmail", email).commit();
 
 
-        Intent i = new Intent(this, DoItStationActivity.class);
+        Intent i = new Intent(this, StationActivity.class);
         startActivity(i);
         finish();
     }

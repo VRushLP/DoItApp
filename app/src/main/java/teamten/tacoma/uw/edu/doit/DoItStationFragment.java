@@ -1,6 +1,7 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,28 +11,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import teamten.tacoma.uw.edu.doit.model.DoItListCollection;
-import teamten.tacoma.uw.edu.doit.model.DoItListCollection.DoItList;
+import java.util.List;
+
+import teamten.tacoma.uw.edu.doit.model.DoItList;
+import teamten.tacoma.uw.edu.doit.model.DoItList.DoItList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Items. (Verbose View)
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnDoItStationFragmentInteractionListener}
  * interface.
  */
 public class DoItStationFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 2;
+    private int mColumnCount = 1;
+
+    private static final String COURSE_URL
+            = "http://http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=station&email=";
+
+
+    private String mUserEmail;
+    private RecyclerView mRecyclerView;
+
+    private CourseDB mCourseDB;
+    private List<Course> mCourseList;
     private OnDoItStationFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public DoItStationFragment() {
+    public DoItStationFragment(String theEmail) {
+        mUserEmail = theEmail;
     }
 
     // TODO: Customize parameter initialization
@@ -68,7 +79,7 @@ public class DoItStationFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItListCollection.ITEMS, mListener));
+            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItList.ITEMS, mListener));
         }
         return view;
     }

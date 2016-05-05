@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import teamten.tacoma.uw.edu.doit.model.DoItListCollection.DoItList;
+import teamten.tacoma.uw.edu.doit.model.DoItList.DoItList;
 
 
 import java.util.List;
