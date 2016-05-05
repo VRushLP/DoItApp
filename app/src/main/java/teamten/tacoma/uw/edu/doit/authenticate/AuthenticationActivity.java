@@ -21,23 +21,19 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authentication);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.authentication_activity_container, new LogInFragment() )
-                .commit();
-
         mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
-        if (!mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {  // if not logged in, start login
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.login_fragment_container, new LogInFragment())
-                    .commit();
-        } else {
-            //TODO They are logged in already,
-            //so check db against the name and pw of the logged in user to return the correct lists.
+
+        if (mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {  // if not logged in, start login
             Intent i = new Intent(this, DoItStationActivity.class);
             startActivity(i);
-            finish();
+            finish();             //TODO They are logged in already,
+            //so check db against the name and pw of the logged in user to return the correct lists.
+        } else {
+            setContentView(R.layout.activity_authentication);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.authentication_activity_container, new LogInFragment() )
+                    .commit();
         }
     }
 
