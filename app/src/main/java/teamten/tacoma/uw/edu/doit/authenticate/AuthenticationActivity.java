@@ -27,9 +27,9 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         if (mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {  // if not logged in, start login
             Intent i = new Intent(this, DoItStationActivity.class);
             startActivity(i);
-            finish();             //TODO They are logged in already,
-            //so check db against the name and pw of the logged in user to return the correct lists.
-        } else {
+            finish();
+        } else { //They are logged in already,
+            //TODO check db against the name and pw of the logged in user to return the correct lists.
             setContentView(R.layout.activity_authentication);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.authentication_activity_container, new LogInFragment() )
@@ -52,7 +52,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 outputStreamWriter.write("email = " + email + ";");
                 outputStreamWriter.write("password = " + pwd);
                 outputStreamWriter.close();
-                Toast.makeText(this, "Stored in File Successfully!", Toast.LENGTH_LONG)
+                Toast.makeText(this, email + "logged in successfully!", Toast.LENGTH_LONG)
                         .show();
             } catch (Exception e) {
                 e.printStackTrace();
