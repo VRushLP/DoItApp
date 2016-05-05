@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import teamten.tacoma.uw.edu.doit.model.DoItList;
-import teamten.tacoma.uw.edu.doit.model.DoItList.DoItList;
+import teamten.tacoma.uw.edu.doit.model.DoItList.Task;
 
 /**
  * A fragment representing a list of Items. (Verbose View)
@@ -24,33 +24,25 @@ import teamten.tacoma.uw.edu.doit.model.DoItList.DoItList;
  */
 public class DoItStationFragment extends Fragment {
 
-<<<<<<< HEAD
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 2;
     private OnDoItStationFragmentInteractionListener mDoItStationListener;
-=======
     private int mColumnCount = 1;
 
+    private static final String ARG_COLUMN_COUNT = "column-count";
     private static final String COURSE_URL
             = "http://http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=station&email=";
-
 
     private String mUserEmail;
     private RecyclerView mRecyclerView;
 
-    private CourseDB mCourseDB;
-    private List<Course> mCourseList;
+//    private CourseDB mCourseDB;
+//    private List<Course> mCourseList;
     private OnDoItStationFragmentInteractionListener mListener;
->>>>>>> database
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public DoItStationFragment(String theEmail) {
-        mUserEmail = theEmail;
+    public DoItStationFragment() {
     }
 
     // TODO: Customize parameter initialization
@@ -86,12 +78,7 @@ public class DoItStationFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
-<<<<<<< HEAD
-            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItListCollection.ITEMS, mDoItStationListener));
-=======
-            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItList.ITEMS, mListener));
->>>>>>> database
+//            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItList.ITEMS, mListener));
         }
         return view;
     }

@@ -102,9 +102,8 @@ public class RegistrationFragment extends Fragment {
                     mPwdConfirmText.requestFocus();
                     return;
                 }
-
                 url = buildNewUserURL(v);
-                //((AuthenticationActivity) getActivity()).register(email, pwd);
+
 
                 //Register if they hit the button and everything succeeded.
                 if(emailOkay && pwdOkay){
@@ -148,20 +147,6 @@ public class RegistrationFragment extends Fragment {
         return sb.toString();
     }
 
-    /**
-     * Event listener for registering users.
-     */
-    public interface RegistrationInteractionListener {
-        public void register(String url);
-    }
-
-<<<<<<< HEAD
-=======
-
-    /**
-     * Web service for registering users by POST method
-     */
->>>>>>> database
     private class RegisterUserTask extends AsyncTask<String, Void, String> {
 
         /* For easy Log tracking */

@@ -16,16 +16,15 @@ import java.util.Map;
 public class DoItList {
 
     private String mTitle;
-
     public List<Task> mList;
 
+   public static final List<Task> ITEMS = new ArrayList<Task>();
+    public static final Map<String, Task> ITEM_MAP = new HashMap<String, Task>();
 
     public DoItList(String theTitle) {
         mTitle = theTitle;
         mList = new ArrayList<Task>();
     }
-
-
     public void addTask(Task item) { mList.add(item); }
 
     public void removeTask(Task item) {mList.remove(item);}
@@ -37,7 +36,6 @@ public class DoItList {
             mTitle = "Title Default";
         }
     }
-
 
     private String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();
@@ -72,23 +70,17 @@ public class DoItList {
         return reason;
     }
 
-
     /**
      * Class representing a single task.
      */
     public static class Task {
         public String content;
-
-        public static final String contentText = "textInput"
-
+        public static final String contentText = "textInput";
         public Task(String content) {
             this.content = content;
         }
-
         public String getTaskContent() { return content;}
-
         public void setContent(String theNewContent) { this.content = theNewContent;}
-
 
         @Override
         public String toString() {

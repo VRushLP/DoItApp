@@ -26,9 +26,13 @@ public class StationActivity extends AppCompatActivity implements DoItStationFra
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
         String email = mSharedPreferences.getString("@string/userEmail", null);
+        DoItStationFragment fragment = new DoItStationFragment();
+        Bundle args = new Bundle();
+        args.putString("EMAIL", email);
+        fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.station_activity, new DoItStationFragment(email) )
+                .add(R.id.station_activity, fragment)
                 .commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
