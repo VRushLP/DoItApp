@@ -9,7 +9,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
@@ -40,31 +43,39 @@ public class StationActivity extends AppCompatActivity implements DoItStationFra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with new List creation action!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        if (toolbar != null) {
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        if(fab != null){
+            fab.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE)
-                            .edit().putBoolean(getString(R.string.LOGGEDIN), false)
-                            .apply();
-                    Intent i = new Intent(v.getContext(), AuthenticationActivity.class);
-                    startActivity(i);
-                    finish();
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "Not yet implemented! Sorry!",
+                            Toast.LENGTH_SHORT)
+                            .show();
                 }
             });
         }
+    }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_station, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
 
+        if(id == R.id.action_logout){
+            getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE)
+                    .edit().putBoolean(getString(R.string.LOGGEDIN), false)
+                    .apply();
+            Intent i = new Intent(this, AuthenticationActivity.class);
+            startActivity(i);
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

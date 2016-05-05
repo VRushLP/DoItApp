@@ -93,7 +93,6 @@ public class LogInFragment extends Fragment {
         return v;
     }
 
-
     public interface LoginInteractionListener {
         public void login(String email, String pwd);
     }
