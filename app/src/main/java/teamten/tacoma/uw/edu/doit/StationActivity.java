@@ -63,13 +63,21 @@ public class StationActivity extends AppCompatActivity implements DoItStationFra
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        setTitle("Station");
 
     }
 
 
     @Override
     public void onListFragmentInteraction(DoItList item) {
-
+//        CourseDetailFragment courseDetailFragment = new CourseDetailFragment();
+//        Bundle args = new Bundle();
+//        args.putSerializable(CourseDetailFragment.COURSE_ITEM_SELECTED, item);
+//        courseDetailFragment.setArguments(args);
+//
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.course_fragment_container, courseDetailFragment)
+//                .addToBackStack(null)
+//                .commit();
     }
 }

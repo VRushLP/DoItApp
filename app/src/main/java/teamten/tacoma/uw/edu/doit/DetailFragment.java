@@ -10,12 +10,15 @@ import android.widget.TextView;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Adds the newly created List to the web service.
  */
 public class DetailFragment extends Fragment {
 
-    private TextView mTaskContentTextView;
+//    private TextView mTaskContentTextView;
     private TextView mListTitleTextView;
+
+    private final static String COURSE_ADD_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm10/android/addList.php?";
 
     public DetailFragment() {
         // Required empty public constructor
