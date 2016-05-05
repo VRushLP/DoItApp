@@ -3,6 +3,7 @@ package teamten.tacoma.uw.edu.doit.authenticate;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,7 +51,6 @@ public class RegistrationFragment extends Fragment {
         mEmailText = (EditText) v.findViewById(R.id.register_edit_text_user_email);
         mPwdText = (EditText) v.findViewById(R.id.register_edit_text_password);
         mPwdConfirmText = (EditText) v.findViewById(R.id.register_edit_text_password_confirm);
-        //final EditText pwdConfirm = (EditText) v.findViewById(R.id.register_edit_text_password_confirm);
         Button finishRegisterButton = (Button) v.findViewById(R.id.finish_button);
 
         url = "";
@@ -109,6 +109,13 @@ public class RegistrationFragment extends Fragment {
                 if(emailOkay && pwdOkay){
                     RegisterUserTask task = new RegisterUserTask();
                     task.execute(new String[]{url.toString()});
+
+                    //Go back to LogIn Fragment
+                    Fragment fragment = new LogInFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.authentication_activity_container, fragment)
+                            .commit();
                 }
             }
         });
@@ -148,7 +155,6 @@ public class RegistrationFragment extends Fragment {
     }
 
     private class RegisterUserTask extends AsyncTask<String, Void, String> {
-
         /* For easy Log tracking */
         private static final String TAG = "RegisterUserTask";
 

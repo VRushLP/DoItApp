@@ -48,7 +48,6 @@ public class StationActivity extends AppCompatActivity implements DoItStationFra
             }
         });
 
-
         if (toolbar != null) {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
