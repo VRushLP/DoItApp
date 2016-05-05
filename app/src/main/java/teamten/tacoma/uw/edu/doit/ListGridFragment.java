@@ -10,8 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import teamten.tacoma.uw.edu.doit.Data.DummyContent;
-import teamten.tacoma.uw.edu.doit.Data.DummyContent.DummyItem;
+import teamten.tacoma.uw.edu.doit.model.DoItList;
 
 /**
  * A fragment representing a list of Items.
@@ -21,11 +20,19 @@ import teamten.tacoma.uw.edu.doit.Data.DummyContent.DummyItem;
  */
 public class ListGridFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
+    private OnDoItStationFragmentInteractionListener mDoItStationListener;
+    private int mColumnCount = 1;
+
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 2;
-    private OnListFragmentInteractionListener mListener;
+    private static final String COURSE_URL
+            = "http://http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=station&email=";
+
+    private String mUserEmail;
+    private RecyclerView mRecyclerView;
+
+    //    private CourseDB mCourseDB;
+//    private List<Course> mCourseList;
+    private OnDoItStationFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -36,8 +43,8 @@ public class ListGridFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ListGridFragment newInstance(int columnCount) {
-        ListGridFragment fragment = new ListGridFragment();
+    public static DoItStationFragment newInstance(int columnCount) {
+        DoItStationFragment fragment = new DoItStationFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -56,7 +63,7 @@ public class ListGridFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_listgrid_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_doitlist_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -67,7 +74,7 @@ public class ListGridFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyListGridRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+//            recyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(DoItList.ITEMS, mListener));
         }
         return view;
     }
@@ -76,18 +83,18 @@ public class ListGridFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnDoItStationFragmentInteractionListener) {
+            mDoItStationListener = (OnDoItStationFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnDoItStationFragmentInteractionListener");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mDoItStationListener = null;
     }
 
     /**
@@ -100,8 +107,7 @@ public class ListGridFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+    public interface OnDoItStationFragmentInteractionListener {
+        void onListFragmentInteraction(DoItList item);
     }
 }
