@@ -53,21 +53,26 @@ public class RegistrationFragment extends Fragment {
         finishRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = mEmailText.getText().toString();
-                String pwd = mPwdText.getText().toString();
+                final String email = mEmailText.getText().toString();
+                final String pwd = mPwdText.getText().toString();
                 final String pwdConfirm = mPwdConfirmText.getText().toString();
+
+                boolean emailOkay = true;
+                boolean pwdOkay = true;
+
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(v.getContext(), "Enter an email"
                             , Toast.LENGTH_SHORT)
                             .show();
+                    emailOkay = false;
                     mEmailText.requestFocus();
                     return;
-                }
-                if (!email.contains("@")) {
+                } else  if (!email.contains("@")) {
                     Toast.makeText(v.getContext(), "Enter a valid email address"
                             , Toast.LENGTH_SHORT)
                             .show();
                     mEmailText.requestFocus();
+                    emailOkay = false;
                     return;
                 }
 
@@ -75,35 +80,37 @@ public class RegistrationFragment extends Fragment {
                     Toast.makeText(v.getContext(), "Enter password"
                             , Toast.LENGTH_SHORT)
                             .show();
+                    pwdOkay = false;
                     mPwdText.requestFocus();
                     return;
-                }
-                if (pwd.length() < 6) {
+                }else if (pwd.length() < 6) {
                     Toast.makeText(v.getContext(), "Enter password of at least 6 characters"
                             , Toast.LENGTH_SHORT)
                             .show();
+                    pwdOkay = false;
                     mPwdText.requestFocus();
                     return;
-                }
-
-                if (!pwd.equals(pwdConfirm)) {
+                } else  if (!pwd.equals(pwdConfirm)) {
                     Toast.makeText(v.getContext(), "Your password fields must match",
                             Toast.LENGTH_SHORT)
                             .show();
+                    pwdOkay = false;
                     mPwdConfirmText.requestFocus();
                     return;
                 }
 
                 url = buildNewUserURL(v);
                 //((AuthenticationActivity) getActivity()).register(email, pwd);
+
+                //Register if they hit the button and everything succeeded.
+                if(emailOkay && pwdOkay){
+                    RegisterUserTask task = new RegisterUserTask();
+                    task.execute(new String[]{url.toString()});
+                }
             }
         });
 
         getActivity().setTitle("Register New Account");
-
-        RegisterUserTask task = new RegisterUserTask();
-        task.execute(new String[]{url.toString()});
-
         return v;
     }
 
