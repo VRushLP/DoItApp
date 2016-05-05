@@ -7,7 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import teamten.tacoma.uw.edu.doit.model.DoItListCollection.DoItList;
+=======
+
+import teamten.tacoma.uw.edu.doit.model.DoItList.DoItList;
+>>>>>>> database
 
 import java.util.List;
 

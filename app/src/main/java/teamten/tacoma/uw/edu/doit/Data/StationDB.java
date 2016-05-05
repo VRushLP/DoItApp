@@ -87,7 +87,7 @@ public class StationDB {
     }
 
     /**
-     * Delete all the data from the COURSE_TABLE
+     * Delete all the data from the TABLE
      */
     public void deleteStation() {
         mSQLiteDatabase.delete(COURSE_TABLE, null, null);
@@ -96,12 +96,15 @@ public class StationDB {
 
     class StationDBHelper extends SQLiteOpenHelper {
 
-        private static final String CREATE_COURSE_SQL =
-                "CREATE TABLE IF NOT EXISTS Course "
+        private static final String CREATE_LIST_SQL =
+                "CREATE TABLE IF NOT EXISTS List "
+                        + "(id TEXT PRIMARY KEY, shortDesc TEXT, longDesc TEXT, prereqs TEXT)";
+        private static final String CREATE_TASK_SQL =
+                "CREATE TABLE IF NOT EXISTS task "
                         + "(id TEXT PRIMARY KEY, shortDesc TEXT, longDesc TEXT, prereqs TEXT)";
 
         private static final String DROP_COURSE_SQL =
-                "DROP TABLE IF EXISTS Course";
+                "DROP TABLE IF EXISTS List";
 
         public StationDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);
@@ -109,7 +112,8 @@ public class StationDB {
 
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            sqLiteDatabase.execSQL(CREATE_COURSE_SQL);
+            sqLiteDatabase.execSQL(CREATE_LIST_SQL);
+            sqLiteDatabase.execSQL(CREATE_TASK_SQL);
         }
 
         @Override

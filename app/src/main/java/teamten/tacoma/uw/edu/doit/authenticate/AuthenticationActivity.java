@@ -11,11 +11,16 @@ import android.widget.Toast;
 
 import java.io.OutputStreamWriter;
 
-import teamten.tacoma.uw.edu.doit.DoItStationActivity;
+import teamten.tacoma.uw.edu.doit.StationActivity;
 import teamten.tacoma.uw.edu.doit.R;
 
+/**
+ * AuthenticationActivity determines if a user is already logged in or
+ * needs to log-in. Also, this activity houses the login and registration fragments.
+ */
 public class AuthenticationActivity extends AppCompatActivity implements LogInFragment.LoginInteractionListener, RegistrationFragment.RegistrationInteractionListener{
 
+    /* holds the applications preferences */
     private SharedPreferences mSharedPreferences;
 
     @Override
@@ -23,9 +28,20 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         super.onCreate(savedInstanceState);
         mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
+<<<<<<< HEAD
 
         if (mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {  // if not logged in, start login
             Intent i = new Intent(this, DoItStationActivity.class);
+=======
+        if (!mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {  // if not logged in, start login
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.login_fragment_container, new LogInFragment())
+                    .commit();
+        } else {
+            //TODO They are logged in already,
+            //so check db against the name and pw of the logged in user to return the correct lists.
+            Intent i = new Intent(this, StationActivity.class);
+>>>>>>> database
             startActivity(i);
             finish();
         } else { //They are logged in already,
@@ -37,6 +53,11 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         }
     }
 
+    /**
+     *
+     * @param email
+     * @param pwd
+     */
     @Override
     public void login(String email, String pwd) {
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -73,30 +94,13 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         // sets login credentials within sharedPreferences
         // putting the key of the sharedPref into a string resource
         // will allow universal access to the key to then obtain value
-        mSharedPreferences.edit().putString("@string/userEmail", email);
-        mSharedPreferences.edit().putString("@string/userPassword", pwd);
+        mSharedPreferences.edit().putString("@string/userEmail", email).commit();
 
 
-        Intent i = new Intent(this, DoItStationActivity.class);
+        Intent i = new Intent(this, StationActivity.class);
         startActivity(i);
         finish();
     }
-
-//    public void authen_register(View v){
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        RegistrationFragment fragment = new RegistrationFragment();
-//        fragmentTransaction.add(R.id.registration_fragment_container, fragment);
-//        fragmentTransaction.commit();
-//    }
-//
-//    public void authen_login(View v){
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        RegistrationFragment fragment = new RegistrationFragment();
-//        fragmentTransaction.add(R.id.login_fragment_container, fragment);
-//        fragmentTransaction.commit();
-//    }
 
     @Override
     public void register(String url) {
@@ -107,6 +111,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
 //        getSupportFragmentManager().popBackStackImmediate();
     }
 
+<<<<<<< HEAD
 
 //    @Override
 //    public void register(String email, String pwd) {
@@ -199,4 +204,6 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
 //            Toast.makeText(AuthenticationActivity.this, s, Toast.LENGTH_LONG).show();
 //        }
 //    }
+=======
+>>>>>>> database
 }
