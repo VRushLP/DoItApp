@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DoItStationActivity"
+            android:name=".StationActivity"
             android:label="@string/title_activity_do_it_station"
             android:parentActivityName=".authenticate.AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar">
