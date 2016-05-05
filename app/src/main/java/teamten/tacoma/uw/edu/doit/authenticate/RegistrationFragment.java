@@ -104,11 +104,10 @@ public class RegistrationFragment extends Fragment {
                 }
                 url = buildNewUserURL(v);
 
-
                 //Register if they hit the button and everything succeeded.
                 if(emailOkay && pwdOkay){
                     RegisterUserTask task = new RegisterUserTask();
-                    task.execute(new String[]{url.toString()});
+                    task.execute(new String[]{url});
 
                     //Go back to LogIn Fragment
                     Fragment fragment = new LogInFragment();
