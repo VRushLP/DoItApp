@@ -25,7 +25,7 @@ import teamten.tacoma.uw.edu.doit.model.DoItList.Task;
 public class DoItStationFragment extends Fragment {
 
     private OnDoItStationFragmentInteractionListener mDoItStationListener;
-    private int mColumnCount = 1;
+    private int mColumnCount = 2;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private static final String COURSE_URL

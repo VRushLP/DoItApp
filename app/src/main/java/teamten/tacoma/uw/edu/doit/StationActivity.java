@@ -70,6 +70,14 @@ public class StationActivity extends AppCompatActivity implements DoItStationFra
 
     @Override
     public void onListFragmentInteraction(DoItList item) {
-
+//        CourseDetailFragment courseDetailFragment = new CourseDetailFragment();
+//        Bundle args = new Bundle();
+//        args.putSerializable(CourseDetailFragment.COURSE_ITEM_SELECTED, item);
+//        courseDetailFragment.setArguments(args);
+//
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.course_fragment_container, courseDetailFragment)
+//                .addToBackStack(null)
+//                .commit();
     }
 }
