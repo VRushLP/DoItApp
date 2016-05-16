@@ -1,0 +1,86 @@
+package teamten.tacoma.uw.edu.doit;
+
+import android.content.Context;
+import android.content.Intent;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
+import teamten.tacoma.uw.edu.doit.model.DoItList;
+
+
+public class StationActivity extends AppCompatActivity implements DoItStationFragment.OnDoItStationFragmentInteractionListener {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_do_it_station);
+
+        // to obtain user's email to send to station.php (DoItStationFragment)
+        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
+                , Context.MODE_PRIVATE);
+        String email = mSharedPreferences.getString("@string/userEmail", null);
+        DoItStationFragment fragment = new DoItStationFragment();
+        Bundle args = new Bundle();
+        args.putString("EMAIL", email);
+        fragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.station_activity, fragment)
+                .commit();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
+        if(fab != null){
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "Not yet implemented! Sorry!",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_station, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == R.id.action_logout){
+            getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE)
+                    .edit().putBoolean(getString(R.string.LOGGEDIN), false)
+                    .apply();
+            Intent i = new Intent(this, AuthenticationActivity.class);
+            startActivity(i);
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onListFragmentInteraction(DoItList item) {
+
+    }
+}

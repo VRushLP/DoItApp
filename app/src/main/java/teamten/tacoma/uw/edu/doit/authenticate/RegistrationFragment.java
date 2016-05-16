@@ -3,6 +3,7 @@ package teamten.tacoma.uw.edu.doit.authenticate;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,14 +26,18 @@ import java.net.URLEncoder;
 import teamten.tacoma.uw.edu.doit.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * RegistrationFragment allows users to register a new account.
  */
 public class RegistrationFragment extends Fragment {
 
-    EditText mEmailText;
-    EditText mPwdText;
-    EditText mPwdConfirmText;
-    String url;
+    /* text edit view for email */
+    private EditText mEmailText;
+    /* text edit view for password */
+    private EditText mPwdText;
+    /* text edit view for confirmed password */
+    private EditText mPwdConfirmText;
+    /* URL  */
+    private String url;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -46,28 +51,32 @@ public class RegistrationFragment extends Fragment {
         mEmailText = (EditText) v.findViewById(R.id.register_edit_text_user_email);
         mPwdText = (EditText) v.findViewById(R.id.register_edit_text_password);
         mPwdConfirmText = (EditText) v.findViewById(R.id.register_edit_text_password_confirm);
-        //final EditText pwdConfirm = (EditText) v.findViewById(R.id.register_edit_text_password_confirm);
         Button finishRegisterButton = (Button) v.findViewById(R.id.finish_button);
 
         url = "";
         finishRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = mEmailText.getText().toString();
-                String pwd = mPwdText.getText().toString();
+                final String email = mEmailText.getText().toString();
+                final String pwd = mPwdText.getText().toString();
                 final String pwdConfirm = mPwdConfirmText.getText().toString();
+
+                boolean emailOkay = true;
+                boolean pwdOkay = true;
+
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(v.getContext(), "Enter an email"
                             , Toast.LENGTH_SHORT)
                             .show();
+                    emailOkay = false;
                     mEmailText.requestFocus();
                     return;
-                }
-                if (!email.contains("@")) {
+                } else  if (!email.contains("@")) {
                     Toast.makeText(v.getContext(), "Enter a valid email address"
                             , Toast.LENGTH_SHORT)
                             .show();
                     mEmailText.requestFocus();
+                    emailOkay = false;
                     return;
                 }
 
@@ -75,41 +84,54 @@ public class RegistrationFragment extends Fragment {
                     Toast.makeText(v.getContext(), "Enter password"
                             , Toast.LENGTH_SHORT)
                             .show();
+                    pwdOkay = false;
                     mPwdText.requestFocus();
                     return;
-                }
-                if (pwd.length() < 6) {
+                }else if (pwd.length() < 6) {
                     Toast.makeText(v.getContext(), "Enter password of at least 6 characters"
                             , Toast.LENGTH_SHORT)
                             .show();
+                    pwdOkay = false;
                     mPwdText.requestFocus();
                     return;
-                }
-
-                if (!pwd.equals(pwdConfirm)) {
+                } else  if (!pwd.equals(pwdConfirm)) {
                     Toast.makeText(v.getContext(), "Your password fields must match",
                             Toast.LENGTH_SHORT)
                             .show();
+                    pwdOkay = false;
                     mPwdConfirmText.requestFocus();
                     return;
                 }
-
                 url = buildNewUserURL(v);
-                //((AuthenticationActivity) getActivity()).register(email, pwd);
+
+                //Register if they hit the button and everything succeeded.
+                if(emailOkay && pwdOkay){
+                    RegisterUserTask task = new RegisterUserTask();
+                    task.execute(new String[]{url});
+
+                    //Go back to LogIn Fragment
+                    Fragment fragment = new LogInFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.authentication_activity_container, fragment)
+                            .commit();
+                }
             }
         });
 
         getActivity().setTitle("Register New Account");
-
-        RegisterUserTask task = new RegisterUserTask();
-        task.execute(new String[]{url.toString()});
-
         return v;
     }
 
     private final static String USER_ADD_URL =
             "http://cssgate.insttech.washington.edu/~_450atm10/android/addUser.php?";
 
+    /**
+     * Given URL, build a url string for an http connection.
+     *
+     * @param v the view
+     * @return string of composed url
+     */
     private String buildNewUserURL(View v) {
         StringBuilder sb = new StringBuilder(USER_ADD_URL);
 
@@ -131,12 +153,7 @@ public class RegistrationFragment extends Fragment {
         return sb.toString();
     }
 
-    public interface RegistrationInteractionListener {
-        public void register(String url);
-    }
-
     private class RegisterUserTask extends AsyncTask<String, Void, String> {
-
         /* For easy Log tracking */
         private static final String TAG = "RegisterUserTask";
 
