@@ -8,19 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import teamten.tacoma.uw.edu.doit.model.DoItList;
-import teamten.tacoma.uw.edu.doit.model.DoItList.Task;
 
 import java.util.List;
 
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
 
-    private final List<DoItList> mValues;
-    private final DoItStationFragment.OnDoItStationFragmentInteractionListener mListener;
+    private final List<DoItList> listOfListsData;
+    private final StationFragment.OnDoItStationFragmentInteractionListener mListener;
 
-    public MyDoItListRecyclerViewAdapter(List<DoItList> items, DoItStationFragment.OnDoItStationFragmentInteractionListener listener) {
+    public MyDoItListRecyclerViewAdapter(List<DoItList> items, StationFragment.OnDoItStationFragmentInteractionListener listener) {
 
-        mValues = items;
+        listOfListsData = items;
         mListener = listener;
     }
 
@@ -33,7 +32,8 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
+        // getting particular item from list
+        holder.mListItem = listOfListsData.get(position);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,7 +41,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(holder.mListItem);
                 }
             }
         });
@@ -49,26 +49,28 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return listOfListsData.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView mTitleView;
 
-        public DoItList mItem;
+//        public final TextView mTaskContentView;
+
+        public DoItList mListItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mTitleView = (TextView) view.findViewById(R.id.list_title_view);
+//            mTaskContentView = (TextView) view.findViewById(R.id.list_task_content_view);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
+//        @Override
+//        public String toString() {
+//            return super.toString() + " '" + mTaskContentView.getText() + "'";
+//        }
     }
 }
