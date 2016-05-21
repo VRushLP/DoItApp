@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +80,12 @@ public class StationFragment extends Fragment {
         // adding userID to obtain their specific data
         SharedPreferences mSharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
+
         mUserID = mSharedPreferences.getString("USERID", null);
         listURL = listURL + "&userID=" + mUserID;
+
+//        userEmail = mSharedPreferences.getString("@string/userEmail", null);
+//        listURL = listURL + "&email=" + userEmail;
     }
 
     @Override
@@ -185,12 +191,15 @@ public class StationFragment extends Fragment {
         protected String doInBackground(String... urls) {
             String response = "";
             HttpURLConnection urlConnection = null;
+            URL urlObject=null;
             for (String url : urls) {
                 try {
-                    URL urlObject = new URL(url);
+                    urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
+                    Log.wtf("Help", "1");
 
                     InputStream content = urlConnection.getInputStream();
+                    Log.wtf("Help", "2");
 
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
                     String s = "";
@@ -200,7 +209,8 @@ public class StationFragment extends Fragment {
 
                 } catch (Exception e) {
                     response = "Unable to download the lists, Reason: "
-                            + e.getMessage();
+                            + e.getClass();
+
                 }
                 finally {
                     if (urlConnection != null)
