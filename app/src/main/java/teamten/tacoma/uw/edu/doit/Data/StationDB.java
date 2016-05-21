@@ -15,7 +15,7 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
  * Created by heath_000 on 5/2/2016.
  */
 public class StationDB {
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 5;
     public static final String DB_NAME = "_450atm10.db";
     private static final String TABLE_NAME = "lists";
 
@@ -42,7 +42,7 @@ public class StationDB {
     public List<DoItList> getDoItLists() {
 
         String[] columns = {
-                "listID",
+                //"listID",
                 "title",
                 "isDeleted"
         };
@@ -59,9 +59,9 @@ public class StationDB {
         c.moveToFirst();
         List<DoItList> list = new ArrayList<DoItList>();
         for (int i=0; i<c.getCount(); i++) {
-            int id = c.getInt(0);
-            String title = c.getString(1);
-            int isDeleted = c.getInt(2);  // handle if it equals null
+            //int id = c.getInt(0);
+            String title = c.getString(0);
+            int isDeleted = c.getInt(1);
             DoItList theList = new DoItList(title, isDeleted);
             list.add(theList);
             c.moveToNext();
@@ -74,7 +74,7 @@ public class StationDB {
 
     /**
      * Inserts the course into the local sqlite table. Returns true if successful, false otherwise.
-     * @param id
+     * @param
      * @param title
      * @return true or false
      */
@@ -99,7 +99,8 @@ public class StationDB {
 
         private static final String CREATE_LIST_SQL =
                 "CREATE TABLE IF NOT EXISTS lists "
-                        + "(listID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, isDeleted INTEGER)";
+//                        + "(listID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, isDeleted INTEGER)";
+                        + "(title TEXT, isDeleted INTEGER)";
 //        private static final String CREATE_TASK_SQL =
 //                "CREATE TABLE IF NOT EXISTS tasks "
 //                        + "(taskID INTEGER PRIMARY KEY AUTOINCREMENT, textInput TEXT, isDeleted TINYINT)";

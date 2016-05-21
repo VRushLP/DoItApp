@@ -36,9 +36,9 @@ public class StationFragment extends Fragment {
 
 
     private int mColumnCount = 1;
-    private String userEmail;
+    private String mUserID;
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
+    //private static final String ARG_COLUMN_COUNT = "1";
     private String listURL
             = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=station";
 
@@ -70,24 +70,22 @@ public class StationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
+//        if (getArguments() != null) {
+//            mColumnCount = getArguments().getInt(mColumnCount);
+//        }
         mStationDB = new StationDB(this.getContext());
 
-        // adding user email to obtain their specific data
+        // adding userID to obtain their specific data
         SharedPreferences mSharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
-        userEmail = mSharedPreferences.getString("@string/userEmail", null);
-        listURL = listURL + "&email=" + userEmail;
+        mUserID = mSharedPreferences.getString("USERID", null);
+        listURL = listURL + "&userID=" + mUserID;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_doitlist_list, container, false);
-
-
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -98,13 +96,7 @@ public class StationFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            if (mStationDB == null) {
-                mStationDB = new StationDB(getActivity());
-            }
-            if (mListOfDoItLists == null) {
-                mListOfDoItLists = mStationDB.getDoItLists();
-            }
-            mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(mListOfDoItLists, mListener));
+
         }
 
 
@@ -113,7 +105,6 @@ public class StationFragment extends Fragment {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             DownloadListsTask task = new DownloadListsTask();
-            //add user's email here
             task.execute(new String[]{listURL});
         }
         else {

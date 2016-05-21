@@ -73,14 +73,6 @@ public class ListAddFragment extends Fragment {
         StringBuilder sb = new StringBuilder(LIST_ADD_URL);
 
         try {
-//            String listTitle = mListTitleEditText.getText().toString();
-//            sb.append("title=");
-//            sb.append(listTitle);
-//
-//            Bundle data = getArguments();
-//            String userEmail = data.getString("EMAIL");
-//            sb.append("&email=");
-//            sb.append(URLEncoder.encode(userEmail, "UTF-8"));
 
             Bundle data = getArguments();
             String userEmail = data.getString("EMAIL");
@@ -90,6 +82,10 @@ public class ListAddFragment extends Fragment {
             String listTitle = mListTitleEditText.getText().toString();
             sb.append("&title=");
             sb.append(URLEncoder.encode(listTitle, "UTF-8"));
+
+            String userID = data.getString("USERID");
+            sb.append("&userID=");
+            sb.append(userID);
 
             Log.i("ListAddFragment", sb.toString());
 

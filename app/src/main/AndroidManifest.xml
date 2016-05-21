@@ -18,14 +18,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".StationActivity"
             android:label="@string/title_activity_do_it_station"
-            android:parentActivityName=".authenticate.AuthenticationActivity"
+
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity" />
+
         </activity>
     </application>
 

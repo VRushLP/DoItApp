@@ -1,6 +1,10 @@
 package teamten.tacoma.uw.edu.doit.authenticate;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,14 +15,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Iterator;
+
 import teamten.tacoma.uw.edu.doit.R;
+import teamten.tacoma.uw.edu.doit.StationActivity;
 
 /**
  * LogInFragment allows user to access their account.
  */
 public class LogInFragment extends Fragment {
 
-    private final static String USER_LOGIN_URL =
+    private static String USER_LOGIN_URL =
             "http://cssgate.insttech.washington.edu/~_450atm10/android/login.php?";
 
     public LogInFragment() {
@@ -69,8 +85,10 @@ public class LogInFragment extends Fragment {
                     return;
                 }
 
-                //TODO check against webservices to authenticate user
                 ((AuthenticationActivity) getActivity()).login(userEmail, pwd);
+//                USER_LOGIN_URL += "email=" + userEmail + "&pwd=" + pwd;
+//                Log.i("LoginFragment", USER_LOGIN_URL.toString());
+//                new  VerifyLoginAndRetrieveUserIdTask().execute(USER_LOGIN_URL);
             }
         });
 
@@ -96,4 +114,93 @@ public class LogInFragment extends Fragment {
     public interface LoginInteractionListener {
         public void login(String email, String pwd);
     }
+
+//    /**
+//     * Web service to retrieve userID stored in database
+//     * Creates a POST of user's account credentials saved to the database.
+//     */
+//    private class VerifyLoginAndRetrieveUserIdTask extends AsyncTask<String, Void, String> {
+//
+//        private static final String TAG = "RetrieveUserIdTask";
+//
+//        /**
+//         * Checks connection for service.
+//         *
+//         * @param urls php file path.
+//         * @return if accessible or not.
+//         */
+//        @Override
+//        protected String doInBackground(String... urls) {
+//            String response = "";
+//            HttpURLConnection urlConnection = null;
+//            //for (String url : urls) {
+//                try {
+//                    URL urlObject = new URL(urls[0]);
+//                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+//
+//                    InputStream content = urlConnection.getInputStream();
+//
+//                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+//                    String s = "";
+//                    while ((s = buffer.readLine()) != null) {
+//                        response += s;
+//                    }
+//
+//                } catch (Exception e) {
+//                    response = "Unable to retrieve userID, Reason: "
+//                            + e.getMessage();
+//                    Log.wtf("wtf", e.getMessage());
+//                } finally {
+//                    if (urlConnection != null)
+//                        urlConnection.disconnect();
+//                }
+//            //}
+//            return response;
+//        }
+//
+//        /**
+//         * It checks to see if there was a problem with the URL(Network) which is when an
+//         * exception is caught. It tries to call the parse Method and checks to see if it was successful.
+//         * If not, it displays the exception.
+//         *
+//         * @param result
+//         */
+//        @Override
+//        protected void onPostExecute(String result) {
+//            // Something wrong with the network or the URL.
+//            try {
+////                JSONObject jsonObject = new JSONObject(result).getJSONObject("categories");
+////                JSONObject[] keys = jsonObject.getJSONArray();
+////                for (String value : keys){
+////                    String status = (String) jsonObject.get("result");
+////                    String userID = (String) jsonObject.get("userid");
+////                }
+//
+//                JSONObject jsonObject = new JSONObject(result);
+//                String status = (String) jsonObject.get("result");
+//                String userID = (String) jsonObject.get("userid");
+//                StationActivity.setUserID(userID);
+//                Context context;
+//                StationActivity.context = getApplicationContext();
+//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(StationActivity.context);
+//                getSharedPreferences(getString(R.string.LOGIN_PREFS)
+//                        , Context.MODE_PRIVATE);
+//                preferences.edit().putString("@string/userID", userID).commit();
+//
+//                if (status.equals("success")) {
+//                    Toast.makeText(getActivity(), "Database user data successfully retrieved! userID = " + userID
+//                            , Toast.LENGTH_LONG)
+//                            .show();
+//                } else {
+//                    Toast.makeText(getActivity(), "Failed to retrieve: "
+//                                    + jsonObject.get("error")
+//                            , Toast.LENGTH_LONG)
+//                            .show();
+//                }
+//            } catch (JSONException e) {
+//                Toast.makeText(getActivity(), "Something wrong with the php file/other" +
+//                        e.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    }
 }

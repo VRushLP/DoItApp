@@ -1,21 +1,15 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentBottom="true"
-    android:layout_marginTop="10dp"
-    android:paddingTop="5dp"
-    android:paddingRight="3dp"
-    android:paddingLeft="3dp"
+    android:orientation="vertical"
     android:id="@+id/fragment_add_list_ID"
-    tools:context=".ListAddFragment">
+    tools:context=".ListDetailFragment">
 
     <EditText
         android:id="@+id/list_title_ET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="50pt"
-        android:layout_alignParentTop="true"
         android:hint="Enter Title"/>
 
     <Button
@@ -32,4 +26,4 @@
         android:id="@+id/create_list_title"
         android:text="Create" />
 
-</RelativeLayout>
+</LinearLayout>

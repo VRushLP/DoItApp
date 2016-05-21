@@ -53,8 +53,8 @@ error_reporting(E_ALL);
             // check result and obtain userID
             if ($result != false) {
                 //on success, return the user id
-			   echo '{"result": "success", "userID": "' . $result['userID'] . '"}';
-			   $userID = $result['userID'];
+			   echo '{"result": "success", "userID": "' . $userID . '"}';
+			   //$userID = $result['userID'];
             } else {
                 echo '{"result": "fail", "error": "Incorrect email query to obtain userID."}';
             }

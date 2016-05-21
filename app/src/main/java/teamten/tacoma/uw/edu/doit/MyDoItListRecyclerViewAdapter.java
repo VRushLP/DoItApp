@@ -68,9 +68,9 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
 //            mTaskContentView = (TextView) view.findViewById(R.id.list_task_content_view);
         }
 
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mTaskContentView.getText() + "'";
-//        }
+        @Override
+        public String toString() {
+            return super.toString() + " '" + mTitleView.getText() + "'";
+        }
     }
 }

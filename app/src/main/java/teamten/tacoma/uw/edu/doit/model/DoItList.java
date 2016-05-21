@@ -27,9 +27,9 @@ public class DoItList implements Serializable {
         mIsDeleted = theIsDeleted;
     }
 
-    public void addTask(Task item) { mList.add(item); }
+    //public void addTask(Task item) { mList.add(item); }
 
-    public void removeTask(Task item) {mList.remove(item);}
+    //public void removeTask(Task item) {mList.remove(item);}
 
     public String getTitle() { return this.mTitle; }
 

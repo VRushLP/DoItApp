@@ -29,7 +29,7 @@
                     echo '{"result": "fail", "error": "Please enter a valid password (longer than five characters)."}';
                 } else {    
                     //build query
-                    $sql = "SELECT email, pwd FROM users ";
+                    $sql = "SELECT userID, email, pwd FROM users ";
                     $sql .= " WHERE email = '" . $email . "'";
 
             
@@ -42,7 +42,8 @@
                     if ($result != false) {
                         //on success, return the user id
                         if (strcmp($pwd, $result['pwd']) == 0)
-            	           echo '{"result": "success", "email": "' . $result['email'] . '"}';
+							echo '{"result": "success", "email": "' . $result['email'] . '", "userid": "' . $result['userID'] . '"}';
+						//", "userid": "' . $result['userID'] . '
     	               else 
     		              echo '{"result": "fail", "error": "Incorrect password."}';
                     } else {
@@ -54,6 +55,6 @@
             catch (PDOException $e) {
                 echo 'Error Number: ' . $e->getCode() . '<br>';
             }
-
+		//$db = null;
             
     ?>
