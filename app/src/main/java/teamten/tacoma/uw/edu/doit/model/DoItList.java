@@ -18,12 +18,17 @@ public class DoItList implements Serializable {
 
     String mTitle;
     int mIsDeleted;
-    public List<Task> mList;
+    //public List<Task> mList;
+    public ArrayList<String> mSampleListOfTasks;
     public static final String TITLE = "title", ISDELETED = "isDeleted";
 
     public DoItList(String theTitle, int theIsDeleted) {
         mTitle = theTitle;
         //mList = new ArrayList<Task>();
+        mSampleListOfTasks = new ArrayList<String>();  // should be able to replace Strings to Task class
+        mSampleListOfTasks.add("Task1");
+        mSampleListOfTasks.add("Task2");
+        mSampleListOfTasks.add("Task3");
         mIsDeleted = theIsDeleted;
     }
 
@@ -40,6 +45,8 @@ public class DoItList implements Serializable {
             mTitle = "Title Default";
         }
     }
+
+    public ArrayList<String> getTasks() { return this.mSampleListOfTasks; }
 
     public void setIsDeleted(int mIsDeleted) {
         this.mIsDeleted = mIsDeleted;
@@ -78,18 +85,18 @@ public class DoItList implements Serializable {
         }
         return reason;
     }
-
-    /**
-     * Class representing a single task.
-     */
-    public static class Task {
-        public String taskContent;
-        public static final String TEXT_INPUT = "textInput";
-        public Task(String content) {
-            this.taskContent = content;
-        }
-
-        public String getTaskContent() { return this.taskContent;}
-        public void setTaskContent(String theNewContent) { this.taskContent = theNewContent;}
-    }
+//
+//    /**
+//     * Class representing a single task.
+//     */
+//    public static class Task {
+//        public String taskContent;
+//        public static final String TEXT_INPUT = "textInput";
+//        public Task(String content) {
+//            this.taskContent = content;
+//        }
+//
+//        public String getTaskContent() { return this.taskContent;}
+//        public void setTaskContent(String theNewContent) { this.taskContent = theNewContent;}
+//    }
 }

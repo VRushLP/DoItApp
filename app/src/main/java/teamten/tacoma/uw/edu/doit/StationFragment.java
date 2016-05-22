@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,11 +39,10 @@ public class StationFragment extends Fragment {
 
 
     private int mColumnCount = 1;
-    private String mUserID;
+    //private String mUserID;
 
     //private static final String ARG_COLUMN_COUNT = "1";
-    private String listURL
-            = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=station";
+    private String listURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=station";
 
     private RecyclerView mRecyclerView;
 
@@ -81,8 +81,27 @@ public class StationFragment extends Fragment {
         SharedPreferences mSharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
 
-        mUserID = mSharedPreferences.getString("USERID", null);
-        listURL = listURL + "&userID=" + mUserID;
+        String userIdSharePref = mSharedPreferences.getString("@string/userID", null);
+        StringBuilder listURLBuilder = new StringBuilder();
+
+        listURLBuilder.append("&userID=");
+        listURLBuilder.append(userIdSharePref);
+        System.out.println("StationFragment onCreate URL: " + listURLBuilder);
+
+        listURL += listURLBuilder;
+
+//        //bundle doesn't seem to be retrieving data
+//        Bundle data = getArguments();
+//        String userID = "";
+//        if (data!= null) {// to avoid the NullPointerException
+//            userID = data.getString("USERIDAUTH");
+//            System.out.println("StationFragment onCreate USERIDAUTH: " + userID);
+//        }
+
+
+
+//        mUserID = mSharedPreferences.getString("USERID", null);
+//        listURL = listURL + "&userID=" + mUserID;
 
 //        userEmail = mSharedPreferences.getString("@string/userEmail", null);
 //        listURL = listURL + "&email=" + userEmail;
@@ -110,6 +129,7 @@ public class StationFragment extends Fragment {
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
+            Log.i("StationFragment", listURL);
             DownloadListsTask task = new DownloadListsTask();
             task.execute(new String[]{listURL});
         }
@@ -189,11 +209,13 @@ public class StationFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... urls) {
+
             String response = "";
             HttpURLConnection urlConnection = null;
             URL urlObject=null;
             for (String url : urls) {
                 try {
+
                     urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
                     Log.wtf("Help", "1");
@@ -208,6 +230,7 @@ public class StationFragment extends Fragment {
                     }
 
                 } catch (Exception e) {
+
                     response = "Unable to download the lists, Reason: "
                             + e.getClass();
 

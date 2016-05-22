@@ -58,19 +58,27 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!= null) {// to avoid the NullPointerException
+            mUserID = bundle.getString("userID");
+        }
+
 //        StationActivity.context = getApplicationContext();
 
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
         userEmailSharePref = mSharedPreferences.getString("@string/userEmail", null);
-        System.out.println("StationActivity onCreate: " + userEmailSharePref);
-        StationFragment fragment = new StationFragment();
+        System.out.println("StationActivity onCreate email from shared pref: " + userEmailSharePref);
+
+        /////
+//        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
+        ////
 
         //String userIdSharePref = getUserID();
         //mSharedPreferences.edit().putString("@string/userID", userIdSharePref).commit();  //add userID for first time
         userIdSharePref = mSharedPreferences.getString("@string/userID", null);
-        System.out.println("StationActivity onCreate: " + userIdSharePref);
+        System.out.println("StationActivity onCreate userID from shared pref: " + userIdSharePref);
         //setDefaults("@string/userID", userIdSharePref, StationActivity.context);
 
         Bundle args = new Bundle();
@@ -80,7 +88,9 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
 
         args.putString("USERID", userIdSharePref);
 
+        StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
+
 
 
 //        getSupportFragmentManager().beginTransaction()

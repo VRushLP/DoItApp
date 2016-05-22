@@ -28,7 +28,7 @@ public class ListDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list_detail, container, false);
-        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_id);
+        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
         return view;
     }
 

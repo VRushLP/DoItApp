@@ -9,6 +9,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_item_id" />
+        android:textSize="18dp"
+        android:id="@+id/list_item_title" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Currently viewing List's detail" />
 
 </LinearLayout>

@@ -56,7 +56,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mTitleView;
-
+        
 //        public final TextView mTaskContentView;
 
         public DoItList mListItem;

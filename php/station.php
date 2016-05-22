@@ -34,7 +34,7 @@ $command = $_GET['cmd'];
 		//$userID = $result['userID'];
 		
 		if ($command == "station") {
-			$select_sql = 'SELECT lists.title, lists.isDeleted FROM lists JOIN listRights ON lists.listID = listRights.listID WHERE listRights.userID = ' . $userID;
+			$select_sql = "SELECT lists.title, lists.isDeleted FROM lists JOIN listRights ON lists.listID = listRights.listID WHERE listRights.userID = " . "'$userID'";
 			$list_query = $db->query($select_sql);
 			$lists = $list_query->fetchAll(PDO::FETCH_ASSOC);
 			if ($lists) {	
