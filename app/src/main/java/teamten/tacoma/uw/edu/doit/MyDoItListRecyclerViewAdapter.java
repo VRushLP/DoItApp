@@ -34,6 +34,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // getting particular item from list
         holder.mListItem = listOfListsData.get(position);
+        holder.mTitleView.setText(listOfListsData.get(position).getTitle());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
