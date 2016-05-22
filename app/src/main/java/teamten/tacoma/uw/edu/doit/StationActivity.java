@@ -1,7 +1,9 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.app.Application;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -10,10 +12,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -186,6 +190,35 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                 .replace(R.id.station_container, listDetailFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(getSupportFragmentManager().getBackStackEntryCount() < 1){
+            new AlertDialog.Builder(this)
+                    .setTitle("Close")
+                    .setMessage("Are you sure you want to close Do It?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which){
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .setOnKeyListener(new Dialog.OnKeyListener() {
+                        @Override
+                        public boolean onKey(DialogInterface arg0, int keyCode,
+                                             KeyEvent event) {
+                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                finish();
+                            }
+                            return true;
+                        }
+                    })
+                    .show();
+        } else{
+            super.onBackPressed();
+        }
     }
 
     @Override
