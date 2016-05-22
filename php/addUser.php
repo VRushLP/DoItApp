@@ -24,7 +24,7 @@ error_reporting(E_ALL);
 
                 //build query
                 $sql = "INSERT INTO users";
-                $sql .= " VALUES ('NULL', '$pwd', '$email')";
+                $sql .= " VALUES ('NULL', '$email', '$pwd')";
              
                 //attempts to add record
                 if ($db->query($sql)) {
