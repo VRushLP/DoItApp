@@ -108,14 +108,14 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         Log.i("AuthenticationActivity", buildURL.toString());
         new  VerifyLoginAndRetrieveUserIdTask().execute(buildURL);
 
-//        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
-//        String mUserIDSP = mSharedPreferences.getString("@string/userID", null);
+        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
+        String mUserIDSP = mSharedPreferences.getString("@string/userID", null);
 //        System.out.println("AuthenticationActivity mUserID= " + mUserIDSP);
         i = new Intent(this, StationActivity.class);
-//        Intent i = new Intent(this, StationActivity.class);
-//        i.putExtra("userID", mUserIDSP);
-//        startActivity(i);
-//        finish();
+        Intent i = new Intent(this, StationActivity.class);
+        i.putExtra("userID", mUserIDSP);
+        startActivity(i);
+        finish();
     }
 
 
