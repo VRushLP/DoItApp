@@ -20,9 +20,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +48,7 @@ public class StationFragment extends Fragment {
     private List<DoItList> mListOfDoItLists;
 
     private OnDoItStationFragmentInteractionListener mListener;
+    private DeleteListClickListener mDeleteListListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -107,6 +106,8 @@ public class StationFragment extends Fragment {
 //        listURL = listURL + "&email=" + userEmail;
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,6 +117,7 @@ public class StationFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
+
             if (mColumnCount <= 1) {
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -144,7 +146,8 @@ public class StationFragment extends Fragment {
             if (mListOfDoItLists == null) {
                 mListOfDoItLists = mStationDB.getDoItLists();
             }
-            mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(mListOfDoItLists, mListener));
+
+            mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(mListOfDoItLists, mListener, mDeleteListListener));
 
         }
 
@@ -183,6 +186,14 @@ public class StationFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnDoItStationFragmentInteractionListener");
         }
+
+        if (context instanceof  DeleteListClickListener) {
+            mDeleteListListener = (DeleteListClickListener) context; }
+        else
+        {
+            throw new RuntimeException(context.toString()
+                    + " must implement DeleteListClickListener");
+        }
     }
 
     @Override
@@ -205,11 +216,15 @@ public class StationFragment extends Fragment {
         void onListFragmentInteraction(DoItList item);
     }
 
+
+    public interface DeleteListClickListener {
+        public void itemClickedToBeDeleted(DoItList item);
+    }
+
     private class DownloadListsTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls) {
-
             String response = "";
             HttpURLConnection urlConnection = null;
             URL urlObject=null;
@@ -263,7 +278,7 @@ public class StationFragment extends Fragment {
 
             // Everything is good, show the list of courses.
             if (!list.isEmpty()) {
-                mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(list, mListener));
+                mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(list, mListener, mDeleteListListener));
 
                 if (mStationDB == null) {
                     mStationDB = new StationDB(getActivity());
@@ -276,11 +291,14 @@ public class StationFragment extends Fragment {
                 // Also, add to the local database
                 for (int i=0; i<list.size(); i++) {
                     DoItList single_list = list.get(i);
-                    mStationDB.insertStation(single_list.getTitle(),
+                    mStationDB.insertStation(single_list.getListID(), single_list.getTitle(),
                             single_list.getIsDeleted());
                 }
             }
         }
     }
+
+
+
 
 }

@@ -12,42 +12,48 @@ $command = $_GET['cmd'];
 		$db = new PDO($dsn, $username, $password);
 		
 		$userID = isset($_GET['userID']) ? $_GET['userID'] : '';
+		// $listID used for when there is a delete occuring
+		$listID = isset($_GET['listID']) ? $_GET['listID'] : '';
 		
-		//build select query to obtain that user's station data
-        //$sql = "SELECT * FROM users ";
-        //$sql .= " WHERE email = '$email'";
-		//$userID = 12;
-		//
-		//$userID_query = $db->query($sql);
-		//$userID_query->execute();
-		//$result = $userID_query->fetchAll(PDO::FETCH_ASSOC); 
-		//$userID = $result;
-		
-		//$userID_query = $db->userID_query($sql);
-		//$result = $userID_query->fetchAll(PDO::FETCH_COLUMN, 0); 
-		//$userID = $result;
-		
-		//$stmt = $db->prepare($sql); 
-		//$stmt->execute();
-		// set the resulting array to associative
-		//$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-		//$userID = $result['userID'];
+		$list_title = isset($_GET['title']) ? $_GET['title'] : ''; // later assignment
+		$isDeleted = isset($_GET['isDeleted']) ? $_GET['isDeleted'] : '';  // place holder for later assignment
+
 		
 		if ($command == "station") {
-			$select_sql = "SELECT lists.title, lists.isDeleted FROM lists JOIN listRights ON lists.listID = listRights.listID WHERE listRights.userID = " . "'$userID'";
+			$select_sql = "SELECT lists.listID, lists.title, lists.isDeleted FROM lists JOIN listRights ON lists.listID = listRights.listID WHERE listRights.userID = " . "'$userID'";
 			$list_query = $db->query($select_sql);
 			$lists = $list_query->fetchAll(PDO::FETCH_ASSOC);
 			if ($lists) {	
 				echo json_encode($lists);
 			}
+		} else if ($command == "delete") {      
+			// delete query for listRights
+			$sql_deleteListRights = "DELETE FROM listRights WHERE listID = "."'$listID'";
+		 
+			//attempts to delete listRights
+			if ($db->query($sql_deleteListRights)) {
+				//echo '{"result": "successfully deleted a record for table listRights"}';
+				
+				//attempts to delete list
+				$sql_deleteList = "DELETE FROM lists WHERE listID = "."'$listID'";
+				if ($db->query($sql_deleteList)) {
+					echo '{"result": "success"}';
+				} else {
+					echo '{"result": "fail", "error": "listRight and lists record NOT deleted."}';
+				}
+            }  
+		} else {
+			echo '{"result": "fail", "error": "in station.php"}';
 		}
-		//else if ($command == "instructors") {
-		//	$select_sql = 'SELECT fullName, title, email, photoUrl, office FROM Instructors';
-		//	$query = $db->query($select_sql);
-		//	$instructors = $query->fetchAll(PDO::FETCH_ASSOC);
-		//	if ($instructors) {
-		//		echo json_encode($instructors);
-		//	}
+		//else if ($command == "update") { 
+			//$update_sql = "UPDATE lists SET title = '$list_title', isDeleted = '$isDeleted' WHERE listID = '$listID'";
+			//attempts to update listRights
+			//if ($db->query($update_sql)) {
+			//		echo '{"result": "success, list was UPDATED"}';
+            //} else {
+			//		echo '{"result": "fail, list did NOT update"}';
+			//}
+			
 		//}
 		$db = null;
 	} catch (PDOException $e) {

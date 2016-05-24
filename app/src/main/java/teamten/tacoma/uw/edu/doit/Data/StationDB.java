@@ -42,7 +42,7 @@ public class StationDB {
     public List<DoItList> getDoItLists() {
 
         String[] columns = {
-                //"listID",
+                "listID",
                 "title",
                 "isDeleted"
         };
@@ -59,10 +59,10 @@ public class StationDB {
         c.moveToFirst();
         List<DoItList> list = new ArrayList<DoItList>();
         for (int i=0; i<c.getCount(); i++) {
-            //int id = c.getInt(0);
-            String title = c.getString(0);
-            int isDeleted = c.getInt(1);
-            DoItList theList = new DoItList(title, isDeleted);
+            int id = c.getInt(0);
+            String title = c.getString(1);
+            int isDeleted = c.getInt(2);
+            DoItList theList = new DoItList(id, title, isDeleted);
             list.add(theList);
             c.moveToNext();
         }
@@ -78,9 +78,9 @@ public class StationDB {
      * @param title
      * @return true or false
      */
-    public boolean insertStation(String title, int isDeleted) {
+    public boolean insertStation(int id, String title, int isDeleted) {
         ContentValues contentValues = new ContentValues();
-        //contentValues.put("listID", id);
+        contentValues.put("listID", id);
         contentValues.put("title", title);
         contentValues.put("isDeleted", isDeleted);
         long rowId = mSQLiteDatabase.insert("lists", null, contentValues);
@@ -99,11 +99,8 @@ public class StationDB {
 
         private static final String CREATE_LIST_SQL =
                 "CREATE TABLE IF NOT EXISTS lists "
-//                        + "(listID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, isDeleted INTEGER)";
-                        + "(title TEXT, isDeleted INTEGER)";
-//        private static final String CREATE_TASK_SQL =
-//                "CREATE TABLE IF NOT EXISTS tasks "
-//                        + "(taskID INTEGER PRIMARY KEY AUTOINCREMENT, textInput TEXT, isDeleted TINYINT)";
+                        + "(listID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, isDeleted INTEGER)";
+//                        + "(title TEXT, isDeleted INTEGER)";
 
         private static final String DROP_COURSE_SQL =
                 "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -115,7 +112,6 @@ public class StationDB {
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
             sqLiteDatabase.execSQL(CREATE_LIST_SQL);
-//            sqLiteDatabase.execSQL(CREATE_TASK_SQL);
         }
 
         @Override

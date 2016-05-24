@@ -1,6 +1,7 @@
 package teamten.tacoma.uw.edu.doit;
 
-import android.app.Application;
+
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,11 +11,13 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -40,18 +43,21 @@ import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 
 
-public class StationActivity extends AppCompatActivity implements StationFragment.OnDoItStationFragmentInteractionListener, ListAddFragment.ListAddListener {
+public class StationActivity extends AppCompatActivity implements StationFragment.OnDoItStationFragmentInteractionListener,
+                        ListAddFragment.ListAddListener, StationFragment.DeleteListClickListener {
 
     //private static final String TAG = "StationActivity";
     private String userEmailSharePref;
     private String userIdSharePref;
     private static String mUserID;
+    private android.support.v4.app.FragmentManager m;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+
 
 
     @Override
@@ -61,6 +67,8 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        m = getSupportFragmentManager();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {// to avoid the NullPointerException
@@ -87,8 +95,6 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
 
         Bundle args = new Bundle();
         args.putString("EMAIL", userEmailSharePref);
-
-
 
         args.putString("USERID", userIdSharePref);
 
@@ -166,6 +172,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
             Bundle userBundleData = new Bundle();
             userBundleData.putString("EMAIL", userEmailSharePref);
             userBundleData.putString("USERID", userIdSharePref);
+            userBundleData.putString("TASK_ACTION", "add");
             ListAddFragment listAddFragment = new ListAddFragment();
             listAddFragment.setArguments(userBundleData);
             getSupportFragmentManager().beginTransaction()
@@ -186,10 +193,50 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         args.putSerializable(ListDetailFragment.LIST_ITEM_SELECTED, item);
         listDetailFragment.setArguments(args);
 
+        System.out.println("HERE: onListFragmentInteraction method on StationActivity");
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.station_container, listDetailFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void itemClickedToBeDeleted(DoItList item) {
+        // open dialog fragment to either delete/update passed in listitem.
+        Log.d("HERE:", "itemClickedToBeDeleted method on StationActivity");
+        System.out.println("HERE: itemClickedToBeDeleted method on StationActivity");
+
+//        FragmentManager fm = getSupportFragmentManager();
+//        new ListDialogFragment().show(fm,"about");
+        showDialog(item);
+
+
+////        if (dialog != null && !dialog.isVisible()) {
+////            dialog.show(fm, "Here");
+//        new dialog
+//            getSupportFragmentManager().executePendingTransactions();
+//        }
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_list_dialog_ID, )
+    }
+
+    //private int mStackLevel;
+    void showDialog(DoItList theItem) {
+        //mStackLevel++;
+        int mStackLevel = 8;
+
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = ListDialogFragment.newInstance(mStackLevel, theItem, userIdSharePref);
+        newFragment.show(ft, "dialog");
     }
 
     @Override
@@ -222,8 +269,8 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
     }
 
     @Override
-    public void addList(String url) {
-        AddList_AsyncTask task = new AddList_AsyncTask();
+    public void addList(String url, String taskAction) {
+        AddList_AsyncTask task = new AddList_AsyncTask(taskAction);
         task.execute(new String[]{url.toString()});
 
         // Takes you back to the previous fragment by popping the current fragment out.
@@ -270,12 +317,24 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         client.disconnect();
     }
 
+
+
     private class AddList_AsyncTask extends AsyncTask<String, Void, String> {
+
+
+        private String TASK_ACTION;
+
+        public AddList_AsyncTask(String taskAction) {
+            TASK_ACTION = taskAction;
+        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
+
+
+
 
         @Override
         protected String doInBackground(String... urls) {
@@ -295,7 +354,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                     }
 
                 } catch (Exception e) {
-                    response = "Unable to add list, Reason: "
+                    response = "Unable to " + TASK_ACTION + " list, Reason: "
                             + e.getMessage();
                     Log.wtf("wtf", e.getMessage());
                 } finally {
@@ -320,11 +379,11 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
-                    Toast.makeText(getApplicationContext(), "List successfully added!"
+                    Toast.makeText(getApplicationContext(), "List successfully "+TASK_ACTION+"ed!"
                             , Toast.LENGTH_LONG)
                             .show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Failed to add: "
+                    Toast.makeText(getApplicationContext(), "Failed to "+TASK_ACTION+": "
                                     + jsonObject.get("error")
                             , Toast.LENGTH_LONG)
                             .show();

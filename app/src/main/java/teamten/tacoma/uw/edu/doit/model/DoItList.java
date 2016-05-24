@@ -17,24 +17,20 @@ import java.util.Map;
 public class DoItList implements Serializable {
 
     String mTitle;
-    int mIsDeleted;
-    //public List<Task> mList;
-    public ArrayList<String> mSampleListOfTasks;
-    public static final String TITLE = "title", ISDELETED = "isDeleted";
+    int mIsDeleted, mListID;
+    public static final String LIST_ID = "listID", TITLE = "title", ISDELETED = "isDeleted";
 
-    public DoItList(String theTitle, int theIsDeleted) {
+    public DoItList(int theListID, String theTitle, int theIsDeleted) {
+        mListID = theListID;
         mTitle = theTitle;
-        //mList = new ArrayList<Task>();
-        mSampleListOfTasks = new ArrayList<String>();  // should be able to replace Strings to Task class
-        mSampleListOfTasks.add("Task1");
-        mSampleListOfTasks.add("Task2");
-        mSampleListOfTasks.add("Task3");
         mIsDeleted = theIsDeleted;
     }
 
-    //public void addTask(Task item) { mList.add(item); }
+    public int getListID() { return this.mListID; }
 
-    //public void removeTask(Task item) {mList.remove(item);}
+    public void setListID(int theListID) {
+        this.mListID = theListID;
+    }
 
     public String getTitle() { return this.mTitle; }
 
@@ -46,21 +42,11 @@ public class DoItList implements Serializable {
         }
     }
 
-    public ArrayList<String> getTasks() { return this.mSampleListOfTasks; }
-
     public void setIsDeleted(int mIsDeleted) {
         this.mIsDeleted = mIsDeleted;
     }
     public int getIsDeleted() { return this.mIsDeleted; }
 
-//    private String makeDetails(int position) {
-//        StringBuilder builder = new StringBuilder();
-//        builder.append("Details about Item: ").append(position);
-//        for (int i = 0; i < position; i++) {
-//            builder.append("\nMore details information here.");
-//        }
-//        return builder.toString();
-//    }
 
     /**
      * Parses the json string, returns an error message if unsuccessful.
@@ -76,7 +62,7 @@ public class DoItList implements Serializable {
 
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
-                    DoItList single_list = new DoItList(obj.getString(DoItList.TITLE), obj.getInt(DoItList.ISDELETED));
+                    DoItList single_list = new DoItList(obj.getInt(DoItList.LIST_ID), obj.getString(DoItList.TITLE), obj.getInt(DoItList.ISDELETED));
                     list.add(single_list);
                 }
             } catch (JSONException e) {
@@ -85,18 +71,5 @@ public class DoItList implements Serializable {
         }
         return reason;
     }
-//
-//    /**
-//     * Class representing a single task.
-//     */
-//    public static class Task {
-//        public String taskContent;
-//        public static final String TEXT_INPUT = "textInput";
-//        public Task(String content) {
-//            this.taskContent = content;
-//        }
-//
-//        public String getTaskContent() { return this.taskContent;}
-//        public void setTaskContent(String theNewContent) { this.taskContent = theNewContent;}
-//    }
+
 }

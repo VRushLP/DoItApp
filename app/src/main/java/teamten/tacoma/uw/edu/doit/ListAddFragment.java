@@ -26,6 +26,7 @@ public class ListAddFragment extends Fragment {
 //    private TextView mTaskContentTextView;
     private ListAddListener mListener;
     private EditText mListTitleEditText;
+    private Bundle data;
 
 
     public ListAddFragment() {
@@ -51,6 +52,10 @@ public class ListAddFragment extends Fragment {
 
         mListTitleEditText = (EditText) v.findViewById(R.id.list_title_ET);
 
+        //unbundle the taskAction value
+        data = getArguments();
+        final String taskAction = data.getString("TASK_ACTION");
+
 //        FloatingActionButton floatingActionButton = (FloatingActionButton)
 //                getActivity().findViewById(R.id.fab);
 //        floatingActionButton.hide();
@@ -60,7 +65,7 @@ public class ListAddFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String url = buildListURL(v);
-                mListener.addList(url);
+                mListener.addList(url, taskAction);
             }
         });
 
@@ -74,7 +79,7 @@ public class ListAddFragment extends Fragment {
 
         try {
 
-            Bundle data = getArguments();
+//            Bundle data = getArguments();
             String userEmail = data.getString("EMAIL");
             sb.append("email=");
             sb.append(userEmail);
@@ -88,6 +93,7 @@ public class ListAddFragment extends Fragment {
             sb.append(userID);
 
             Log.i("ListAddFragment", sb.toString());
+            System.out.println("in buildListURL: ListAddFragment");
 
         }
         catch(Exception e) {
@@ -98,6 +104,6 @@ public class ListAddFragment extends Fragment {
     }
 
     public interface ListAddListener{
-        public void addList(String url);
+        public void addList(String url, String taskAction);
     }
 }
