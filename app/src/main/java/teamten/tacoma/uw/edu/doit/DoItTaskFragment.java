@@ -3,7 +3,6 @@ package teamten.tacoma.uw.edu.doit;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
@@ -42,13 +39,15 @@ public class DoItTaskFragment extends Fragment {
         // Inflate the layout for this fragment
         DoItList list;
         View view = inflater.inflate(R.layout.fragment_doittask_list, container, false);
-        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
-        Log.i("ListDetailView", "OnCreateView triggered");
+//        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+        Log.i(TAG, "OnCreateView called");
         Bundle args = getArguments();
         if(args != null){
+            Log.i(TAG, "args was not null");
             list = (DoItList) args.get("DoItTaskList");
             Log.i(TAG, "" + (list != null));
         } else{
+            Log.i(TAG, "args was null");
             list = null;
         }
 
@@ -59,6 +58,9 @@ public class DoItTaskFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             if(list != null){
                 recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(list.getTasks(), mListener));
+//                recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(DoItTask.DUMMY_TASKS, mListener));
+            } else{
+                recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(DoItTask.DUMMY_TASKS, mListener));
             }
         }
         return view;    }
@@ -70,15 +72,6 @@ public class DoItTaskFragment extends Fragment {
         if (args != null) {
             // Set article based on argument passed in
         }
-    }
-
-   @SuppressWarnings("unused")
-    public static DoItTaskFragment newInstance(int columnCount) {
-        DoItTaskFragment fragment = new DoItTaskFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override

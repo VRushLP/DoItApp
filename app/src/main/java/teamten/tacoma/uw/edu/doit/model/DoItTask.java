@@ -1,9 +1,6 @@
 package teamten.tacoma.uw.edu.doit.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Helper class for providing sample content for user interfaces created by
@@ -13,8 +10,15 @@ import java.util.Map;
  */
 public class DoItTask {
 
-    String mName;
+    public String mName;
     int mCheckedOff;
+    public final static ArrayList<DoItTask> DUMMY_TASKS = new ArrayList<>();
+
+    static {
+        for(int i = 0; i < 25; i++){
+            DUMMY_TASKS.add(new DoItTask("" + i));
+        }
+    }
 
     public DoItTask(String taskName){
         mName = taskName;

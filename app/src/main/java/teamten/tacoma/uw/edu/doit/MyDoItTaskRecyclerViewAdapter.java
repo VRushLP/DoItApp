@@ -1,9 +1,11 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import teamten.tacoma.uw.edu.doit.DoItTaskFragment.OnListFragmentInteractionListener;
@@ -32,7 +34,8 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     public void onBindViewHolder(final ViewHolder holder, int position) {
 //        holder.mItem = mValues.get(position);
 //        holder.mIdView.setText(mValues.get(position).id);
-//        holder.mContentView.setText(mValues.get(position).content);
+        holder.mContentView.setText(mValues.get(position).mName);
+        Log.i("DoItTask", "onBindViewHolder called");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,14 +56,14 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+//        public final TextView mIdView;
         public final TextView mContentView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+//            mIdView = (TextView) view.findViewById(R.id.id);
+            mContentView = (CheckedTextView) view.findViewById(R.id.content);
         }
 
         @Override
