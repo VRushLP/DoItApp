@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,17 +19,17 @@ public class DoItList implements Serializable {
 
     String mTitle;
     int mIsDeleted;
-    //public List<Task> mList;
-    public ArrayList<String> mSampleListOfTasks;
+    public ArrayList<DoItTask> mList;
+//    public ArrayList<String> mSampleListOfTasks;
     public static final String TITLE = "title", ISDELETED = "isDeleted";
 
     public DoItList(String theTitle, int theIsDeleted) {
         mTitle = theTitle;
-        //mList = new ArrayList<Task>();
-        mSampleListOfTasks = new ArrayList<String>();  // should be able to replace Strings to Task class
-        mSampleListOfTasks.add("Task1");
-        mSampleListOfTasks.add("Task2");
-        mSampleListOfTasks.add("Task3");
+        mList = new ArrayList<DoItTask>();
+//        mSampleListOfTasks = new ArrayList<String>();  // should be able to replace Strings to Task class
+//        mSampleListOfTasks.add("Task1");
+//        mSampleListOfTasks.add("Task2");
+//        mSampleListOfTasks.add("Task3");
         mIsDeleted = theIsDeleted;
     }
 
@@ -46,7 +47,7 @@ public class DoItList implements Serializable {
         }
     }
 
-    public ArrayList<String> getTasks() { return this.mSampleListOfTasks; }
+    public ArrayList<DoItTask> getTasks() { return this.mList; }
 
     public void setIsDeleted(int mIsDeleted) {
         this.mIsDeleted = mIsDeleted;
@@ -84,6 +85,11 @@ public class DoItList implements Serializable {
             }
         }
         return reason;
+    }
+
+    public int addTask(DoItTask theTask){
+        mList.add(theTask);
+        return mList.indexOf(theTask);
     }
 //
 //    /**

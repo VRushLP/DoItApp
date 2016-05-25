@@ -6,14 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import teamten.tacoma.uw.edu.doit.dummy.DummyContent;
-import teamten.tacoma.uw.edu.doit.dummy.DummyContent.DummyItem;
+import java.util.ArrayList;
 
-import java.util.List;
+import teamten.tacoma.uw.edu.doit.model.DoItList;
+import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 /**
  * A fragment representing a list of Items.
@@ -23,10 +25,8 @@ import java.util.List;
  */
 public class DoItTaskFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private static final String TAG = "DoItTaskFragment";
+    private TextView mListTitleTextView;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -36,44 +36,50 @@ public class DoItTaskFragment extends Fragment {
     public DoItTaskFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static DoItTaskFragment newInstance(int columnCount) {
-        DoItTaskFragment fragment = new DoItTaskFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        DoItList list;
         View view = inflater.inflate(R.layout.fragment_doittask_list, container, false);
+        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+        Log.i("ListDetailView", "OnCreateView triggered");
+        Bundle args = getArguments();
+        if(args != null){
+            list = (DoItList) args.get("DoItTaskList");
+            Log.i(TAG, "" + (list != null));
+        } else{
+            list = null;
+        }
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            if(list != null){
+                recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(list.getTasks(), mListener));
             }
-            recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
-        return view;
+        return view;    }
+
+       @Override
+    public void onStart() {
+        super.onStart();
+        Bundle args = getArguments();
+        if (args != null) {
+            // Set article based on argument passed in
+        }
     }
 
+   @SuppressWarnings("unused")
+    public static DoItTaskFragment newInstance(int columnCount) {
+        DoItTaskFragment fragment = new DoItTaskFragment();
+        Bundle args = new Bundle();
+
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -103,7 +109,6 @@ public class DoItTaskFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(DoItTask item);
     }
 }

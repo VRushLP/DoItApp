@@ -1,20 +1,16 @@
 package teamten.tacoma.uw.edu.doit;
 
-import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,10 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,10 +30,12 @@ import java.net.URL;
 
 import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
+import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 
 public class StationActivity extends AppCompatActivity
         implements StationFragment.OnDoItStationFragmentInteractionListener,
+        DoItTaskFragment.OnListFragmentInteractionListener,
         ListAddFragment.ListAddListener {
 
     //private static final String TAG = "StationActivity";
@@ -82,22 +76,18 @@ public class StationActivity extends AppCompatActivity
 
         Bundle args = new Bundle();
         args.putString("EMAIL", userEmailSharePref);
-
-
-
         args.putString("USERID", userIdSharePref);
 
         StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
-
-
 
 //        getSupportFragmentManager().beginTransaction()
 //                .add(R.id.station_container, fragment)
 //                .commit();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
-        fab.setOnClickListener(new View.OnClickListener() {
+        if(fab != null){
+            fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -108,6 +98,7 @@ public class StationActivity extends AppCompatActivity
                             .commit();
                 }
             });
+        }
 
         if (savedInstanceState == null || getSupportFragmentManager().findFragmentById(R.id.list) == null) {
             StationFragment courseListFragment = new StationFragment();
@@ -173,13 +164,13 @@ public class StationActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(DoItList item) {
-        ListDetailFragment listDetailFragment = new ListDetailFragment();
+        DoItTaskFragment doItTaskFragment = new DoItTaskFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ListDetailFragment.LIST_ITEM_SELECTED, item);
-        listDetailFragment.setArguments(args);
+        args.putSerializable("DoItTaskList", item);
 
+        doItTaskFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.station_container, listDetailFragment)
+                .replace(R.id.station_container, doItTaskFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -222,7 +213,12 @@ public class StationActivity extends AppCompatActivity
         getSupportFragmentManager().popBackStackImmediate();
     }
 
-       private class AddList_AsyncTask extends AsyncTask<String, Void, String> {
+    @Override
+    public void onListFragmentInteraction(DoItTask item) {
+        item.checkOff();
+    }
+
+    private class AddList_AsyncTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {

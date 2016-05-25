@@ -86,7 +86,6 @@ public class StationFragment extends Fragment {
 
         listURLBuilder.append("&userID=");
         listURLBuilder.append(userIdSharePref);
-        System.out.println("StationFragment onCreate URL: " + listURLBuilder);
 
         listURL += listURLBuilder;
 
@@ -218,11 +217,7 @@ public class StationFragment extends Fragment {
 
                     urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
-                    Log.wtf("Help", "1");
-
                     InputStream content = urlConnection.getInputStream();
-                    Log.wtf("Help", "2");
-
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
                     String s = "";
                     while ((s = buffer.readLine()) != null) {

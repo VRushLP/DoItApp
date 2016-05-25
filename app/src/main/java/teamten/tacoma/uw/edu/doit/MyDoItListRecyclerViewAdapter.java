@@ -13,7 +13,6 @@ import java.util.List;
 
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
-
     private final List<DoItList> listOfListsData;
     private final StationFragment.OnDoItStationFragmentInteractionListener mListener;
 
