@@ -178,7 +178,7 @@ public class StationActivity extends AppCompatActivity
     @Override
     public void onBackPressed(){
         if(getSupportFragmentManager().getBackStackEntryCount() < 1){
-            new AlertDialog.Builder(this)
+            AlertDialog quit = new AlertDialog.Builder(this)
                     .setTitle("Close")
                     .setMessage("Are you sure you want to close Do It?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
@@ -187,18 +187,8 @@ public class StationActivity extends AppCompatActivity
                             finish();
                         }
                     })
-                    .setNegativeButton("No", null)
-                    .setOnKeyListener(new Dialog.OnKeyListener() {
-                        @Override
-                        public boolean onKey(DialogInterface arg0, int keyCode,
-                                             KeyEvent event) {
-                            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                finish();
-                            }
-                            return true;
-                        }
-                    })
-                    .show();
+                    .setNegativeButton("No", null).create();
+              quit.show();
         } else{
             super.onBackPressed();
         }
