@@ -282,5 +282,4 @@ public class StationFragment extends Fragment {
             }
         }
     }
-
 }

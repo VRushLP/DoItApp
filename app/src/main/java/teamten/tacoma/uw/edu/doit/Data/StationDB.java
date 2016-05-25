@@ -123,6 +123,5 @@ public class StationDB {
             sqLiteDatabase.execSQL(DROP_COURSE_SQL);
             onCreate(sqLiteDatabase);
         }
-
     }
 }
