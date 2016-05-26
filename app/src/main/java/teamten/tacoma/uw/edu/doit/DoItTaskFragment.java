@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.net.URLEncoder;
 
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
@@ -21,6 +24,8 @@ import teamten.tacoma.uw.edu.doit.model.DoItTask;
  * interface.
  */
 public class DoItTaskFragment extends Fragment {
+
+    private final static String TASK_MANAGER_URL = "http://cssgate.insttech.washington.edu/~_450atm10/android/addList.php?";
 
     private static final String TAG = "DoItTaskFragment";
     private TextView mListTitleTextView;
@@ -58,7 +63,6 @@ public class DoItTaskFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             if(list != null){
                 recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(list.getTasks(), mListener));
-//                recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(DoItTask.DUMMY_TASKS, mListener));
             } else{
                 recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(DoItTask.DUMMY_TASKS, mListener));
             }
@@ -103,5 +107,24 @@ public class DoItTaskFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(DoItTask item);
+    }
+
+    private String buildAddTaskURL(View v) {
+
+        StringBuilder sb = new StringBuilder(TASK_MANAGER_URL);
+        try {
+            Bundle data = getArguments();
+
+            //append arguments to the list
+
+            Log.i("ListAddFragment", sb.toString());
+
+
+        }
+        catch(Exception e) {
+            Toast.makeText(v.getContext(), "Something wrong with the url" + e.getMessage(), Toast.LENGTH_LONG)
+                    .show();
+        }
+        return sb.toString();
     }
 }

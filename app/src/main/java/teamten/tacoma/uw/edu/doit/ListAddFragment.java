@@ -71,7 +71,6 @@ public class ListAddFragment extends Fragment {
     private String buildListURL(View v) {
 
         StringBuilder sb = new StringBuilder(LIST_ADD_URL);
-
         try {
 
             Bundle data = getArguments();
