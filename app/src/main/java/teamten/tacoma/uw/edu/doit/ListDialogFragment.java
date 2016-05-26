@@ -36,17 +36,19 @@ public class ListDialogFragment extends DialogFragment {
     String mUserID;
     Context mContext;
 
+
 //    public ListDialogFragment() {
 //        // Required empty public constructor
 //    }
 
-    public static ListDialogFragment newInstance(int num, DoItList item, String userID) {
+    public static ListDialogFragment newInstance(int num, DoItList item, List<DoItList> theData, String userID) {
         ListDialogFragment f = new ListDialogFragment();
         // Supply num and serializable object input as an argument.
         Bundle args = new Bundle();
         args.putInt("num", num);
         args.putSerializable("onLongClickedItem", item);
         args.putString("userID", userID);
+//        args.putParcelableArrayList("data", theData);
         f.setArguments(args);
 
         return f;
@@ -112,32 +114,9 @@ public class ListDialogFragment extends DialogFragment {
                 UpdateOrDeleteList_AsyncTask task = new UpdateOrDeleteList_AsyncTask("delete");
                 task.execute(new String[]{url.toString()});
 
-                // Takes you back to the previous fragment by popping the current fragment out.
-//                getActivity().getSupportFragmentManager().popBackStackImmediate();
-
                 dismiss();
             }
         });
-
-        // Watch for update button
-//        Button updateButton = (Button)v.findViewById(R.id.);
-//        deleteButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                  UpdateOrDeleteList_AsyncTask();
-//                System.out.println("ONCLICKED ITEM: " + item.getTitle());
-//        String url = buildListURL(v, "update");
-//
-//        UpdateOrDeleteList_AsyncTask task = new UpdateOrDeleteList_AsyncTask("update");
-//        task.execute(new String[]{url.toString()});
-
-//                NextFragment nextFrag= new NextFragment();
-//                this.getFragmentManager().beginTransaction()
-//                        .replace(R.id.Layout_container, nextFrag,TAG_FRAGMENT)
-//                        .addToBackStack(null)
-//                        .commit();
-//            }
-//        });
 
         return v;
     }

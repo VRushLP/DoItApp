@@ -38,13 +38,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 
 
 public class StationActivity extends AppCompatActivity implements StationFragment.OnDoItStationFragmentInteractionListener,
-                        ListAddFragment.ListAddListener, StationFragment.DeleteListClickListener {
+                        ListAddFragment.ListAddListener, StationFragment.DeleteListClickListener, ListDetailFragment.UpdateListTitleListener {
 
     //private static final String TAG = "StationActivity";
     private String userEmailSharePref;
@@ -201,27 +203,15 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
     }
 
     @Override
-    public void itemClickedToBeDeleted(DoItList item) {
+    public void itemClickedToBeDeleted(DoItList item, List<DoItList> theData) {
         // open dialog fragment to either delete/update passed in listitem.
         Log.d("HERE:", "itemClickedToBeDeleted method on StationActivity");
         System.out.println("HERE: itemClickedToBeDeleted method on StationActivity");
 
-//        FragmentManager fm = getSupportFragmentManager();
-//        new ListDialogFragment().show(fm,"about");
-        showDialog(item);
-
-
-////        if (dialog != null && !dialog.isVisible()) {
-////            dialog.show(fm, "Here");
-//        new dialog
-//            getSupportFragmentManager().executePendingTransactions();
-//        }
-        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_list_dialog_ID, )
+        showDialog(item, theData);
     }
 
-    //private int mStackLevel;
-    void showDialog(DoItList theItem) {
-        //mStackLevel++;
+    void showDialog(DoItList theItem, List<DoItList> theData) {
         int mStackLevel = 8;
 
         // DialogFragment.show() will take care of adding the fragment
@@ -235,8 +225,18 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DialogFragment newFragment = ListDialogFragment.newInstance(mStackLevel, theItem, userIdSharePref);
+        DialogFragment newFragment = ListDialogFragment.newInstance(mStackLevel, theItem, theData, userIdSharePref);
         newFragment.show(ft, "dialog");
+    }
+
+    @Override
+    public void updateListTitle(int theListID, String theNewTitle) {
+        // change name to UpdateOrAddList_AsynTask
+        AddList_AsyncTask task = new AddList_AsyncTask("update");
+        String updateURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=update";
+        updateURL += "&listID=" + theListID;
+        updateURL += "&title=" + theNewTitle;
+        task.execute(new String[]{updateURL.toString()});
     }
 
     @Override
@@ -332,9 +332,6 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         protected void onPreExecute() {
             super.onPreExecute();
         }
-
-
-
 
         @Override
         protected String doInBackground(String... urls) {

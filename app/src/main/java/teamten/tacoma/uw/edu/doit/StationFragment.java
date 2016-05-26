@@ -70,7 +70,6 @@ public class StationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 //        if (getArguments() != null) {
 //            mColumnCount = getArguments().getInt(mColumnCount);
 //        }
@@ -218,7 +217,7 @@ public class StationFragment extends Fragment {
 
 
     public interface DeleteListClickListener {
-        public void itemClickedToBeDeleted(DoItList item);
+        public void itemClickedToBeDeleted(DoItList item, List<DoItList> theData);
     }
 
     private class DownloadListsTask extends AsyncTask<String, Void, String> {

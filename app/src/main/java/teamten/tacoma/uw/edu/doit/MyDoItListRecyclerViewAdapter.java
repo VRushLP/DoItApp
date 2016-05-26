@@ -22,12 +22,11 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         listOfListsData = items;
         mListener = listener;
         mDeleteListListener = deleteListListener;
-//        mContext = context;
     }
 
-    public interface OnItemClickListener {
-        void onItemClicked(View v);
-    }
+//    public interface OnItemClickListener {
+//        void onItemClicked(View v);
+//    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -50,7 +49,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mListItem);
-
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -60,9 +59,10 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
             public boolean onLongClick(View v) {
                 System.out.println("RecyclerAdapter: item clicked on LONG CLICK");
                 if (null != mDeleteListListener) {
-                    mDeleteListListener.itemClickedToBeDeleted(holder.mListItem);
-                    listOfListsData.remove(position);
-                    notifyItemRemoved(position);
+                    mDeleteListListener.itemClickedToBeDeleted(holder.mListItem, listOfListsData);
+//                    listOfListsData.remove(position);
+//                    notifyItemRemoved(position);
+                    notifyDataSetChanged();
                 }
                 return true;
             }
@@ -102,78 +102,4 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         }
     }
 
-
-//    public void deleteList(String url) {
-//        AddList_AsyncTask task = new AddList_AsyncTask();
-//        task.execute(new String[]{url.toString()});
-//
-//        // Takes you back to the previous fragment by popping the current fragment out.
-//        getSupportFragmentManager().popBackStackImmediate();
-//    }
-//
-//    private class DeleteListAsyncTask extends AsyncTask<String, Void, String> {
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... urls) {
-//            String response = "";
-//            HttpURLConnection urlConnection = null;
-//            for (String url : urls) {
-//                try {
-//                    URL urlObject = new URL(url);
-//                    urlConnection = (HttpURLConnection) urlObject.openConnection();
-//
-//                    InputStream content = urlConnection.getInputStream();
-//
-//                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-//                    String s = "";
-//                    while ((s = buffer.readLine()) != null) {
-//                        response += s;
-//                    }
-//
-//                } catch (Exception e) {
-//                    response = "Unable to add list, Reason: "
-//                            + e.getMessage();
-//                    Log.wtf("wtf", e.getMessage());
-//                } finally {
-//                    if (urlConnection != null)
-//                        urlConnection.disconnect();
-//                }
-//            }
-//            return response;
-//        }
-//
-//        /**
-//         * It checks to see if there was a problem with the URL(Network) which is when an
-//         * exception is caught. It tries to call the parse Method and checks to see if it was successful.
-//         * If not, it displays the exception.
-//         *
-//         * @param result
-//         */
-//        @Override
-//        protected void onPostExecute(String result) {
-//            // Something wrong with the network or the URL.
-//            try {
-//                JSONObject jsonObject = new JSONObject(result);
-//                String status = (String) jsonObject.get("result");
-//                if (status.equals("success")) {
-//                    Toast.makeText(getActivity(), "List successfully deleted!"
-//                            , Toast.LENGTH_LONG)
-//                            .show();
-//                } else {
-//                    Toast.makeText(getActivity(), "Failed to delete: "
-//                                    + jsonObject.get("error")
-//                            , Toast.LENGTH_LONG)
-//                            .show();
-//                }
-//            } catch (JSONException e) {
-//                Toast.makeText(getActivity(), "Something wrong with the data" +
-//                        e.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
 }
