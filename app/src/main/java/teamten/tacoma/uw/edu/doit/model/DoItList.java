@@ -18,24 +18,17 @@ import java.util.Map;
 public class DoItList implements Serializable {
 
     String mTitle;
+    int mId;
     int mIsDeleted;
     public ArrayList<DoItTask> mList;
 //    public ArrayList<String> mSampleListOfTasks;
-    public static final String TITLE = "title", ISDELETED = "isDeleted";
+    public static final String TITLE = "title", ISDELETED = "isDeleted", LIST_ID = "listID";
 
-    public DoItList(String theTitle, int theIsDeleted) {
+    public DoItList(String theTitle, int listID, int theIsDeleted) {
         mTitle = theTitle;
         mList = new ArrayList<DoItTask>();
-//        mSampleListOfTasks = new ArrayList<String>();  // should be able to replace Strings to Task class
-//        mSampleListOfTasks.add("Task1");
-//        mSampleListOfTasks.add("Task2");
-//        mSampleListOfTasks.add("Task3");
         mIsDeleted = theIsDeleted;
     }
-
-    //public void addTask(Task item) { mList.add(item); }
-
-    //public void removeTask(Task item) {mList.remove(item);}
 
     public String getTitle() { return this.mTitle; }
 
@@ -77,7 +70,7 @@ public class DoItList implements Serializable {
 
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
-                    DoItList single_list = new DoItList(obj.getString(DoItList.TITLE), obj.getInt(DoItList.ISDELETED));
+                    DoItList single_list = new DoItList(obj.getString(DoItList.TITLE), obj.getInt(DoItList.LIST_ID), obj.getInt(DoItList.ISDELETED));
                     list.add(single_list);
                 }
             } catch (JSONException e) {

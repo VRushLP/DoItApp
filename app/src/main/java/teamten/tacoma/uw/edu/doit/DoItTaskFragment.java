@@ -25,11 +25,13 @@ import teamten.tacoma.uw.edu.doit.model.DoItTask;
  */
 public class DoItTaskFragment extends Fragment {
 
-    private final static String TASK_MANAGER_URL = "http://cssgate.insttech.washington.edu/~_450atm10/android/addList.php?";
+    private final static String TASK_MANAGER_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?";
 
     private static final String TAG = "DoItTaskFragment";
     private TextView mListTitleTextView;
     private OnListFragmentInteractionListener mListener;
+    private DoItList mDoItList = null;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -42,18 +44,16 @@ public class DoItTaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        DoItList list;
         View view = inflater.inflate(R.layout.fragment_doittask_list, container, false);
 //        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
         Log.i(TAG, "OnCreateView called");
         Bundle args = getArguments();
         if(args != null){
             Log.i(TAG, "args was not null");
-            list = (DoItList) args.get("DoItTaskList");
-            Log.i(TAG, "" + (list != null));
+            mDoItList= (DoItList) args.get("DoItTaskList");
+            Log.i(TAG, "" + (mDoItList != null));
         } else{
             Log.i(TAG, "args was null");
-            list = null;
         }
 
         // Set the adapter
@@ -61,13 +61,12 @@ public class DoItTaskFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            if(list != null){
-                recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(list.getTasks(), mListener));
-            } else{
-                recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(DoItTask.DUMMY_TASKS, mListener));
+            if(mDoItList != null){
+                recyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.getTasks(), mListener));
             }
         }
-        return view;    }
+        return view;
+    }
 
        @Override
     public void onStart() {
@@ -109,15 +108,31 @@ public class DoItTaskFragment extends Fragment {
         void onListFragmentInteraction(DoItTask item);
     }
 
-    private String buildAddTaskURL(View v) {
+    //retrieve all tasks with associated passed listID
+    //build get allURL
 
+    //http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=getAll&id=61
+    private String buildGetAllTasksURL(View v){
+        Log.i(TAG, "buildGetAllTasksURL Called");
         StringBuilder sb = new StringBuilder(TASK_MANAGER_URL);
         try {
             Bundle data = getArguments();
 
-            //append arguments to the list
+            //append arguments to the url
+        }
+        catch(Exception e) {
+            Toast.makeText(v.getContext(), "Something wrong with the url" + e.getMessage(), Toast.LENGTH_LONG)
+                    .show();
+        }
+        return sb.toString();    }
 
-            Log.i("ListAddFragment", sb.toString());
+    private String buildAddTaskURL(View v) {
+        Log.i(TAG, "buildAddTaskURL called");
+        StringBuilder sb = new StringBuilder(TASK_MANAGER_URL);
+        try {
+            Bundle data = getArguments();
+
+            //append arguments to the url
 
 
         }

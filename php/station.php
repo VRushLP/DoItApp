@@ -25,7 +25,6 @@ $command = $_GET['cmd'];
 			$lists = $list_query->fetchAll(PDO::FETCH_ASSOC);
 			if ($lists) {	
 				echo json_encode($lists);
-				//for each loop get all tasks for each list
 			}
 		} else if ($command == "delete") {      
 			// delete query for listRights

@@ -42,7 +42,7 @@ public class StationDB {
     public List<DoItList> getDoItLists() {
 
         String[] columns = {
-                //"listID",
+                "listID",
                 "title",
                 "isDeleted"
         };
@@ -61,8 +61,9 @@ public class StationDB {
         for (int i=0; i<c.getCount(); i++) {
             //int id = c.getInt(0);
             String title = c.getString(0);
+            int id = c.getInt(0);
             int isDeleted = c.getInt(1);
-            DoItList theList = new DoItList(title, isDeleted);
+            DoItList theList = new DoItList(title, id, isDeleted);
             list.add(theList);
             c.moveToNext();
         }

@@ -12,8 +12,16 @@ $command = $_GET['cmd'];
         	$db = new PDO($dsn, $username, $password);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$command = isset($_GET['cmd']) ? $_GET['cmd'] : '';
+			if($command = "getAll"){
+				$listID = $_GET['id'];
+				echo $listID;
 			
-			if($command == "add"){
+			} else if($command == "add"){
+				
+				/*
+				INSERT INTO _450atm10.tasks VALUES (DEFAULT, 'testInsert', 0);
+				INSERT INTO _450atm10.taskRights VALUES ('O', last_insert_id(), 61);
+				*/
 				
 				$taskText = $_GET['textInput'];
 				$sql = "INSERT INTO tasks";

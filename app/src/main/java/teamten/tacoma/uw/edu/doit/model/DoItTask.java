@@ -12,13 +12,6 @@ public class DoItTask {
 
     public String mName;
     int mCheckedOff;
-    public final static ArrayList<DoItTask> DUMMY_TASKS = new ArrayList<>();
-
-    static {
-        for(int i = 0; i < 25; i++){
-            DUMMY_TASKS.add(new DoItTask("" + i));
-        }
-    }
 
     public DoItTask(String taskName){
         mName = taskName;
