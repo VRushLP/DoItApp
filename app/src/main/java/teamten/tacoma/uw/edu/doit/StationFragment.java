@@ -88,22 +88,6 @@ public class StationFragment extends Fragment {
         listURLBuilder.append(userIdSharePref);
 
         listURL += listURLBuilder;
-
-//        //bundle doesn't seem to be retrieving data
-//        Bundle data = getArguments();
-//        String userID = "";
-//        if (data!= null) {// to avoid the NullPointerException
-//            userID = data.getString("USERIDAUTH");
-//            System.out.println("StationFragment onCreate USERIDAUTH: " + userID);
-//        }
-
-
-
-//        mUserID = mSharedPreferences.getString("USERID", null);
-//        listURL = listURL + "&userID=" + mUserID;
-
-//        userEmail = mSharedPreferences.getString("@string/userEmail", null);
-//        listURL = listURL + "&email=" + userEmail;
     }
 
     @Override

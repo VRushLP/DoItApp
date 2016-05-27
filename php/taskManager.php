@@ -13,8 +13,18 @@ $command = $_GET['cmd'];
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			//$command = isset($_GET['cmd']) ? $_GET['cmd'] : '';
 			if($command = "getAll"){
-				$listID = $_GET['id'];
-				echo $listID;
+				$listID = $_GET['id'];	
+				//$select_sql = "SELECT lists.listID, lists.title, lists.isDeleted FROM lists JOIN listRights ON lists.listID = listRights.listID WHERE listRights.userID = " . "'$userID'";
+				
+				$select_sql = "SELECT tasks.taskID, tasks.textInput, tasks.isDeleted FROM tasks JOIN taskRights ON tasks.taskID = taskRights.taskID WHERE taskRights.listID=$listID";
+				
+				$query = $db->query($select_sql);
+				$tasks = $query->fetchAll(PDO::FETCH_ASSOC);
+				if ($tasks) {	
+					echo json_encode($tasks);
+				} else {
+					echo "Something went horribly wrong";				}
+				
 			
 			} else if($command == "add"){
 				

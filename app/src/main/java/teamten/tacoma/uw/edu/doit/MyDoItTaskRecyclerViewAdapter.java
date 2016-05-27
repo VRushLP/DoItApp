@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
-import teamten.tacoma.uw.edu.doit.DoItTaskFragment.OnListFragmentInteractionListener;
+import teamten.tacoma.uw.edu.doit.DoItListDisplayFragment.OnListFragmentInteractionListener;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTaskRecyclerViewAdapter.ViewHolder> {
 
     private final List<DoItTask> mValues;
-    private final DoItTaskFragment.OnListFragmentInteractionListener mListener;
+    private final DoItListDisplayFragment.OnListFragmentInteractionListener mListener;
 
     public MyDoItTaskRecyclerViewAdapter(List<DoItTask> items, OnListFragmentInteractionListener listener) {
         mValues = items;

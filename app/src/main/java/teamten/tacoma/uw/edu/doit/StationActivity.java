@@ -1,6 +1,5 @@
 package teamten.tacoma.uw.edu.doit;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +33,7 @@ import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 public class StationActivity extends AppCompatActivity
         implements StationFragment.OnDoItStationFragmentInteractionListener,
-        DoItTaskFragment.OnListFragmentInteractionListener,
+        DoItListDisplayFragment.OnListFragmentInteractionListener,
         ListAddFragment.ListAddListener {
 
     //private static final String TAG = "StationActivity";
@@ -164,13 +162,13 @@ public class StationActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(DoItList item) {
-        DoItTaskFragment doItTaskFragment = new DoItTaskFragment();
+        DoItListDisplayFragment doItListDisplayFragment = new DoItListDisplayFragment();
         Bundle args = new Bundle();
         args.putSerializable("DoItTaskList", item);
 
-        doItTaskFragment.setArguments(args);
+        doItListDisplayFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.station_container, doItTaskFragment)
+                .replace(R.id.station_container, doItListDisplayFragment)
                 .addToBackStack(null)
                 .commit();
     }

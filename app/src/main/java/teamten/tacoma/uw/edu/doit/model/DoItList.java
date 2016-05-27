@@ -26,11 +26,14 @@ public class DoItList implements Serializable {
 
     public DoItList(String theTitle, int listID, int theIsDeleted) {
         mTitle = theTitle;
+        mId = listID;
         mList = new ArrayList<DoItTask>();
         mIsDeleted = theIsDeleted;
     }
 
     public String getTitle() { return this.mTitle; }
+
+    public int getId() {return this.mId; };
 
     public void setTitle(String theNewTitle) {
         if (theNewTitle != null) {
