@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -38,8 +37,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
@@ -48,7 +45,7 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
 public class StationActivity extends AppCompatActivity implements StationFragment.OnDoItStationFragmentInteractionListener,
                         ListAddFragment.ListAddListener, StationFragment.DeleteListClickListener, ListDetailFragment.UpdateListTitleListener {
 
-    //private static final String TAG = "StationActivity";
+
     private String userEmailSharePref;
     private String userIdSharePref;
     private static String mUserID;
@@ -60,8 +57,6 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
      */
     private GoogleApiClient client;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,12 +67,12 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
 
         m = getSupportFragmentManager();
 
+
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {// to avoid the NullPointerException
             mUserID = bundle.getString("userID");
         }
 
-//        StationActivity.context = getApplicationContext();
 
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
@@ -85,15 +80,8 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         userEmailSharePref = mSharedPreferences.getString("@string/userEmail", null);
         System.out.println("StationActivity onCreate email from shared pref: " + userEmailSharePref);
 
-        /////
-//        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
-        ////
-
-        //String userIdSharePref = getUserID();
-        //mSharedPreferences.edit().putString("@string/userID", userIdSharePref).commit();  //add userID for first time
         userIdSharePref = mSharedPreferences.getString("@string/userID", null);
         System.out.println("StationActivity onCreate userID from shared pref: " + userIdSharePref);
-        //setDefaults("@string/userID", userIdSharePref, StationActivity.context);
 
         Bundle args = new Bundle();
         args.putString("EMAIL", userEmailSharePref);
@@ -103,11 +91,6 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
 
-
-
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.station_container, fragment)
-//                .commit();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -133,23 +116,6 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-//    public static void setDefaults(String key, String value, Context context) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//        SharedPreferences.Editor editor = prefs.edit();
-//        editor.putString(key, value);
-//        editor.commit();
-//    }
-//
-//    public static String getDefaults(String key, Context context) {
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-//        return preferences.getString(key, null);
-//    }
-//
-//    public static void  setUserID(String userID) {
-//        mUserID = userID;
-//    }
-//
-//    public String getUserID() { return mUserID; }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -203,31 +169,17 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
     }
 
     @Override
-    public void itemClickedToBeDeleted(DoItList item, List<DoItList> theData) {
-        // open dialog fragment to either delete/update passed in listitem.
-        Log.d("HERE:", "itemClickedToBeDeleted method on StationActivity");
-        System.out.println("HERE: itemClickedToBeDeleted method on StationActivity");
+    public void itemClickedToBeDeleted(DoItList item) {
+        String listURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=";
 
-        showDialog(item, theData);
+        listURL += "delete";
+        listURL += "&listID=" + item.getListID();
+        Log.i("Delete", new String(listURL));
+
+        AddList_AsyncTask task = new AddList_AsyncTask("delete");
+        task.execute(new String[]{listURL});
     }
 
-    void showDialog(DoItList theItem, List<DoItList> theData) {
-        int mStackLevel = 8;
-
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = ListDialogFragment.newInstance(mStackLevel, theItem, theData, userIdSharePref);
-        newFragment.show(ft, "dialog");
-    }
 
     @Override
     public void updateListTitle(int theListID, String theNewTitle) {
@@ -238,6 +190,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         updateURL += "&title=" + theNewTitle;
         task.execute(new String[]{updateURL.toString()});
     }
+
 
     @Override
     public void onBackPressed(){

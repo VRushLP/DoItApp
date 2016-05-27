@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:xmlsn="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/action_logout"
@@ -8,5 +9,6 @@
     <item
         android:id="@+id/action_add_list"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="Add List"/>
+        android:title="Add List"
+        app:showAsAction="always"/>
 </menu>

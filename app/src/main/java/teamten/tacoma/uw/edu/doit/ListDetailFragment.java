@@ -29,8 +29,6 @@ public class ListDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -42,7 +40,7 @@ public class ListDetailFragment extends Fragment {
         }
     }
     public interface UpdateListTitleListener {
-        public void updateListTitle(int theListID, String newTitle);
+        void updateListTitle(int theListID, String newTitle);
     }
 
     @Override
@@ -56,14 +54,14 @@ public class ListDetailFragment extends Fragment {
 
                     @Override
                     public boolean onLongClick(View v) {
-                        // get prompts.xml view
+                        // get update_list_title_prompt.xml_title_prompt.xml view
                         LayoutInflater li = LayoutInflater.from(getContext());
-                        View promptsView = li.inflate(R.layout.prompts, null);
+                        View promptsView = li.inflate(R.layout.update_list_title_prompt, null);
 
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                                 getContext());
 
-                        // set prompts.xml to alertdialog builder
+                        // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
                         alertDialogBuilder.setView(promptsView);
 
                         final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);

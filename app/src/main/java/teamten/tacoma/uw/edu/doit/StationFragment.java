@@ -87,22 +87,6 @@ public class StationFragment extends Fragment {
         System.out.println("StationFragment onCreate URL: " + listURLBuilder);
 
         listURL += listURLBuilder;
-
-//        //bundle doesn't seem to be retrieving data
-//        Bundle data = getArguments();
-//        String userID = "";
-//        if (data!= null) {// to avoid the NullPointerException
-//            userID = data.getString("USERIDAUTH");
-//            System.out.println("StationFragment onCreate USERIDAUTH: " + userID);
-//        }
-
-
-
-//        mUserID = mSharedPreferences.getString("USERID", null);
-//        listURL = listURL + "&userID=" + mUserID;
-
-//        userEmail = mSharedPreferences.getString("@string/userEmail", null);
-//        listURL = listURL + "&email=" + userEmail;
     }
 
 
@@ -193,6 +177,9 @@ public class StationFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement DeleteListClickListener");
         }
+
+
+
     }
 
     @Override
@@ -217,8 +204,10 @@ public class StationFragment extends Fragment {
 
 
     public interface DeleteListClickListener {
-        public void itemClickedToBeDeleted(DoItList item, List<DoItList> theData);
+        void itemClickedToBeDeleted(DoItList item);
     }
+
+
 
     private class DownloadListsTask extends AsyncTask<String, Void, String> {
 

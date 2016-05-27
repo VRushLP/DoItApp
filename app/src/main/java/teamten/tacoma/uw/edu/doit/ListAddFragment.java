@@ -1,12 +1,15 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
+
+import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +50,19 @@ public class ListAddFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);     // finds if options on Menu exist
+    }
+
+    // on viewing of fragment, decide whether to show/hide MenuItems
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_add_list);
+        item.setVisible(false);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -56,9 +74,10 @@ public class ListAddFragment extends Fragment {
         data = getArguments();
         final String taskAction = data.getString("TASK_ACTION");
 
-//        FloatingActionButton floatingActionButton = (FloatingActionButton)
-//                getActivity().findViewById(R.id.fab);
-//        floatingActionButton.hide();
+        // hide floating button
+        FloatingActionButton floatingActionButton = (FloatingActionButton)
+                getActivity().findViewById(R.id.new_list_button);
+        floatingActionButton.hide();
 
         Button addListButton = (Button) v.findViewById(R.id.create_list_title);
         addListButton.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +85,14 @@ public class ListAddFragment extends Fragment {
             public void onClick(View v) {
                 String url = buildListURL(v);
                 mListener.addList(url, taskAction);
+            }
+        });
+
+        Button cancelButton = (Button) v.findViewById(R.id.cancel_list_title);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 

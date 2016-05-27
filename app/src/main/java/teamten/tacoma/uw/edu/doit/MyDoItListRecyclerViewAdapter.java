@@ -1,6 +1,7 @@
 package teamten.tacoma.uw.edu.doit;
 
-import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -12,21 +13,22 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
 
 import java.util.List;
 
+
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
     private final List<DoItList> listOfListsData;
     private final StationFragment.OnDoItStationFragmentInteractionListener mListener;
     private StationFragment.DeleteListClickListener mDeleteListListener;
 
-    public MyDoItListRecyclerViewAdapter(List<DoItList> items, StationFragment.OnDoItStationFragmentInteractionListener listener, StationFragment.DeleteListClickListener deleteListListener) {
+
+    public MyDoItListRecyclerViewAdapter(List<DoItList> items, StationFragment.OnDoItStationFragmentInteractionListener listener,
+                                         StationFragment.DeleteListClickListener deleteListListener) {
         listOfListsData = items;
         mListener = listener;
         mDeleteListListener = deleteListListener;
     }
 
-//    public interface OnItemClickListener {
-//        void onItemClicked(View v);
-//    }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -35,6 +37,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
 
         return new ViewHolder(view);
     }
+
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -58,12 +61,39 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
             @Override
             public boolean onLongClick(View v) {
                 System.out.println("RecyclerAdapter: item clicked on LONG CLICK");
-                if (null != mDeleteListListener) {
-                    mDeleteListListener.itemClickedToBeDeleted(holder.mListItem, listOfListsData);
-//                    listOfListsData.remove(position);
-//                    notifyItemRemoved(position);
-                    notifyDataSetChanged();
-                }
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+
+                // set title
+                alertDialogBuilder.setTitle("List Action");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("Click cancel to exit action!")
+                        .setCancelable(false)
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked, close
+                                // current activity
+                                listOfListsData.remove(position);
+                                notifyItemRemoved(position);
+                                mDeleteListListener.itemClickedToBeDeleted(holder.mListItem); // listener
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked, just close
+                                // the dialog box and do nothing
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
                 return true;
             }
         });
@@ -76,11 +106,9 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         return listOfListsData.size();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView mTitleView;
-//        public final TextView mTaskContentView;
         public DoItList mListItem;
 
         public ViewHolder(View view) {
