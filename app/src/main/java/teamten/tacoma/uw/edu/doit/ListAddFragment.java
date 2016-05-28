@@ -23,6 +23,7 @@ import java.net.URLEncoder;
 public class ListAddFragment extends Fragment {
 
     private final static String LIST_ADD_URL = "http://cssgate.insttech.washington.edu/~_450atm10/android/addList.php?";
+    private static final String TAG = "ListAddFragment";
 
     private ListAddListener mListener;
     private EditText mListTitleEditText;
@@ -98,7 +99,6 @@ public class ListAddFragment extends Fragment {
 
 
     private String buildListURL(View v) {
-
         StringBuilder sb = new StringBuilder(LIST_ADD_URL);
         try {
 
@@ -115,9 +115,7 @@ public class ListAddFragment extends Fragment {
             sb.append("&userID=");
             sb.append(userID);
 
-            Log.i("ListAddFragment", sb.toString());
-            System.out.println("in buildListURL: ListAddFragment");
-
+            Log.i(TAG, sb.toString());
         }
         catch(Exception e) {
             Toast.makeText(v.getContext(), "Something wrong with the url" + e.getMessage(), Toast.LENGTH_LONG)

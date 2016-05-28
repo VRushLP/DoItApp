@@ -75,6 +75,8 @@ public class StationFragment extends Fragment {
         listURLBuilder.append(userIdSharePref);
 
         listURL += listURLBuilder;
+
+
     }
 
 
@@ -143,7 +145,7 @@ public class StationFragment extends Fragment {
         }
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
-        fab.show();
+        fab.hide();
 
         return view;
     }

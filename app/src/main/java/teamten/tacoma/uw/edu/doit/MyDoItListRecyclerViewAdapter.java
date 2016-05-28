@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.List;
 
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = "MyDoItListRecyclerViewAdapter";
     private final List<DoItList> listOfListsData;
     private final StationFragment.OnDoItStationFragmentInteractionListener mListener;
     private StationFragment.DeleteListClickListener mDeleteListListener;
@@ -35,7 +37,6 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_doitlist, parent, false);
-
         return new ViewHolder(view);
     }
 
@@ -45,7 +46,6 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         // getting particular item from list
         holder.mListItem = listOfListsData.get(position);
         holder.mTitleView.setText(listOfListsData.get(position).getTitle());
-
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +62,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                System.out.println("RecyclerAdapter: item clicked on LONG CLICK");
+                Log.i(TAG, "RecyclerAdapter: item clicked on LONG CLICK");
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 

@@ -1,21 +1,18 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,17 +21,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
-import teamten.tacoma.uw.edu.doit.Data.StationDB;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 /**
  * Displays a List of DoItTasks associated with a specific DoItList.
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnTaskDisplayInteractionListener}
  * interface.
  */
 public class DoItListDisplayFragment extends Fragment {
@@ -43,7 +36,7 @@ public class DoItListDisplayFragment extends Fragment {
             "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php";
     private static final String TAG = "DoItListDisplayFragment";
 
-    private OnListFragmentInteractionListener mListener;
+    private OnTaskDisplayInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private TextView mListTitleTextView;
     private UpdateListTitleListener mListTitleListener;
@@ -205,11 +198,11 @@ public class DoItListDisplayFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnTaskDisplayInteractionListener) {
+            mListener = (OnTaskDisplayInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnTaskDisplayInteractionListener");
         }
 
         if (context instanceof UpdateListTitleListener) {
@@ -226,7 +219,7 @@ public class DoItListDisplayFragment extends Fragment {
      * to the activity and potentially other fragments contained in that
      * activity.
      */
-    public interface OnListFragmentInteractionListener {
+    public interface OnTaskDisplayInteractionListener {
         void onDoItTaskInteraction(DoItTask item);
     }
 
@@ -252,7 +245,7 @@ public class DoItListDisplayFragment extends Fragment {
 //     * to the activity and potentially other fragments contained in that
 //     * activity.
 //     */
-//    public interface OnListFragmentInteractionListener {
+//    public interface OnTaskDisplayInteractionListener {
 //        void onListFragmentInteraction(DoItTask item);
 //    }
 
@@ -297,12 +290,14 @@ public class DoItListDisplayFragment extends Fragment {
                         .show();
             } else  {
                 result = DoItTask.parseTaskListJSON(result, mDoItList.mList);
+                if(result!= null) {
+                    Log.i(TAG, result);
+                }
             }
 
             // Everything is good, show the tasks.
             if (!mDoItList.mList.isEmpty()) {
                 mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.mList, mListener));
-
             }
         }
     }
