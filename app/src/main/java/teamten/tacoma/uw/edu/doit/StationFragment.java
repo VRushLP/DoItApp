@@ -175,7 +175,7 @@ public class StationFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDoItStationFragmentInteractionListener {
-        void onListFragmentInteraction(DoItList item);
+        void onDoItListItemInteraction(DoItList item);
     }
 
     private class DownloadListsTask extends AsyncTask<String, Void, String> {
