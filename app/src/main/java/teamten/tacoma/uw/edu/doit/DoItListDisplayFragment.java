@@ -139,7 +139,7 @@ public class DoItListDisplayFragment extends Fragment {
      * activity.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(DoItTask item);
+        void onDoItTaskInteraction(DoItTask item);
     }
 
     /**

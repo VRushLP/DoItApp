@@ -151,7 +151,7 @@ public class StationActivity extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(DoItList item) {
+    public void onDoItListItemInteraction(DoItList item) {
         DoItListDisplayFragment doItListDisplayFragment = new DoItListDisplayFragment();
         Bundle args = new Bundle();
         args.putSerializable("DoItTaskList", item);
@@ -161,6 +161,11 @@ public class StationActivity extends AppCompatActivity
                 .replace(R.id.station_container, doItListDisplayFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onDoItTaskInteraction(DoItTask item) {
+        item.checkOff();
     }
 
     @Override
@@ -195,11 +200,6 @@ public class StationActivity extends AppCompatActivity
         //Execute a task to add new... task
         new AddDoItTaskAsyncTask().execute(url);
         getSupportFragmentManager().popBackStackImmediate(); //go back
-    }
-
-    @Override
-    public void onListFragmentInteraction(DoItTask item) {
-        item.checkOff();
     }
 
     private class AddList_AsyncTask extends AsyncTask<String, Void, String> {
