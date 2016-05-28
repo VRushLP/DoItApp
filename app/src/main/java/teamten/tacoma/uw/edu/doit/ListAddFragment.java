@@ -63,6 +63,8 @@ public class ListAddFragment extends Fragment {
                 mListener.addList(url);
             }
         });
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        fab.hide();
 
         return v;
     }

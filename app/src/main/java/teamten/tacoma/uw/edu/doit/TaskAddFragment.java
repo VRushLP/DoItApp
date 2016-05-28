@@ -1,7 +1,9 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +18,7 @@ import android.widget.Toast;
  */
 public class TaskAddFragment extends Fragment {
 
-    private final static String LIST_ADD_URL = "http://cssgate.insttech.washington.edu/~_450atm10/android/addList.php?";
+    private final static String TASK_ADD_URL = "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?";
     private final static String TAG = "TaskAddFragment";
     private TaskAddListener mListener;
     private EditText mTaskTitleEditText;
@@ -41,6 +43,9 @@ public class TaskAddFragment extends Fragment {
             }
         });
 
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        fab.hide();
+
         mListToAddTo = getArguments().getInt("ListID");
         return v;
     }
@@ -58,11 +63,11 @@ public class TaskAddFragment extends Fragment {
 
     private String buildTaskURL(View v) {
 
-        StringBuilder sb = new StringBuilder(LIST_ADD_URL);
+        StringBuilder sb = new StringBuilder(TASK_ADD_URL);
         try {
-            //cmd=add&textInput=test&list=61
+            //ex cmd=add&textInput=test&list=61
             sb.append("cmd=add&textInput=");
-            sb.append(mTaskTitleEditText.getText().toString());
+            sb.append(Uri.encode(mTaskTitleEditText.getText().toString().trim()));
             sb.append("&list=");
             sb.append(mListToAddTo);
             Log.i(TAG, sb.toString());

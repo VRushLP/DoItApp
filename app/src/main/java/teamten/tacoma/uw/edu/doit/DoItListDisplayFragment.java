@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +41,6 @@ public class DoItListDisplayFragment extends Fragment {
             "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php";
 
     private static final String TAG = "DoItListDisplayFragment";
-    private TextView mListTitleTextView;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private DoItList mDoItList = null;
@@ -72,10 +72,9 @@ public class DoItListDisplayFragment extends Fragment {
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            Log.i("StationFragment", TASK_MANAGER_URL);
+            Log.i(TAG, TASK_MANAGER_URL);
             DownloadListsTask task = new DownloadListsTask();
-            task.execute(new String[]{getGetAllURL()});
-
+            task.execute(getGetAllURL());
         }
 
         // Set the adapter
@@ -87,6 +86,9 @@ public class DoItListDisplayFragment extends Fragment {
                 mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.getTasks(), mListener));
             }
         }
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        fab.show();
         return view;
     }
 

@@ -64,8 +64,6 @@ public class DoItTask {
                     DoItTask parsedTask = new DoItTask(obj.getString(DoItTask.TEXT_INPUT),
                             obj.getInt(DoItTask.TASK_ID));
 
-                    Log.i(TAG, parsedTask.toString());
-
                     if(!list.contains(parsedTask)){
                         list.add(parsedTask);
                     }

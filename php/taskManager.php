@@ -12,9 +12,9 @@ if($command != null){
 	try {
 		$db = new PDO($dsn, $username, $password);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		//$command = isset($_GET['cmd']) ? $_GET['cmd'] : '';
 		if($command == "getAll"){
-			$listID = $_GET['id'];	
+			$listID = $_GET['id'];
+			$taskText = '';
 			
 			$select_sql = "SELECT tasks.taskID, tasks.textInput, tasks.isDeleted FROM tasks JOIN taskRights ON tasks.taskID = taskRights.taskID WHERE taskRights.listID=$listID";
 
@@ -28,18 +28,20 @@ if($command != null){
 			
 		} else if($command == "add"){
 			$taskText = $_GET['textInput'];
+			$taskText = urldecode($taskTest);
+			
 			$sql = "INSERT INTO tasks";
 			$sql .= " VALUES (DEFAULT, '$taskText', 0)";
 
 			if ($db->query($sql)) {
-				echo '{"result": "successfully created a record for table: tasks "}';
+				echo '{"result":"successfully created a record for table: tasks "}';
 
 				//obtains taskID that was just stored
 				$taskID = $db->lastInsertId();
-				$whichList = $_GET['list'];
+				$listID = $_GET['list'];
 
 				$sql = "INSERT INTO taskRights";
-				$sql .= " VALUES ('O', '$taskID', '$whichList')";
+				$sql .= " VALUES ('O', '$taskID', '$listID')";
 
 				//attempts to add listRights
 				if ($db->query($sql)) {
@@ -50,10 +52,11 @@ if($command != null){
 		$db = null;			
 	} catch(PDOException $e) {
 		if ((int)($e->getCode()) == 23000) {
-			echo '{"result": "fail", "error": "That list already exists."}';
+			echo '{"result": "fail", "error": "That task already exists."}';
 			} else {
 			echo 'Error Number: ' . $e->getCode() . '<br>';
-			echo '{"result": "fail", "error": "Unknown error (' . (((int)($e->getCode()) + 123) * 2) .')"}';
+			echo '{"result": "
+			", "error": "Unknown error (' . (((int)($e->getCode()) + 123) * 2) .')"}';
 		}
 	}
 } else {

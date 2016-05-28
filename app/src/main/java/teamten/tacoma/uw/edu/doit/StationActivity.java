@@ -204,8 +204,9 @@ public class StationActivity extends AppCompatActivity
 
     @Override
     public void addTask(String url) {
-        //Execute task to add new... task
-        getSupportFragmentManager().popBackStackImmediate(); //just kill the task add fragment for now
+        //Execute a task to add new... task
+        new AddDoItTaskAsyncTask().execute(url);
+        getSupportFragmentManager().popBackStackImmediate(); //go back
     }
 
     @Override
@@ -274,6 +275,67 @@ public class StationActivity extends AppCompatActivity
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "Something wrong with the data" +
+                        e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private class AddDoItTaskAsyncTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = "";
+            HttpURLConnection urlConnection = null;
+            for (String url : urls) {
+                try {
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s = "";
+                    while ((s = buffer.readLine()) != null) {
+                        response += s;
+                    }
+
+                } catch (Exception e) {
+                    response = "Unable to add list, Reason: "
+                            + e.getMessage();
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, result);
+            result = result.substring(result.lastIndexOf('>') + 1);
+            Log.i(TAG, result);
+            //The error reporting on the php complains about undefined variables.
+            // Something wrong with the network or the URL.
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String status = (String) jsonObject.get("result");
+                if (status.startsWith("success")) {
+                    Toast.makeText(getApplicationContext(), "Task successfully added!"
+                            , Toast.LENGTH_LONG)
+                            .show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed to add task because: "
+                                    + jsonObject.get("error")
+                            , Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(getApplicationContext(), "Something wrong with the data " +
                         e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
