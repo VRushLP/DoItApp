@@ -1,10 +1,6 @@
 package teamten.tacoma.uw.edu.doit.authenticate;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,27 +11,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Iterator;
-
 import teamten.tacoma.uw.edu.doit.R;
-import teamten.tacoma.uw.edu.doit.StationActivity;
 
 /**
  * LogInFragment allows user to access their account.
  */
 public class LogInFragment extends Fragment {
-
-    private static String USER_LOGIN_URL =
-            "http://cssgate.insttech.washington.edu/~_450atm10/android/login.php?";
 
     public LogInFragment() {
         // Required empty public constructor

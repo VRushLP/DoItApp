@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -57,22 +58,10 @@ public class StationFragment extends Fragment {
     public StationFragment() {
     }
 
-//    // TODO: Customize parameter initialization
-//    @SuppressWarnings("unused")
-//    public static StationFragment newInstance(int columnCount) {
-//        StationFragment fragment = new StationFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_COLUMN_COUNT, columnCount);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mColumnCount = getArguments().getInt(mColumnCount);
-//        }
+
         mStationDB = new StationDB(this.getContext());
 
         // adding userID to obtain their specific data
@@ -84,11 +73,9 @@ public class StationFragment extends Fragment {
 
         listURLBuilder.append("&userID=");
         listURLBuilder.append(userIdSharePref);
-        System.out.println("StationFragment onCreate URL: " + listURLBuilder);
 
         listURL += listURLBuilder;
     }
-
 
 
     @Override
@@ -109,14 +96,13 @@ public class StationFragment extends Fragment {
 
         }
 
-
         ConnectivityManager connMgr = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             Log.i("StationFragment", listURL);
             DownloadListsTask task = new DownloadListsTask();
-            task.execute(new String[]{listURL});
+            task.execute(listURL);
         }
         else {
             Toast.makeText(view.getContext(),
@@ -155,6 +141,9 @@ public class StationFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        fab.show();
 
         return view;
     }
@@ -221,11 +210,7 @@ public class StationFragment extends Fragment {
 
                     urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
-                    Log.wtf("Help", "1");
-
                     InputStream content = urlConnection.getInputStream();
-                    Log.wtf("Help", "2");
-
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
                     String s = "";
                     while ((s = buffer.readLine()) != null) {
@@ -285,8 +270,5 @@ public class StationFragment extends Fragment {
             }
         }
     }
-
-
-
 
 }

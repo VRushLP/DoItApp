@@ -1,9 +1,7 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,12 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
 
-import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +24,6 @@ public class ListAddFragment extends Fragment {
 
     private final static String LIST_ADD_URL = "http://cssgate.insttech.washington.edu/~_450atm10/android/addList.php?";
 
-//    private TextView mTaskContentTextView;
     private ListAddListener mListener;
     private EditText mListTitleEditText;
     private Bundle data;
@@ -79,7 +74,7 @@ public class ListAddFragment extends Fragment {
                 getActivity().findViewById(R.id.new_list_button);
         floatingActionButton.hide();
 
-        Button addListButton = (Button) v.findViewById(R.id.create_list_title);
+        Button addListButton = (Button) v.findViewById(R.id.floating_action_button);
         addListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +90,8 @@ public class ListAddFragment extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        fab.hide();
 
         return v;
     }
@@ -103,7 +100,6 @@ public class ListAddFragment extends Fragment {
     private String buildListURL(View v) {
 
         StringBuilder sb = new StringBuilder(LIST_ADD_URL);
-
         try {
 
 //            Bundle data = getArguments();

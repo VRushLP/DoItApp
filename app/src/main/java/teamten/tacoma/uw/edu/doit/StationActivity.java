@@ -1,17 +1,15 @@
 package teamten.tacoma.uw.edu.doit;
 
-
-
 import android.app.Dialog;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,19 +17,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,22 +31,22 @@ import java.net.URL;
 
 import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
+import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 
 public class StationActivity extends AppCompatActivity implements StationFragment.OnDoItStationFragmentInteractionListener,
-                        ListAddFragment.ListAddListener, StationFragment.DeleteListClickListener, ListDetailFragment.UpdateListTitleListener {
+        DoItListDisplayFragment.OnListFragmentInteractionListener,
+                        ListAddFragment.ListAddListener, StationFragment.DeleteListClickListener, DoItListDisplayFragment.UpdateListTitleListener,
+        TaskAddFragment.TaskAddListener{
 
+
+    private android.support.v4.app.FragmentManager m;
 
     private String userEmailSharePref;
     private String userIdSharePref;
     private static String mUserID;
-    private android.support.v4.app.FragmentManager m;
+    private static final String TAG = "StationActivity";
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +64,12 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
             mUserID = bundle.getString("userID");
         }
 
-
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
         userEmailSharePref = mSharedPreferences.getString("@string/userEmail", null);
         System.out.println("StationActivity onCreate email from shared pref: " + userEmailSharePref);
+
 
         userIdSharePref = mSharedPreferences.getString("@string/userID", null);
         System.out.println("StationActivity onCreate userID from shared pref: " + userIdSharePref);
@@ -91,19 +82,40 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
 
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.station_container, fragment)
+//                .commit();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
-        fab.setOnClickListener(new View.OnClickListener() {
+        if(fab != null){
+            fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
-                    ListAddFragment listAddFragment = new ListAddFragment();
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.station_container, listAddFragment)
-                            .addToBackStack(null)
-                            .commit();
+                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
+                    Log.i(TAG, "Current Fragment: " + f.getClass().getCanonicalName());
+                    if(f instanceof StationFragment){
+                        ListAddFragment listAddFragment = new ListAddFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.station_container, listAddFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    } else if (f instanceof DoItListDisplayFragment){
+
+                        TaskAddFragment taskAddFragment = new TaskAddFragment();
+                        Bundle args = new Bundle();
+                        //getCurrentListID
+                        args.putInt("ListID", ((DoItListDisplayFragment) f).getCurrentListID());
+                        taskAddFragment.setArguments(args);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.station_container, taskAddFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
             });
+        }
 
         if (savedInstanceState == null || getSupportFragmentManager().findFragmentById(R.id.list) == null) {
             StationFragment courseListFragment = new StationFragment();
@@ -111,9 +123,6 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                     .add(R.id.station_container, courseListFragment)
                     .commit();
         }
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -136,7 +145,6 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
             finish();
             return true;
         } else if (id == R.id.action_add_list) {
-//            Log.d(TAG, "Add a new list");
             Bundle userBundleData = new Bundle();
             userBundleData.putString("EMAIL", userEmailSharePref);
             userBundleData.putString("USERID", userIdSharePref);
@@ -149,21 +157,21 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                     .commit();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void onListFragmentInteraction(DoItList item) {
-        ListDetailFragment listDetailFragment = new ListDetailFragment();
+        DoItListDisplayFragment doItListDisplayFragment = new DoItListDisplayFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ListDetailFragment.LIST_ITEM_SELECTED, item);
-        listDetailFragment.setArguments(args);
+        args.putSerializable(DoItListDisplayFragment.LIST_ITEM_SELECTED, item);
+        args.putSerializable("DoItTaskList", item);
 
-        System.out.println("HERE: onListFragmentInteraction method on StationActivity");
+        System.out.println("onListFragmentInteraction method StationActivity = " + item.getTitle());
+
+        doItListDisplayFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.station_container, listDetailFragment)
+                .replace(R.id.station_container, doItListDisplayFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -195,7 +203,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
     @Override
     public void onBackPressed(){
         if(getSupportFragmentManager().getBackStackEntryCount() < 1){
-            new AlertDialog.Builder(this)
+            AlertDialog quit = new AlertDialog.Builder(this)
                     .setTitle("Close")
                     .setMessage("Are you sure you want to close Do It?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
@@ -204,18 +212,8 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                             finish();
                         }
                     })
-                    .setNegativeButton("No", null)
-                    .setOnKeyListener(new Dialog.OnKeyListener() {
-                        @Override
-                        public boolean onKey(DialogInterface arg0, int keyCode,
-                                             KeyEvent event) {
-                            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                finish();
-                            }
-                            return true;
-                        }
-                    })
-                    .show();
+                    .setNegativeButton("No", null).create();
+              quit.show();
         } else{
             super.onBackPressed();
         }
@@ -231,43 +229,15 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "List Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://teamten.tacoma.uw.edu.doit/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
+    public void addTask(String url) {
+        //Execute a task to add new... task
+        new AddDoItTaskAsyncTask().execute(url);
+        getSupportFragmentManager().popBackStackImmediate(); //go back
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "List Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://teamten.tacoma.uw.edu.doit/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
+    public void onListFragmentInteraction(DoItTask item) {
+        item.checkOff();
     }
 
 
@@ -340,6 +310,70 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "Something wrong with the data" +
+                        e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    /**
+     * Adds a DoItTask to a specified DoItList in the background of the App.
+     */
+    private class AddDoItTaskAsyncTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = "";
+            HttpURLConnection urlConnection = null;
+            for (String url : urls) {
+                try {
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s = "";
+                    while ((s = buffer.readLine()) != null) {
+                        response += s;
+                    }
+
+                } catch (Exception e) {
+                    response = "Unable to add list, Reason: "
+                            + e.getMessage();
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, result);
+            result = result.substring(result.lastIndexOf('>') + 1); //Account for errors
+            Log.i(TAG, result); //Check changed result
+            //The error reporting on the php complains about undefined variables.
+            // Something wrong with the network or the URL.
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String status = (String) jsonObject.get("result");
+                if (status.startsWith("success")) {
+                    Toast.makeText(getApplicationContext(), "Task successfully added!"
+                            , Toast.LENGTH_LONG)
+                            .show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed to add task because: "
+                                    + jsonObject.get("error")
+                            , Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(getApplicationContext(), "Something wrong with the data " +
                         e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }

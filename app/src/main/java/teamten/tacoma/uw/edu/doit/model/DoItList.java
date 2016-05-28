@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,12 +19,14 @@ public class DoItList implements Serializable {
 
     String mTitle;
     int mIsDeleted, mListID;
+    public ArrayList<DoItTask> mList;
     public static final String LIST_ID = "listID", TITLE = "title", ISDELETED = "isDeleted";
 
     public DoItList(int theListID, String theTitle, int theIsDeleted) {
         mListID = theListID;
         mTitle = theTitle;
         mIsDeleted = theIsDeleted;
+        mList = new ArrayList<DoItTask>();
     }
 
     public int getListID() { return this.mListID; }
@@ -34,6 +37,8 @@ public class DoItList implements Serializable {
 
     public String getTitle() { return this.mTitle; }
 
+    public int getId() {return this.mListID; };
+
     public void setTitle(String theNewTitle) {
         if (theNewTitle != null) {
             mTitle = theNewTitle;
@@ -41,6 +46,9 @@ public class DoItList implements Serializable {
             mTitle = "Title Default";
         }
     }
+
+    public ArrayList<DoItTask> getTasks() { return this.mList; }
+
 
     public void setIsDeleted(int mIsDeleted) {
         this.mIsDeleted = mIsDeleted;
@@ -62,7 +70,11 @@ public class DoItList implements Serializable {
 
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
+
                     DoItList single_list = new DoItList(obj.getInt(DoItList.LIST_ID), obj.getString(DoItList.TITLE), obj.getInt(DoItList.ISDELETED));
+
+//                    DoItList single_list = new DoItList(obj.getString(DoItList.TITLE), obj.getInt(DoItList.LIST_ID), obj.getInt(DoItList.ISDELETED));
+
                     list.add(single_list);
                 }
             } catch (JSONException e) {
@@ -70,6 +82,11 @@ public class DoItList implements Serializable {
             }
         }
         return reason;
+    }
+
+    public int addTask(DoItTask theTask){
+        mList.add(theTask);
+        return mList.indexOf(theTask);
     }
 
 }

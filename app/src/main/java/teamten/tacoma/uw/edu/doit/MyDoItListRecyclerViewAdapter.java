@@ -14,6 +14,7 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
 import java.util.List;
 
 
+
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
     private final List<DoItList> listOfListsData;

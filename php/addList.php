@@ -20,8 +20,12 @@ error_reporting(E_ALL);
             //$isDeleted = isset($_GET['isDeleted']) ? $_GET['isDeleted'] : '';  // place holder for later assignment
 			//$listID = isset($_GET['listID']) ? $_GET['listID'] : '';  // place holder for later assignment
             $userID = isset($_GET['userID']) ? $_GET['userID'] : '';
+<<<<<<< HEAD
 			
 			
+=======
+
+>>>>>>> tasks_part
             //build select query to obtain that user's station data
             $sql = "SELECT * FROM users ";
             $sql .= " WHERE email = '$email'";
@@ -69,7 +73,10 @@ error_reporting(E_ALL);
                     //attempts to add listRights
                     if ($db->query($sql)) {
                         echo '{"result": "successfully created a record for table: listRights"}';
+<<<<<<< HEAD
                         
+=======
+>>>>>>> tasks_part
                     } 
                 }
             }  

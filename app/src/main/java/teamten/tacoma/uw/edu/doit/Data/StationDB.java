@@ -63,6 +63,7 @@ public class StationDB {
             String title = c.getString(1);
             int isDeleted = c.getInt(2);
             DoItList theList = new DoItList(id, title, isDeleted);
+
             list.add(theList);
             c.moveToNext();
         }
@@ -119,6 +120,5 @@ public class StationDB {
             sqLiteDatabase.execSQL(DROP_COURSE_SQL);
             onCreate(sqLiteDatabase);
         }
-
     }
 }
