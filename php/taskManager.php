@@ -14,7 +14,7 @@ if($command != null){
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		if($command == "getAll"){
 			$listID = $_GET['id'];
-			$taskText = '';
+			$textInput = '';
 			
 			$select_sql = "SELECT tasks.taskID, tasks.textInput, tasks.isDeleted FROM tasks JOIN taskRights ON tasks.taskID = taskRights.taskID WHERE taskRights.listID=$listID";
 
@@ -23,15 +23,15 @@ if($command != null){
 			if ($tasks) {	
 				echo json_encode($tasks);
 			} else {
-				echo "Something went horribly wrong";
+				echo json_encode('"result":"Failure');
 			}
 			
 		} else if($command == "add"){
-			$taskText = $_GET['textInput'];
-			$taskText = urldecode($taskTest);
+			$textInput = $_GET['textInput'];
+			$textInput = urldecode($textInput);
 			
 			$sql = "INSERT INTO tasks";
-			$sql .= " VALUES (DEFAULT, '$taskText', 0)";
+			$sql .= " VALUES (DEFAULT, '$textInput', 0)";
 
 			if ($db->query($sql)) {
 				echo '{"result":"successfully created a record for table: tasks "}';
