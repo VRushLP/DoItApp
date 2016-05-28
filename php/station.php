@@ -15,11 +15,7 @@ $command = $_GET['cmd'];
 		// $listID used for when there is a delete occuring
 		$listID = isset($_GET['listID']) ? $_GET['listID'] : '';
 		
-<<<<<<< HEAD
 		$list_title = isset($_GET['title']) ? $_GET['title'] : '';
-=======
-		$list_title = isset($_GET['title']) ? $_GET['title'] : ''; // later assignment
->>>>>>> tasks_part
 		$isDeleted = isset($_GET['isDeleted']) ? $_GET['isDeleted'] : '';  // place holder for later assignment
 
 		
@@ -46,7 +42,7 @@ $command = $_GET['cmd'];
 					echo '{"result": "fail", "error": "listRight and lists record NOT deleted."}';
 				}
             }  
-<<<<<<< HEAD
+
 		} else if ($command == "update") { 
 			$update_sql = "UPDATE lists SET title = '$list_title', isDeleted = '$isDeleted' WHERE listID = '$listID'";
 			//attempts to update lists table 
@@ -59,22 +55,6 @@ $command = $_GET['cmd'];
 		} else {
 			echo '{"result": "fail", "error": "in station.php"}';
 		}
-		
-=======
-		} else {
-			echo '{"result": "fail", "error": "in station.php"}';
-		}
-		//else if ($command == "update") { 
-			//$update_sql = "UPDATE lists SET title = '$list_title', isDeleted = '$isDeleted' WHERE listID = '$listID'";
-			//attempts to update listRights
-			//if ($db->query($update_sql)) {
-			//		echo '{"result": "success, list was UPDATED"}';
-            //} else {
-			//		echo '{"result": "fail, list did NOT update"}';
-			//}
-			
-		//}
->>>>>>> tasks_part
 		$db = null;
 	} catch (PDOException $e) {
 		$error_message = $e->getMessage();
