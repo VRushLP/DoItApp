@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/fragment_add_list_ID"
-    tools:context=".ListDetailFragment">
+    tools:context=".StationActivity">
 
     <EditText
         android:id="@+id/list_title_ET"
@@ -15,14 +15,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/list_title_ET"
         android:id="@+id/cancel_list_title"
         android:text="Cancel" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/list_title_ET"
-        android:layout_toRightOf="@+id/cancel_list_title"
         android:id="@+id/create_list_title"
         android:text="Create" />
 

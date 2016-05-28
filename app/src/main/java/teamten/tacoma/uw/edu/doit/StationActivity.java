@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,12 +35,14 @@ import teamten.tacoma.uw.edu.doit.model.DoItTask;
 public class StationActivity extends AppCompatActivity
         implements StationFragment.OnDoItStationFragmentInteractionListener,
         DoItListDisplayFragment.OnListFragmentInteractionListener,
-        ListAddFragment.ListAddListener {
+        ListAddFragment.ListAddListener,
+        TaskAddFragment.TaskAddListener {
 
     //private static final String TAG = "StationActivity";
     private String userEmailSharePref;
     private String userIdSharePref;
     private static String mUserID;
+    private static final String TAG = "StationActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +92,27 @@ public class StationActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view) {
 
-                    ListAddFragment listAddFragment = new ListAddFragment();
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.station_container, listAddFragment)
-                            .addToBackStack(null)
-                            .commit();
+                    Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
+                    Log.i(TAG, f.getClass().getCanonicalName());
+                    if(f instanceof StationFragment){
+                        ListAddFragment listAddFragment = new ListAddFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.station_container, listAddFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    } else if (f instanceof DoItListDisplayFragment){
+
+
+                        TaskAddFragment taskAddFragment = new TaskAddFragment();
+                        Bundle args = new Bundle();
+                        //getCurrentListID
+                        args.putInt("ListID", ((DoItListDisplayFragment) f).getCurrentListID());
+                        taskAddFragment.setArguments(args);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.station_container, taskAddFragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
                 }
             });
         }
@@ -105,24 +124,6 @@ public class StationActivity extends AppCompatActivity
                     .commit();
         }
     }
-
-//    public static void setDefaults(String key, String value, Context context) {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-//        SharedPreferences.Editor editor = prefs.edit();
-//        editor.putString(key, value);
-//        editor.commit();
-//    }
-//
-//    public static String getDefaults(String key, Context context) {
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-//        return preferences.getString(key, null);
-//    }
-//
-//    public static void  setUserID(String userID) {
-//        mUserID = userID;
-//    }
-//
-//    public String getUserID() { return mUserID; }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -199,6 +200,12 @@ public class StationActivity extends AppCompatActivity
 
         // Takes you back to the previous fragment by popping the current fragment out.
         getSupportFragmentManager().popBackStackImmediate();
+    }
+
+    @Override
+    public void addTask(String url) {
+        //Execute task to add new... task
+        getSupportFragmentManager().popBackStackImmediate(); //just kill the task add fragment for now
     }
 
     @Override

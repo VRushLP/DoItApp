@@ -90,6 +90,8 @@ public class DoItListDisplayFragment extends Fragment {
         return view;
     }
 
+    public int getCurrentListID(){ return mDoItList.getId(); };
+
     private String getGetAllURL() {
         Log.i(TAG, "buildGetAllTasksURL Called");
         StringBuilder sb = new StringBuilder(TASK_MANAGER_URL);
