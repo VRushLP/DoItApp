@@ -30,8 +30,7 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
+ * Displays a List of DoItTasks associated with a specific DoItList.
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
@@ -39,17 +38,14 @@ public class DoItListDisplayFragment extends Fragment {
 
     private final static String TASK_MANAGER_URL =
             "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php";
-
     private static final String TAG = "DoItListDisplayFragment";
+
     private OnListFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private DoItList mDoItList = null;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public DoItListDisplayFragment() {
+        //required empty public constructor
     }
 
     @Override
@@ -65,14 +61,14 @@ public class DoItListDisplayFragment extends Fragment {
             mDoItList= (DoItList) args.get("DoItTaskList");
             Log.i(TAG, "" + (mDoItList != null));
         } else{
-            Log.i(TAG, "args was null");
+            Log.e(TAG, "args was null");
         }
 
+        //check connection
         ConnectivityManager connMgr = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            Log.i(TAG, TASK_MANAGER_URL);
             DownloadListsTask task = new DownloadListsTask();
             task.execute(getGetAllURL());
         }
@@ -87,6 +83,7 @@ public class DoItListDisplayFragment extends Fragment {
             }
         }
 
+        //ensure fab is visible.
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
         fab.show();
         return view;
@@ -94,6 +91,10 @@ public class DoItListDisplayFragment extends Fragment {
 
     public int getCurrentListID(){ return mDoItList.getId(); };
 
+    /**
+     * Builds a String for the URL of getting all the tasks for the list associated with this Fragment.
+     * @return
+     */
     private String getGetAllURL() {
         Log.i(TAG, "buildGetAllTasksURL Called");
         StringBuilder sb = new StringBuilder(TASK_MANAGER_URL);
@@ -136,35 +137,14 @@ public class DoItListDisplayFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(DoItTask item);
     }
 
-    //retrieve all tasks with associated passed listID
-    //build get allURL
-
-    private String buildAddTaskURL(View v) {
-        Log.i(TAG, "buildAddTaskURL called");
-        StringBuilder sb = new StringBuilder(TASK_MANAGER_URL);
-        try {
-            Bundle data = getArguments();
-
-            //append arguments to the url
-
-
-        }
-        catch(Exception e) {
-            Toast.makeText(v.getContext(), "Something wrong with the url" + e.getMessage(), Toast.LENGTH_LONG)
-                    .show();
-        }
-        return sb.toString();
-    }
-
+    /**
+     * A task that gets all the tasks associated with a given list in the background of the application.
+     */
     private class DownloadListsTask extends AsyncTask<String, Void, String> {
 
         @Override

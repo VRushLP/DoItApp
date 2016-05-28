@@ -3,7 +3,6 @@ package teamten.tacoma.uw.edu.doit;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,10 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,14 +28,12 @@ import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
-
 public class StationActivity extends AppCompatActivity
         implements StationFragment.OnDoItStationFragmentInteractionListener,
         DoItListDisplayFragment.OnListFragmentInteractionListener,
         ListAddFragment.ListAddListener,
         TaskAddFragment.TaskAddListener {
 
-    //private static final String TAG = "StationActivity";
     private String userEmailSharePref;
     private String userIdSharePref;
     private static String mUserID;
@@ -58,7 +53,6 @@ public class StationActivity extends AppCompatActivity
         }
 
 //        StationActivity.context = getApplicationContext();
-
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
@@ -68,11 +62,10 @@ public class StationActivity extends AppCompatActivity
         /////
 //        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
         ////
-
         //String userIdSharePref = getUserID();
         //mSharedPreferences.edit().putString("@string/userID", userIdSharePref).commit();  //add userID for first time
         userIdSharePref = mSharedPreferences.getString("@string/userID", null);
-        System.out.println("StationActivity onCreate userID from shared pref: " + userIdSharePref);
+        //System.out.println("StationActivity onCreate userID from shared pref: " + userIdSharePref);
         //setDefaults("@string/userID", userIdSharePref, StationActivity.context);
 
         Bundle args = new Bundle();
@@ -93,7 +86,7 @@ public class StationActivity extends AppCompatActivity
                 public void onClick(View view) {
 
                     Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
-                    Log.i(TAG, f.getClass().getCanonicalName());
+                    Log.i(TAG, "Current Fragment: " + f.getClass().getCanonicalName());
                     if(f instanceof StationFragment){
                         ListAddFragment listAddFragment = new ListAddFragment();
                         getSupportFragmentManager().beginTransaction()
@@ -101,7 +94,6 @@ public class StationActivity extends AppCompatActivity
                                 .addToBackStack(null)
                                 .commit();
                     } else if (f instanceof DoItListDisplayFragment){
-
 
                         TaskAddFragment taskAddFragment = new TaskAddFragment();
                         Bundle args = new Bundle();
@@ -144,7 +136,6 @@ public class StationActivity extends AppCompatActivity
             finish();
             return true;
         } else if (id == R.id.action_add_list) {
-//            Log.d(TAG, "Add a new list");
             Bundle userBundleData = new Bundle();
             userBundleData.putString("EMAIL", userEmailSharePref);
             userBundleData.putString("USERID", userIdSharePref);
@@ -156,10 +147,8 @@ public class StationActivity extends AppCompatActivity
                     .commit();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onListFragmentInteraction(DoItList item) {
@@ -196,8 +185,7 @@ public class StationActivity extends AppCompatActivity
     @Override
     public void addList(String url) {
         AddList_AsyncTask task = new AddList_AsyncTask();
-        task.execute(new String[]{url.toString()});
-
+        task.execute(url);
         // Takes you back to the previous fragment by popping the current fragment out.
         getSupportFragmentManager().popBackStackImmediate();
     }
@@ -280,6 +268,9 @@ public class StationActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Adds a DoItTask to a specified DoItList in the background of the App.
+     */
     private class AddDoItTaskAsyncTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -318,8 +309,8 @@ public class StationActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(String result) {
             Log.i(TAG, result);
-            result = result.substring(result.lastIndexOf('>') + 1);
-            Log.i(TAG, result);
+            result = result.substring(result.lastIndexOf('>') + 1); //Account for errors
+            Log.i(TAG, result); //Check changed result
             //The error reporting on the php complains about undefined variables.
             // Something wrong with the network or the URL.
             try {

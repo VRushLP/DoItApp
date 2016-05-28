@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A subclass of Fragment that gathers information about
+ * new tasks being created before sending the information out to the server.
  */
 public class TaskAddFragment extends Fragment {
 
-    private final static String TASK_ADD_URL = "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?";
     private final static String TAG = "TaskAddFragment";
+    private final static String TASK_ADD_URL = "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?";
+
     private TaskAddListener mListener;
     private EditText mTaskTitleEditText;
     private int mListToAddTo;
@@ -34,7 +36,7 @@ public class TaskAddFragment extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_task_add, container, false);
         mTaskTitleEditText = (EditText) v.findViewById(R.id.list_title_ET);
-        Button addListButton = (Button) v.findViewById(R.id.create_list_title);
+        Button addListButton = (Button) v.findViewById(R.id.floating_action_button);
         addListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,8 +63,13 @@ public class TaskAddFragment extends Fragment {
         }
     }
 
+    /**
+     *
+     * @param v Usually passed as "this" from the calling activity, which is probably StationActivity.
+     * @return A string representing the task and a command to add to the server.
+     * Note that only the text parameter is encoded.
+     */
     private String buildTaskURL(View v) {
-
         StringBuilder sb = new StringBuilder(TASK_ADD_URL);
         try {
             //ex cmd=add&textInput=test&list=61
@@ -80,6 +87,6 @@ public class TaskAddFragment extends Fragment {
     }
 
     public interface TaskAddListener{
-        public void addTask(String url);
+        void addTask(String url);
     }
 }

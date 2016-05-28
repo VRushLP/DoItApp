@@ -96,19 +96,19 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         mSharedPreferences
                 .edit()
                 .putBoolean(getString(R.string.LOGGEDIN), true)
-                .commit();
+                .apply();
 
         // sets login credentials within sharedPreferences
         // putting the key of the sharedPref into a string resource
         // will allow universal access to the key to then obtain value
-        mSharedPreferences.edit().putString("@string/userEmail", email).commit();
+        mSharedPreferences.edit().putString("@string/userEmail", email).apply();
         String buildURL = USER_LOGIN_URL;
 
         buildURL += "email=" + email + "&pwd=" + pwd;
-        Log.i("AuthenticationActivity", buildURL.toString());
+        Log.i("AuthenticationActivity", buildURL);
         new  VerifyLoginAndRetrieveUserIdTask().execute(buildURL);
 
-        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
+        mSharedPreferences.edit().putString("@string/userID", mUserID).apply();
         String mUserIDSP = mSharedPreferences.getString("@string/userID", null);
 //        System.out.println("AuthenticationActivity mUserID= " + mUserIDSP);
         i = new Intent(this, StationActivity.class);
@@ -117,7 +117,6 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         startActivity(i);
         finish();
     }
-
 
     /**
      * Web service to retrieve userID stored in database
@@ -185,8 +184,8 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 String userID = (String) jsonObject.get("userid");
-                mSharedPreferences.edit().putString("@string/userID", userID).commit();
-                System.out.println("AuthenticationActivity: onPostExecute userID: " + userID);
+                mSharedPreferences.edit().putString("@string/userID", userID).apply();
+//                System.out.println("AuthenticationActivity: onPostExecute userID: " + userID);
 
                 Bundle args = new Bundle();
                 args.putString("USERIDAUTH", userID);

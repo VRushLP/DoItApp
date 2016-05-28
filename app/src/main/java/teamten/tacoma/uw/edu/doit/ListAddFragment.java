@@ -6,12 +6,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
@@ -55,7 +53,7 @@ public class ListAddFragment extends Fragment {
 //                getActivity().findViewById(R.id.fab);
 //        floatingActionButton.hide();
 
-        Button addListButton = (Button) v.findViewById(R.id.create_list_title);
+        Button addListButton = (Button) v.findViewById(R.id.floating_action_button);
         addListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
