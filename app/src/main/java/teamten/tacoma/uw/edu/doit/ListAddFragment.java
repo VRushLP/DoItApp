@@ -79,8 +79,15 @@ public class ListAddFragment extends Fragment {
         addListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = buildListURL(v);
-                mListener.addList(url, taskAction);
+                String userInput = mListTitleEditText.getText().toString();
+                if (userInput.length() > 0 && !userInput.equals("")) {
+                    System.out.println("userInput list add: " + userInput);
+                    String url = buildListURL(v);
+                    mListener.addList(url, taskAction);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Title must be at least 1 character long.", Toast.LENGTH_LONG)
+                            .show();
+                }
             }
         });
 
@@ -91,6 +98,8 @@ public class ListAddFragment extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+        getActivity().setTitle("Create a List");
 
         return v;
     }
