@@ -97,7 +97,6 @@ public class StationDB {
 
 
     class StationDBHelper extends SQLiteOpenHelper {
-
         private static final String CREATE_LIST_SQL =
                 "CREATE TABLE IF NOT EXISTS lists "
                         + "(listID INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, isDeleted INTEGER)";

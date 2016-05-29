@@ -1,14 +1,13 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
-import teamten.tacoma.uw.edu.doit.DoItListDisplayFragment.OnListFragmentInteractionListener;
+import teamten.tacoma.uw.edu.doit.DoItListDisplayFragment.OnTaskDisplayInteractionListener;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 import java.util.List;
@@ -16,9 +15,9 @@ import java.util.List;
 public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTaskRecyclerViewAdapter.ViewHolder> {
 
     private final List<DoItTask> mValues;
-    private final DoItListDisplayFragment.OnListFragmentInteractionListener mListener;
+    private final OnTaskDisplayInteractionListener mListener;
 
-    public MyDoItTaskRecyclerViewAdapter(List<DoItTask> items, OnListFragmentInteractionListener listener) {
+    public MyDoItTaskRecyclerViewAdapter(List<DoItTask> items, DoItListDisplayFragment.OnTaskDisplayInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -31,17 +30,16 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 //        holder.mItem = mValues.get(position);
 //        holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).mName);
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-//                    mListener.onDoItListItemInteraction(holder.mItem);
+                if (mListener != null) {
+                    mListener.onDoItTaskInteraction(mValues.get(holder.getAdapterPosition()));
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -56,7 +54,6 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
         public final View mView;
 //        public final TextView mIdView;
         public final TextView mContentView;
-
         public ViewHolder(View view) {
             super(view);
             mView = view;

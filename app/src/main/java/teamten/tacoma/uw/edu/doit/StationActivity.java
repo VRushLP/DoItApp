@@ -1,7 +1,5 @@
 package teamten.tacoma.uw.edu.doit;
 
-import android.app.Dialog;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,18 +29,19 @@ import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
+public class StationActivity extends AppCompatActivity implements
+        StationFragment.OnDoItStationFragmentInteractionListener,
+        DoItListDisplayFragment.OnTaskDisplayInteractionListener,
+        ListAddFragment.ListAddListener,
+        StationFragment.DeleteListClickListener,
+        StationFragment.UpdateListTitleListener,
+        TaskAddFragment.TaskAddListener {
 
-public class StationActivity extends AppCompatActivity implements StationFragment.OnDoItStationFragmentInteractionListener,
-        DoItListDisplayFragment.OnListFragmentInteractionListener,
-                        ListAddFragment.ListAddListener, StationFragment.DeleteListClickListener, DoItListDisplayFragment.UpdateListTitleListener,
-        TaskAddFragment.TaskAddListener{
-
-
-    private android.support.v4.app.FragmentManager m;
+    private android.support.v4.app.FragmentManager m; //assigned but never used?
 
     private String userEmailSharePref;
     private String userIdSharePref;
-    private static String mUserID;
+    private static String mUserID; //assigned but never used?
     private static final String TAG = "StationActivity";
 
 
@@ -57,7 +56,6 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         m = getSupportFragmentManager();
 
         setTitle("Station");
-
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {// to avoid the NullPointerException
             mUserID = bundle.getString("userID");
@@ -67,24 +65,17 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
         userEmailSharePref = mSharedPreferences.getString("@string/userEmail", null);
-        System.out.println("StationActivity onCreate email from shared pref: " + userEmailSharePref);
-
+        Log.i(TAG, "StationActivity onCreate email from shared pref: " + userEmailSharePref);
 
         userIdSharePref = mSharedPreferences.getString("@string/userID", null);
-        System.out.println("StationActivity onCreate userID from shared pref: " + userIdSharePref);
+        Log.i(TAG, "StationActivity onCreate userID from shared pref: " + userIdSharePref);
 
         Bundle args = new Bundle();
         args.putString("EMAIL", userEmailSharePref);
-
         args.putString("USERID", userIdSharePref);
 
         StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
-
-//        getSupportFragmentManager().beginTransaction()
-//                .add(R.id.station_container, fragment)
-//                .commit();
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
         fab.hide();
@@ -92,17 +83,9 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
                     Log.i(TAG, "Current Fragment: " + f.getClass().getCanonicalName());
-                    if(f instanceof StationFragment){
-                        ListAddFragment listAddFragment = new ListAddFragment();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.station_container, listAddFragment)
-                                .addToBackStack(null)
-                                .commit();
-                    } else if (f instanceof DoItListDisplayFragment){
-
+                    if (f instanceof DoItListDisplayFragment){
                         TaskAddFragment taskAddFragment = new TaskAddFragment();
                         Bundle args = new Bundle();
                         //getCurrentListID
@@ -117,14 +100,14 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
             });
         }
 
-        if (savedInstanceState == null || getSupportFragmentManager().findFragmentById(R.id.list) == null) {
-            StationFragment courseListFragment = new StationFragment();
+        if (savedInstanceState == null
+                || getSupportFragmentManager().findFragmentById(R.id.list) == null) {
+            StationFragment stationFragment = new StationFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.station_container, courseListFragment)
+                    .add(R.id.station_container, stationFragment)
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -167,7 +150,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         args.putSerializable(DoItListDisplayFragment.LIST_ITEM_SELECTED, item);
         args.putSerializable("DoItTaskList", item);
 
-        System.out.println("onListFragmentInteraction method StationActivity = " + item.getTitle());
+        Log.i(TAG, "onListFragmentInteraction method StationActivity = " + item.getTitle());
 
         doItListDisplayFragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
@@ -182,10 +165,10 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
 
         listURL += "delete";
         listURL += "&listID=" + item.getListID();
-        Log.i("Delete", new String(listURL));
+        Log.i("Delete", listURL);
 
         AddList_AsyncTask task = new AddList_AsyncTask("delete");
-        task.execute(new String[]{listURL});
+        task.execute(listURL);
     }
 
 
@@ -196,7 +179,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         String updateURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=update";
         updateURL += "&listID=" + theListID;
         updateURL += "&title=" + theNewTitle;
-        task.execute(new String[]{updateURL.toString()});
+        task.execute(updateURL);
     }
 
     public void onDoItTaskInteraction(DoItTask item) {
@@ -225,8 +208,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
     @Override
     public void addList(String url, String taskAction) {
         AddList_AsyncTask task = new AddList_AsyncTask(taskAction);
-        task.execute(new String[]{url.toString()});
-
+        task.execute(url.toString());
         // Takes you back to the previous fragment by popping the current fragment out.
         getSupportFragmentManager().popBackStackImmediate();
     }
@@ -239,12 +221,9 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
     }
 
     private class AddList_AsyncTask extends AsyncTask<String, Void, String> {
-
-
-        private String TASK_ACTION;
-
+        private String mTaskAction;
         public AddList_AsyncTask(String taskAction) {
-            TASK_ACTION = taskAction;
+            mTaskAction = taskAction;
         }
 
         @Override
@@ -270,7 +249,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                     }
 
                 } catch (Exception e) {
-                    response = "Unable to " + TASK_ACTION + " list, Reason: "
+                    response = "Unable to " + mTaskAction + " list, Reason: "
                             + e.getMessage();
                     Log.wtf("wtf", e.getMessage());
                 } finally {
@@ -295,11 +274,11 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
-                    Toast.makeText(getApplicationContext(), "List successfully "+TASK_ACTION+"ed!"
+                    Toast.makeText(getApplicationContext(), "List successfully "+ mTaskAction +"ed!"
                             , Toast.LENGTH_LONG)
                             .show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Failed to "+TASK_ACTION+": "
+                    Toast.makeText(getApplicationContext(), "Failed to "+ mTaskAction +": "
                                     + jsonObject.get("error")
                             , Toast.LENGTH_LONG)
                             .show();
