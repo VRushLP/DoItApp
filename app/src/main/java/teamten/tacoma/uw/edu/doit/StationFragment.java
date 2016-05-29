@@ -187,12 +187,9 @@ public class StationFragment extends Fragment {
         void onDoItListItemInteraction(DoItList item);
     }
 
-
     public interface DeleteListClickListener {
         void itemClickedToBeDeleted(DoItList item);
     }
-
-
 
     private class DownloadListsTask extends AsyncTask<String, Void, String> {
 

@@ -110,64 +110,6 @@ public class DoItListDisplayFragment extends Fragment {
             }
         }
 
-
-
-//        // long press on textview to update list's title
-//        mListTitleTextView.setOnLongClickListener(new View.OnLongClickListener() {
-//
-//            @Override
-//            public boolean onLongClick(View v) {
-//                // get update_list_title_prompt.xml_title_prompt.xml view
-//                LayoutInflater li = LayoutInflater.from(getContext());
-//                View promptsView = li.inflate(R.layout.update_list_title_prompt, null);
-//
-//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-//                        getContext());
-//
-//                // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
-//                alertDialogBuilder.setView(promptsView);
-//
-//                final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
-//
-//                // set dialog message
-//                alertDialogBuilder
-//                        .setCancelable(false)
-//                        .setPositiveButton("OK",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(
-//                                            DialogInterface dialog,
-//                                            int id) {
-//                                        // get user input and set it to
-//                                        // result
-//                                        // edit text
-//                                        String newTitle =  userInput.getText().toString();
-//                                        if (newTitle != "") {
-//                                            mListTitleTextView.setText(newTitle);
-//                                            // query database
-//
-//                                            mListTitleListener.updateListTitle(mDoItList.getListID(), newTitle);
-//                                        }
-//                                    }
-//                                })
-//                        .setNegativeButton("Cancel",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(
-//                                            DialogInterface dialog,
-//                                            int id) {
-//                                        dialog.cancel();
-//                                    }
-//                                });
-//
-//                // create alert dialog
-//                AlertDialog alertDialog = alertDialogBuilder.create();
-//
-//                // show it
-//                alertDialog.show();
-//                return false;
-//            }
-//        });
-
-
         //ensure fab is visible.
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
         fab.show();
@@ -238,16 +180,6 @@ public class DoItListDisplayFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     */
-//    public interface OnTaskDisplayInteractionListener {
-//        void onListFragmentInteraction(DoItTask item);
-//    }
 
     /**
      * A task that gets all the tasks associated with a given list in the background of the application.

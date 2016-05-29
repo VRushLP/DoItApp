@@ -1,6 +1,9 @@
 package teamten.tacoma.uw.edu.doit;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,7 @@ import java.util.List;
 
 public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTaskRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = "DoItTaskRecyclerView";
     private final List<DoItTask> mValues;
     private final OnTaskDisplayInteractionListener mListener;
 
@@ -41,6 +45,14 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                     mListener.onDoItTaskInteraction(mValues.get(holder.getAdapterPosition()));
                     notifyDataSetChanged();
                 }
+            }
+        });
+
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.i(TAG, "RecyclerAdapter: item clicked on LONG CLICK");
+                return true;
             }
         });
     }

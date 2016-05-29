@@ -1,5 +1,7 @@
 package teamten.tacoma.uw.edu.doit.model;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,10 +38,11 @@ public class DoItTask {
         else{
             mCheckedOff = 0;
         }
+        Log.i(TAG, this.toString());
     }
 
     public String toString(){
-        return this.mName;
+        return this.mName + " " + this.mCheckedOff;
     }
 
     public boolean equals(Object o){

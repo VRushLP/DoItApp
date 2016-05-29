@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "MyDoItListRecyclerViewAdapter";
+    private static final String TAG = "DoItListRecyclerView";
     private final List<DoItList> listOfListsData;
     private final StationFragment.OnDoItStationFragmentInteractionListener mListener;
     private StationFragment.DeleteListClickListener mDeleteListListener;
@@ -30,8 +30,6 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         mListener = listener;
         mDeleteListListener = deleteListListener;
     }
-
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
