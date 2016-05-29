@@ -75,6 +75,7 @@ public class StationFragment extends Fragment {
         listURLBuilder.append(userIdSharePref);
 
         listURL += listURLBuilder;
+
     }
 
 
@@ -82,6 +83,8 @@ public class StationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_doitlist_list, container, false);
+
+        getActivity().setTitle("Station");
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -143,7 +146,7 @@ public class StationFragment extends Fragment {
         }
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
-        fab.show();
+        fab.hide();
 
         return view;
     }

@@ -10,9 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -54,10 +52,11 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
         setContentView(R.layout.activity_do_it_station);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         m = getSupportFragmentManager();
 
+        setTitle("Station");
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {// to avoid the NullPointerException
@@ -88,6 +87,7 @@ public class StationActivity extends AppCompatActivity implements StationFragmen
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
+        fab.hide();
         if(fab != null){
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
