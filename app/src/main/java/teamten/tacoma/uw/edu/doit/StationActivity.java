@@ -219,19 +219,17 @@ public class StationActivity extends AppCompatActivity implements
     @Override
     public void addTask(String url) {
         //Execute a task to add new... task
-        new AddDoItTaskAsyncTask().execute(url);
+        new StationAsyncTask("AddTask").execute(url);
         getSupportFragmentManager().popBackStackImmediate(); //go back
     }
 
     @Override
     public void deleteTask(DoItTask item) {
         String url =
-                "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=delete&";
+                "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=delete";
         url += "&id=" + item.mTaskID;
         Log.i(TAG, url);
-
-        StationAsyncTask task = new StationAsyncTask("delete");
-        task.execute(url);
+        new StationAsyncTask("delete task").execute(url);
     }
 
     @Override
@@ -241,8 +239,7 @@ public class StationActivity extends AppCompatActivity implements
         url += "&id=" + id;
         url += "&newtext=" + Uri.encode(newTitle);
         Log.i(TAG, url);
-        StationAsyncTask task = new StationAsyncTask("edit");
-        task.execute(url);
+        new StationAsyncTask("edit task").execute(url);
     }
 
     private class StationAsyncTask extends AsyncTask<String, Void, String> {
@@ -310,70 +307,6 @@ public class StationActivity extends AppCompatActivity implements
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "Something wrong with the data" +
-                        e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    /**
-     * Adds a DoItTask to a specified DoItList in the background of the App.
-     */
-    private class AddDoItTaskAsyncTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... urls) {
-            String response = "";
-            HttpURLConnection urlConnection = null;
-            for (String url : urls) {
-                try {
-                    URL urlObject = new URL(url);
-                    urlConnection = (HttpURLConnection) urlObject.openConnection();
-
-                    InputStream content = urlConnection.getInputStream();
-
-                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-                    String s = "";
-                    while ((s = buffer.readLine()) != null) {
-                        response += s;
-                    }
-
-                } catch (Exception e) {
-                    response = "Unable to add task, Reason: "
-                            + e.getMessage();
-                } finally {
-                    if (urlConnection != null)
-                        urlConnection.disconnect();
-                }
-            }
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Log.i(TAG, result);
-            result = result.substring(result.lastIndexOf('>') + 1); //Account for errors
-            Log.i(TAG, result); //Check changed result
-            //The error reporting on the php complains about undefined variables.
-            // Something wrong with the network or the URL.
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                String status = (String) jsonObject.get("result");
-                if (status.startsWith("success")) {
-                    Toast.makeText(getApplicationContext(), "Task successfully added!"
-                            , Toast.LENGTH_LONG)
-                            .show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Failed to add task because: "
-                                    + jsonObject.get("error")
-                            , Toast.LENGTH_SHORT).show();
-                }
-            } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "Something wrong with the data " +
                         e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }

@@ -75,8 +75,7 @@ if($command != null){
 			echo '{"result": "fail", "error": "That task already exists."}';
 			} else {
 			echo 'Error Number: ' . $e->getCode() . '<br>';
-			echo '{"result": "
-			", "error": "Unknown error (' . (((int)($e->getCode()) + 123) * 2) .')"}';
+			echo '{"result": " ", "error": "Unknown error (' . (((int)($e->getCode()) + 123) * 2) .')"}';
 		}
 	}
 } else {

@@ -110,9 +110,9 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                             break;
                         case 1:
                             Log.i(TAG, "Delete selected");
-//                            listOfListsData.remove(position);
-//                            notifyItemRemoved(position);
-//                            mDeleteListListener.itemClickedToBeDeleted(holder.mListItem);
+                            mValues.remove(position);
+                            notifyItemRemoved(position);
+                            mDeleteListener.deleteTask(holder.heldTask);
                             break;
                         case 2:
                             Log.i(TAG, "Dialog canceled");

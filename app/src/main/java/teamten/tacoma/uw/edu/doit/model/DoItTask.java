@@ -21,14 +21,17 @@ public class DoItTask {
     public String mName;
     public int mTaskID;
     public int mCheckedOff;
+    public int mDeleted;
 
     private final static String TEXT_INPUT = "textInput";
     private final static String TASK_ID = "taskID";
+    private static final String IS_DELETED = "isDeleted";
 
-    public DoItTask(String taskName, int taskId){
+    public DoItTask(String taskName, int taskId, /*int checked,*/ int deleted){
         mName = taskName;
         mTaskID = taskId;
-        mCheckedOff = 0;
+//        mCheckedOff = checked;
+        mDeleted = deleted;
     }
 
     public void checkOff() {
@@ -62,7 +65,7 @@ public class DoItTask {
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
                     DoItTask parsedTask = new DoItTask(obj.getString(DoItTask.TEXT_INPUT),
-                            obj.getInt(DoItTask.TASK_ID));
+                            obj.getInt(DoItTask.TASK_ID), obj.getInt(DoItTask.IS_DELETED));
 
                     if(!list.contains(parsedTask)){
                         list.add(parsedTask);
