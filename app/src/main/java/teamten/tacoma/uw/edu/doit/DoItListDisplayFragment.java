@@ -39,7 +39,7 @@ public class DoItListDisplayFragment extends Fragment {
     private OnTaskDisplayInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private TextView mListTitleTextView;
-    private UpdateListTitleListener mListTitleListener;
+//    private UpdateListTitleListener mListTitleListener;
     private DoItList mListItem;
     private DoItList mDoItList = null;
 
@@ -74,7 +74,8 @@ public class DoItListDisplayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_doittask_list, container, false);
 //        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
         // put textView in fragment_doittask_list
-        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+//        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+
         Log.i(TAG, "OnCreateView called");
         Bundle args = getArguments();
         if(args != null){
@@ -87,6 +88,7 @@ public class DoItListDisplayFragment extends Fragment {
 //            mListTitleTextView.setText(mDoItList.getTitle());
 
 //            updateView(mDoItList);
+            getActivity().setTitle(mDoItList.getTitle());
         } else{
             Log.e(TAG, "args was null");
         }
@@ -109,7 +111,6 @@ public class DoItListDisplayFragment extends Fragment {
                 mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.getTasks(), mListener));
             }
         }
-
 
 
 //        // long press on textview to update list's title
@@ -205,12 +206,12 @@ public class DoItListDisplayFragment extends Fragment {
                     + " must implement OnTaskDisplayInteractionListener");
         }
 
-        if (context instanceof UpdateListTitleListener) {
-            mListTitleListener = (UpdateListTitleListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement UpdateListTitleListener");
-        }
+//        if (context instanceof UpdateListTitleListener) {
+//            mListTitleListener = (UpdateListTitleListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement UpdateListTitleListener");
+//        }
     }
 
     /**
@@ -223,9 +224,9 @@ public class DoItListDisplayFragment extends Fragment {
         void onDoItTaskInteraction(DoItTask item);
     }
 
-    public interface UpdateListTitleListener {
-        void updateListTitle(int theListID, String newTitle);
-    }
+//    public interface UpdateListTitleListener {
+//        void updateListTitle(int theListID, String newTitle);
+//    }
 
     public void updateView(DoItList list) {
         if (list != null) {

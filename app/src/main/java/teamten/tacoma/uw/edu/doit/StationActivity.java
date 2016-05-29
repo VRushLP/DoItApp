@@ -34,7 +34,7 @@ public class StationActivity extends AppCompatActivity implements
         DoItListDisplayFragment.OnTaskDisplayInteractionListener,
         ListAddFragment.ListAddListener,
         StationFragment.DeleteListClickListener,
-        DoItListDisplayFragment.UpdateListTitleListener,
+        StationFragment.UpdateListTitleListener,
         TaskAddFragment.TaskAddListener {
 
     private android.support.v4.app.FragmentManager m; //assigned but never used?
@@ -44,17 +44,17 @@ public class StationActivity extends AppCompatActivity implements
     private static String mUserID; //assigned but never used?
     private static final String TAG = "StationActivity";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_do_it_station);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         m = getSupportFragmentManager();
 
+        setTitle("Station");
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {// to avoid the NullPointerException
             mUserID = bundle.getString("userID");
@@ -77,6 +77,7 @@ public class StationActivity extends AppCompatActivity implements
         fragment.setArguments(args);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
+        fab.hide();
         if(fab != null){
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
