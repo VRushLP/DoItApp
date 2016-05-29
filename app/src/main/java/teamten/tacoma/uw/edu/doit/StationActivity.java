@@ -44,7 +44,6 @@ public class StationActivity extends AppCompatActivity implements
     private static String mUserID; //assigned but never used?
     private static final String TAG = "StationActivity";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +130,7 @@ public class StationActivity extends AppCompatActivity implements
             Bundle userBundleData = new Bundle();
             userBundleData.putString("EMAIL", userEmailSharePref);
             userBundleData.putString("USERID", userIdSharePref);
-            userBundleData.putString("TASK_ACTION", "add");
+            userBundleData.putString("mTaskAction", "add");
             ListAddFragment listAddFragment = new ListAddFragment();
             listAddFragment.setArguments(userBundleData);
             getSupportFragmentManager().beginTransaction()

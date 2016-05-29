@@ -36,7 +36,7 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
  */
 public class StationFragment extends Fragment {
 
-
+    private static final String TAG = "STATION_FRAGMENT";
     private int mColumnCount = 1;
     //private String mUserID;
 
@@ -44,7 +44,6 @@ public class StationFragment extends Fragment {
     private String listURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=station";
 
     private RecyclerView mRecyclerView;
-
     private StationDB mStationDB;
     private List<DoItList> mListOfDoItLists;
 
@@ -70,11 +69,11 @@ public class StationFragment extends Fragment {
                 , Context.MODE_PRIVATE);
 
         String userIdSharePref = mSharedPreferences.getString("@string/userID", null);
+        Log.d(TAG, userIdSharePref);
         StringBuilder listURLBuilder = new StringBuilder();
 
         listURLBuilder.append("&userID=");
         listURLBuilder.append(userIdSharePref);
-
         listURL += listURLBuilder;
     }
 
@@ -83,7 +82,6 @@ public class StationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_doitlist_list, container, false);
-
         getActivity().setTitle("Station");
 
         // Set the adapter
@@ -103,7 +101,7 @@ public class StationFragment extends Fragment {
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            Log.i("StationFragment", listURL);
+            Log.i(TAG, listURL);
             DownloadListsTask task = new DownloadListsTask();
             task.execute(listURL);
         }
@@ -164,9 +162,8 @@ public class StationFragment extends Fragment {
         }
 
         if (context instanceof  DeleteListClickListener) {
-            mDeleteListListener = (DeleteListClickListener) context; }
-        else
-        {
+            mDeleteListListener = (DeleteListClickListener) context;
+        } else {
             throw new RuntimeException(context.toString()
                     + " must implement DeleteListClickListener");
         }
@@ -177,7 +174,6 @@ public class StationFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement UpdateListTitleListener");
         }
-
     }
 
     @Override
@@ -208,7 +204,6 @@ public class StationFragment extends Fragment {
     public interface UpdateListTitleListener {
         void updateListTitle(int theListID, String newTitle);
     }
-
 
     private class DownloadListsTask extends AsyncTask<String, Void, String> {
 
@@ -283,5 +278,4 @@ public class StationFragment extends Fragment {
             }
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package teamten.tacoma.uw.edu.doit;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -20,12 +19,11 @@ import java.util.List;
 
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "RecyclerViewAdapter";
+    private static final String TAG = "DoItListRecyclerView";
     private final List<DoItList> listOfListsData;
     private final StationFragment.OnDoItStationFragmentInteractionListener mListener;
     private StationFragment.DeleteListClickListener mDeleteListListener;
     private StationFragment.UpdateListTitleListener mListTitleListener;
-
 
     public MyDoItListRecyclerViewAdapter(List<DoItList> items, StationFragment.OnDoItStationFragmentInteractionListener listener,
                                          StationFragment.DeleteListClickListener deleteListListener,
@@ -62,9 +60,9 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
 
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
+
             public boolean onLongClick(final View v) {
                 Log.i(TAG, "RecyclerAdapter: item clicked on LONG CLICK");
-
                 final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 
                 // set title
@@ -157,7 +155,5 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         public String toString() {
             return super.toString() + " '" + mTitleView.getText() + "'";
         }
-
     }
-
 }
