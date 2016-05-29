@@ -130,7 +130,7 @@ public class StationActivity extends AppCompatActivity implements
             Bundle userBundleData = new Bundle();
             userBundleData.putString("EMAIL", userEmailSharePref);
             userBundleData.putString("USERID", userIdSharePref);
-            userBundleData.putString("mTaskAction", "add");
+            userBundleData.putString("TASK_ACTION", "add");
             ListAddFragment listAddFragment = new ListAddFragment();
             listAddFragment.setArguments(userBundleData);
             getSupportFragmentManager().beginTransaction()

@@ -40,7 +40,7 @@ public class DoItList implements Serializable {
     public int getId() {return this.mListID; };
 
     public void setTitle(String theNewTitle) {
-        if (theNewTitle != null) {
+        if (theNewTitle != null && theNewTitle.length() > 0 && !theNewTitle.equals("")) {
             mTitle = theNewTitle;
         } else {
             mTitle = "Title Default";
@@ -67,18 +67,17 @@ public class DoItList implements Serializable {
         if (listOfTasksJSON != null) {
             try {
                 JSONArray arr = new JSONArray(listOfTasksJSON);
-
-                for (int i = 0; i < arr.length(); i++) {
-                    JSONObject obj = arr.getJSONObject(i);
-
-                    DoItList single_list = new DoItList(obj.getInt(DoItList.LIST_ID), obj.getString(DoItList.TITLE), obj.getInt(DoItList.ISDELETED));
-
-//                    DoItList single_list = new DoItList(obj.getString(DoItList.TITLE), obj.getInt(DoItList.LIST_ID), obj.getInt(DoItList.ISDELETED));
-
-                    list.add(single_list);
+                if (arr !=null) {
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject obj = arr.getJSONObject(i);
+                        DoItList single_list = new DoItList(obj.getInt(DoItList.LIST_ID),
+                                obj.getString(DoItList.TITLE), obj.getInt(DoItList.ISDELETED));
+                        list.add(single_list);
+                    }
                 }
+                return reason;
             } catch (JSONException e) {
-                reason =  "JSON string parse was unsuccessful, Reason: " + e.getMessage();
+                reason =  "Unable to parse data, Reason: " + e.getMessage();
             }
         }
         return reason;

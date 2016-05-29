@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 
@@ -94,12 +95,15 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                                                                     int id) {
                                                                 // get user input and set
                                                                 String newTitle =  userInput.getText().toString();
-                                                                if (newTitle != "") {
+                                                                if (newTitle.length() > 0 && !newTitle.equals("") ) {
                                                                     // query database
                                                                     mListTitleListener.updateListTitle(holder.mListItem.getListID(), newTitle);
 //
                                                                     holder.mListItem.setTitle(newTitle);
                                                                     notifyDataSetChanged();
+                                                                } else {
+                                                                    Toast.makeText(v.getContext(), "Title must be at least 1 character long.", Toast.LENGTH_LONG)
+                                                                            .show();
                                                                 }
                                                             }
                                                         })
