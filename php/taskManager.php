@@ -31,7 +31,7 @@ if($command != null){
 			$textInput = urldecode($textInput);
 			
 			$sql = "INSERT INTO tasks";
-			$sql .= " VALUES (DEFAULT, '$textInput', 0)";
+			$sql .= " VALUES (DEFAULT, '$textInput', 0, -1)";
 
 			if ($db->query($sql)) {
 				echo '{"result":"successfully created a record for table: tasks "}';

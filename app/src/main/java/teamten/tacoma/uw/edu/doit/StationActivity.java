@@ -190,7 +190,6 @@ public class StationActivity extends AppCompatActivity implements
 
     @Override
     public void updateListTitle(int theListID, String theNewTitle) {
-        // change name to UpdateOrAddList_AsynTask
         StationAsyncTask task = new StationAsyncTask("update");
         String updateURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=update";
         updateURL += "&listID=" + theListID;
