@@ -71,8 +71,8 @@ public class ListAddFragment extends Fragment {
         final String taskAction = data.getString("TASK_ACTION");
 
         // hide floating button
-        FloatingActionButton floatingActionButton = (FloatingActionButton)
-                getActivity().findViewById(R.id.task_add_floating_button);
+        FloatingActionButton floatingActionButton =
+                (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         floatingActionButton.hide();
 
         Button addListButton = (Button) v.findViewById(R.id.add_list_create_button);

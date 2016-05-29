@@ -11,10 +11,17 @@
     <string name="userPassword">userPwd</string>
     <string name="userID">userID</string>
 
+    <string name="settings">Settings</string>
+    <string name="add_list">Add List</string>
+
+    <string-array name="view_types">
+        <item>Verbose View</item>
+        <item>Compact View</item>
+    </string-array>
+
     <string-array name="pick_list_action">
         <item>Update</item>
         <item>Delete</item>
         <item>Cancel</item>
     </string-array>
-
 </resources>

@@ -40,12 +40,13 @@ public class StationActivity extends AppCompatActivity implements
         ListAddFragment.ListAddListener,
         TaskAddFragment.TaskAddListener {
 
-    private android.support.v4.app.FragmentManager m; //assigned but never used?
+    private static final String TAG = "StationActivity";
 
+    private android.support.v4.app.FragmentManager m; //assigned but never used?
     private String userEmailSharePref;
     private String userIdSharePref;
     private static String mUserID; //assigned but never used?
-    private static final String TAG = "StationActivity";
+    private static int taskViewMode = 0; //verbose by default
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,7 @@ public class StationActivity extends AppCompatActivity implements
         fragment.setArguments(args);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.task_add_floating_button);
+
         fab.hide();
         if(fab != null){
             fab.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +143,18 @@ public class StationActivity extends AppCompatActivity implements
                     .addToBackStack(null)
                     .commit();
             return true;
+
+        } else if (id == R.id.action_settings){
+            AlertDialog.Builder settingsAlertDialog = new AlertDialog.Builder(this);
+            settingsAlertDialog.setTitle(R.string.settings)
+                    .setItems(R.array.view_types, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            taskViewMode = which;
+                            Log.i(TAG, ""+ taskViewMode);
+                        }
+                    });
+            settingsAlertDialog.show();
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -167,7 +181,7 @@ public class StationActivity extends AppCompatActivity implements
 
         listURL += "delete";
         listURL += "&listID=" + item.getListID();
-        Log.i("Delete", listURL);
+        Log.i(TAG, listURL);
 
         StationAsyncTask task = new StationAsyncTask("delete");
         task.execute(listURL);
@@ -210,6 +224,7 @@ public class StationActivity extends AppCompatActivity implements
     @Override
     public void addList(String url, String taskAction) {
         StationAsyncTask task = new StationAsyncTask(taskAction);
+
         task.execute(url);
         // Takes you back to the previous fragment by popping the current fragment out.
         getSupportFragmentManager().popBackStackImmediate();
