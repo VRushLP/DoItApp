@@ -52,8 +52,8 @@ error_reporting(E_ALL);
             } else {    
                 //build query for list
                 $sql = "INSERT INTO lists";
-                $sql .= " VALUES ('0', '$list_title', 'NULL')";
-                
+                $sql .= " VALUES (DEFAULT, '$list_title', 'NULL', current_timestamp(), current_timestamp())";
+				
                 //attempts to add list
                 if ($db->query($sql)) {
                     echo '{"result": "successfully created a record for table: lists "}';
