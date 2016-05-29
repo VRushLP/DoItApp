@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -31,18 +32,21 @@ import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 public class StationActivity extends AppCompatActivity implements
         StationFragment.OnDoItStationFragmentInteractionListener,
-        DoItListDisplayFragment.OnTaskDisplayInteractionListener,
-        ListAddFragment.ListAddListener,
         StationFragment.DeleteListClickListener,
         StationFragment.UpdateListTitleListener,
+        DoItListDisplayFragment.OnTaskDisplayInteractionListener,
+        DoItListDisplayFragment.EditTaskTitleListener,
+        DoItListDisplayFragment.DeleteTaskListener,
+        ListAddFragment.ListAddListener,
         TaskAddFragment.TaskAddListener {
 
-    private android.support.v4.app.FragmentManager m; //assigned but never used?
+    private static final String TAG = "StationActivity";
 
+    private android.support.v4.app.FragmentManager m; //assigned but never used?
     private String userEmailSharePref;
     private String userIdSharePref;
     private static String mUserID; //assigned but never used?
-    private static final String TAG = "StationActivity";
+    private static int taskViewMode = 0; //verbose by default
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +80,8 @@ public class StationActivity extends AppCompatActivity implements
         StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.task_add_floating_button);
+
         fab.hide();
         if(fab != null){
             fab.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +143,18 @@ public class StationActivity extends AppCompatActivity implements
                     .addToBackStack(null)
                     .commit();
             return true;
+
+        } else if (id == R.id.action_settings){
+            AlertDialog.Builder settingsAlertDialog = new AlertDialog.Builder(this);
+            settingsAlertDialog.setTitle(R.string.settings)
+                    .setItems(R.array.view_types, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            taskViewMode = which;
+                            Log.i(TAG, ""+ taskViewMode);
+                        }
+                    });
+            settingsAlertDialog.show();
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -164,17 +181,16 @@ public class StationActivity extends AppCompatActivity implements
 
         listURL += "delete";
         listURL += "&listID=" + item.getListID();
-        Log.i("Delete", listURL);
+        Log.i(TAG, listURL);
 
-        AddList_AsyncTask task = new AddList_AsyncTask("delete");
+        StationAsyncTask task = new StationAsyncTask("delete");
         task.execute(listURL);
     }
 
 
     @Override
     public void updateListTitle(int theListID, String theNewTitle) {
-        // change name to UpdateOrAddList_AsynTask
-        AddList_AsyncTask task = new AddList_AsyncTask("update");
+        StationAsyncTask task = new StationAsyncTask("update");
         String updateURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=update";
         updateURL += "&listID=" + theListID;
         updateURL += "&title=" + theNewTitle;
@@ -206,8 +222,9 @@ public class StationActivity extends AppCompatActivity implements
 
     @Override
     public void addList(String url, String taskAction) {
-        AddList_AsyncTask task = new AddList_AsyncTask(taskAction);
-        task.execute(url.toString());
+        StationAsyncTask task = new StationAsyncTask(taskAction);
+
+        task.execute(url);
         // Takes you back to the previous fragment by popping the current fragment out.
         getSupportFragmentManager().popBackStackImmediate();
     }
@@ -215,13 +232,32 @@ public class StationActivity extends AppCompatActivity implements
     @Override
     public void addTask(String url) {
         //Execute a task to add new... task
-        new AddDoItTaskAsyncTask().execute(url);
+        new StationAsyncTask("AddTask").execute(url);
         getSupportFragmentManager().popBackStackImmediate(); //go back
     }
 
-    private class AddList_AsyncTask extends AsyncTask<String, Void, String> {
+    @Override
+    public void deleteTask(DoItTask item) {
+        String url =
+                "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=delete";
+        url += "&id=" + item.mTaskID;
+        Log.i(TAG, url);
+        new StationAsyncTask("delete task").execute(url);
+    }
+
+    @Override
+    public void editTaskTitle(int id, String newTitle) {
+        String url =
+                "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=edit";
+        url += "&id=" + id;
+        url += "&newtext=" + Uri.encode(newTitle);
+        Log.i(TAG, url);
+        new StationAsyncTask("edit task").execute(url);
+    }
+
+    private class StationAsyncTask extends AsyncTask<String, Void, String> {
         private String mTaskAction;
-        public AddList_AsyncTask(String taskAction) {
+        public StationAsyncTask(String taskAction) {
             mTaskAction = taskAction;
         }
 
@@ -284,70 +320,6 @@ public class StationActivity extends AppCompatActivity implements
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "Something wrong with the data" +
-                        e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    /**
-     * Adds a DoItTask to a specified DoItList in the background of the App.
-     */
-    private class AddDoItTaskAsyncTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... urls) {
-            String response = "";
-            HttpURLConnection urlConnection = null;
-            for (String url : urls) {
-                try {
-                    URL urlObject = new URL(url);
-                    urlConnection = (HttpURLConnection) urlObject.openConnection();
-
-                    InputStream content = urlConnection.getInputStream();
-
-                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-                    String s = "";
-                    while ((s = buffer.readLine()) != null) {
-                        response += s;
-                    }
-
-                } catch (Exception e) {
-                    response = "Unable to add list, Reason: "
-                            + e.getMessage();
-                } finally {
-                    if (urlConnection != null)
-                        urlConnection.disconnect();
-                }
-            }
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Log.i(TAG, result);
-            result = result.substring(result.lastIndexOf('>') + 1); //Account for errors
-            Log.i(TAG, result); //Check changed result
-            //The error reporting on the php complains about undefined variables.
-            // Something wrong with the network or the URL.
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                String status = (String) jsonObject.get("result");
-                if (status.startsWith("success")) {
-                    Toast.makeText(getApplicationContext(), "Task successfully added!"
-                            , Toast.LENGTH_LONG)
-                            .show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Failed to add task because: "
-                                    + jsonObject.get("error")
-                            , Toast.LENGTH_SHORT).show();
-                }
-            } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "Something wrong with the data " +
                         e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }

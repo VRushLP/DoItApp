@@ -71,11 +71,11 @@ public class ListAddFragment extends Fragment {
         final String taskAction = data.getString("TASK_ACTION");
 
         // hide floating button
-        FloatingActionButton floatingActionButton = (FloatingActionButton)
-                getActivity().findViewById(R.id.new_list_button);
+        FloatingActionButton floatingActionButton =
+                (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         floatingActionButton.hide();
 
-        Button addListButton = (Button) v.findViewById(R.id.floating_action_button);
+        Button addListButton = (Button) v.findViewById(R.id.add_list_create_button);
         addListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,15 +91,13 @@ public class ListAddFragment extends Fragment {
             }
         });
 
-        Button cancelButton = (Button) v.findViewById(R.id.cancel_list_title);
+        Button cancelButton = (Button) v.findViewById(R.id.add_list_cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
-        fab.hide();
 
         getActivity().setTitle("Create a List");
 

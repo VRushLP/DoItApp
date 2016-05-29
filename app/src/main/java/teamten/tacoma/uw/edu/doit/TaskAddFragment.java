@@ -35,9 +35,9 @@ public class TaskAddFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_task_add, container, false);
-        mTaskTitleEditText = (EditText) v.findViewById(R.id.list_title_ET);
-        Button addListButton = (Button) v.findViewById(R.id.floating_action_button);
-        addListButton.setOnClickListener(new View.OnClickListener() {
+        mTaskTitleEditText = (EditText) v.findViewById(R.id.task_title_ET);
+        Button addTaskButton = (Button) v.findViewById(R.id.add_task_create_button);
+        addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = buildTaskURL(v);
@@ -45,7 +45,7 @@ public class TaskAddFragment extends Fragment {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         fab.hide();
 
         mListToAddTo = getArguments().getInt("ListID");

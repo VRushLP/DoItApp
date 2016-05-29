@@ -1,5 +1,7 @@
 package teamten.tacoma.uw.edu.doit.model;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,16 +19,19 @@ public class DoItTask {
     public static final String TAG = "DO_IT_TASK";
 
     public String mName;
-    int mTaskID;
-    int mCheckedOff;
+    public int mTaskID;
+    public int mCheckedOff;
+    public int mDeleted;
 
     private final static String TEXT_INPUT = "textInput";
     private final static String TASK_ID = "taskID";
+    private static final String IS_DELETED = "isDeleted";
 
-    public DoItTask(String taskName, int taskId){
+    public DoItTask(String taskName, int taskId, /*int checked,*/ int deleted){
         mName = taskName;
         mTaskID = taskId;
-        mCheckedOff = 0;
+//        mCheckedOff = checked;
+        mDeleted = deleted;
     }
 
     public void checkOff() {
@@ -36,10 +41,11 @@ public class DoItTask {
         else{
             mCheckedOff = 0;
         }
+        Log.i(TAG, this.toString());
     }
 
     public String toString(){
-        return this.mName;
+        return this.mName + " " + this.mCheckedOff;
     }
 
     public boolean equals(Object o){
@@ -59,7 +65,7 @@ public class DoItTask {
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
                     DoItTask parsedTask = new DoItTask(obj.getString(DoItTask.TEXT_INPUT),
-                            obj.getInt(DoItTask.TASK_ID));
+                            obj.getInt(DoItTask.TASK_ID), obj.getInt(DoItTask.IS_DELETED));
 
                     if(!list.contains(parsedTask)){
                         list.add(parsedTask);
