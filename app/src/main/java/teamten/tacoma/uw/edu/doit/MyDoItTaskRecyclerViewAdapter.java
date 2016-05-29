@@ -51,7 +51,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.i(TAG, "RecyclerAdapter: item clicked on LONG CLICK");
+                Log.i(TAG, "RecyclerAdapter: Task long click");
                 return true;
             }
         });

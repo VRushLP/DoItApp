@@ -52,19 +52,6 @@ public class DoItListDisplayFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        Bundle args = getArguments();
-//        if (args != null) {
-//            // Set article based on argument passed in
-//            mListItem = (DoItList) args.getSerializable(LIST_ITEM_SELECTED);
-//            Log.i(TAG, "mListItem = " + mListItem.getTitle());
-//            updateView(mListItem);
-//
-//            Log.i(TAG, "args was not null");
-//            mDoItList = (DoItList) args.getSerializable("DoItTaskList");
-//            Log.i(TAG, "" + (mDoItList != null));
-//        } else{
-//            Log.e(TAG, "args was null");
-//        }
     }
 
     @Override
@@ -81,11 +68,9 @@ public class DoItListDisplayFragment extends Fragment {
             Log.i(TAG, "args was not null");
             mDoItList= (DoItList) args.get("DoItTaskList");
             Log.i(TAG, "" + (mDoItList != null));
-
             mListItem = (DoItList) args.getSerializable(LIST_ITEM_SELECTED);
             //Log.i(TAG, "mListItem = " + mListItem.getTitle());
 //            mListTitleTextView.setText(mDoItList.getTitle());
-
 //            updateView(mDoItList);
         } else{
             Log.e(TAG, "args was null");
