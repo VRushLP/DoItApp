@@ -12,9 +12,9 @@
     <string name="userID">userID</string>
 
     <string-array name="pick_list_action">
-        <item>update</item>
-        <item>delete</item>
-        <item>cancel</item>
+        <item>Update</item>
+        <item>Delete</item>
+        <item>Cancel</item>
     </string-array>
 
 </resources>

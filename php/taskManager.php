@@ -48,15 +48,34 @@ if($command != null){
 					echo '{"result": "successfully created a record for table: taskRights"}';
 				} 
 			}				
+		} else if ($command == "edit") {
+			$taskID = $_GET['id'];
+			$newText = urldecode($_GET['newtext']);
+			$sql = "UPDATE tasks SET textInput = '$newText' WHERE taskID = $taskID;";
+			if ($db->query($sql)) {
+				echo '{"result": "successfully updated record"}';
+			}
+		} else if ($command == "delete"){
+			$taskID = $_GET['id'];
+			$sql = "DELETE FROM _450atm10.tasks WHERE taskID = $taskID";
+			if ($db->query($sql)) {
+				echo 'you are here';
+				$sql = "DELETE FROM _450atm10.taskRights WHERE taskID = $taskID";
+				if ($db->query($sql)) {
+					echo '{"result": "successfully removed record"}';
+				} 
+			} 
+		} else {
+			echo "Something's wrong with the G-Diffuser!";
 		}
+		
 		$db = null;			
 	} catch(PDOException $e) {
 		if ((int)($e->getCode()) == 23000) {
 			echo '{"result": "fail", "error": "That task already exists."}';
 			} else {
 			echo 'Error Number: ' . $e->getCode() . '<br>';
-			echo '{"result": "
-			", "error": "Unknown error (' . (((int)($e->getCode()) + 123) * 2) .')"}';
+			echo '{"result": " ", "error": "Unknown error (' . (((int)($e->getCode()) + 123) * 2) .')"}';
 		}
 	}
 } else {

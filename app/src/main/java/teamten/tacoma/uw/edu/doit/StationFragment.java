@@ -196,7 +196,6 @@ public class StationFragment extends Fragment {
         void onDoItListItemInteraction(DoItList item);
     }
 
-
     public interface DeleteListClickListener {
         void itemClickedToBeDeleted(DoItList item);
     }
