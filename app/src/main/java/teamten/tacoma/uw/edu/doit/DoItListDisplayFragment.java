@@ -52,19 +52,6 @@ public class DoItListDisplayFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        Bundle args = getArguments();
-//        if (args != null) {
-//            // Set article based on argument passed in
-//            mListItem = (DoItList) args.getSerializable(LIST_ITEM_SELECTED);
-//            Log.i(TAG, "mListItem = " + mListItem.getTitle());
-//            updateView(mListItem);
-//
-//            Log.i(TAG, "args was not null");
-//            mDoItList = (DoItList) args.getSerializable("DoItTaskList");
-//            Log.i(TAG, "" + (mDoItList != null));
-//        } else{
-//            Log.e(TAG, "args was null");
-//        }
     }
 
     @Override
@@ -111,62 +98,6 @@ public class DoItListDisplayFragment extends Fragment {
                 mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.getTasks(), mListener));
             }
         }
-
-
-//        // long press on textview to update list's title
-//        mListTitleTextView.setOnLongClickListener(new View.OnLongClickListener() {
-//
-//            @Override
-//            public boolean onLongClick(View v) {
-//                // get update_list_title_prompt.xml_title_prompt.xml view
-//                LayoutInflater li = LayoutInflater.from(getContext());
-//                View promptsView = li.inflate(R.layout.update_list_title_prompt, null);
-//
-//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-//                        getContext());
-//
-//                // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
-//                alertDialogBuilder.setView(promptsView);
-//
-//                final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
-//
-//                // set dialog message
-//                alertDialogBuilder
-//                        .setCancelable(false)
-//                        .setPositiveButton("OK",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(
-//                                            DialogInterface dialog,
-//                                            int id) {
-//                                        // get user input and set it to
-//                                        // result
-//                                        // edit text
-//                                        String newTitle =  userInput.getText().toString();
-//                                        if (newTitle != "") {
-//                                            mListTitleTextView.setText(newTitle);
-//                                            // query database
-//
-//                                            mListTitleListener.updateListTitle(mDoItList.getListID(), newTitle);
-//                                        }
-//                                    }
-//                                })
-//                        .setNegativeButton("Cancel",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(
-//                                            DialogInterface dialog,
-//                                            int id) {
-//                                        dialog.cancel();
-//                                    }
-//                                });
-//
-//                // create alert dialog
-//                AlertDialog alertDialog = alertDialogBuilder.create();
-//
-//                // show it
-//                alertDialog.show();
-//                return false;
-//            }
-//        });
 
 
         //ensure fab is visible.

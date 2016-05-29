@@ -101,6 +101,8 @@ public class ListAddFragment extends Fragment {
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
         fab.hide();
 
+        getActivity().setTitle("Create a List");
+
         return v;
     }
 
