@@ -144,7 +144,7 @@ public class StationFragment extends Fragment {
             e.printStackTrace();
         }
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         fab.hide();
 
         return view;

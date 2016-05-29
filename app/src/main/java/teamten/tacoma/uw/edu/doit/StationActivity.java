@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 
 import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
@@ -80,7 +79,7 @@ public class StationActivity extends AppCompatActivity implements
         StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.new_list_button);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.task_add_floating_button);
         fab.hide();
         if(fab != null){
             fab.setOnClickListener(new View.OnClickListener() {
