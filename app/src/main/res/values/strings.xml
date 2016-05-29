@@ -11,7 +11,10 @@
     <string name="userPassword">userPwd</string>
     <string name="userID">userID</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="pick_list_action">
+        <item>update</item>
+        <item>delete</item>
+        <item>cancel</item>
+    </string-array>
 
 </resources>

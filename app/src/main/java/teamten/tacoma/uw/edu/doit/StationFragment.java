@@ -49,6 +49,7 @@ public class StationFragment extends Fragment {
 
     private OnDoItStationFragmentInteractionListener mListener;
     private DeleteListClickListener mDeleteListListener;
+    private UpdateListTitleListener mListTitleListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -81,6 +82,7 @@ public class StationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_doitlist_list, container, false);
+        getActivity().setTitle("Station");
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -115,7 +117,8 @@ public class StationFragment extends Fragment {
                 mListOfDoItLists = mStationDB.getDoItLists();
             }
 
-            mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(mListOfDoItLists, mListener, mDeleteListListener));
+            mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(mListOfDoItLists, mListener,
+                                                mDeleteListListener, mListTitleListener));
 
         }
 
@@ -159,11 +162,17 @@ public class StationFragment extends Fragment {
         }
 
         if (context instanceof  DeleteListClickListener) {
-            mDeleteListListener = (DeleteListClickListener) context; }
-        else
-        {
+            mDeleteListListener = (DeleteListClickListener) context;
+        } else {
             throw new RuntimeException(context.toString()
                     + " must implement DeleteListClickListener");
+        }
+
+        if (context instanceof UpdateListTitleListener) {
+            mListTitleListener = (UpdateListTitleListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement UpdateListTitleListener");
         }
     }
 
@@ -189,6 +198,10 @@ public class StationFragment extends Fragment {
 
     public interface DeleteListClickListener {
         void itemClickedToBeDeleted(DoItList item);
+    }
+
+    public interface UpdateListTitleListener {
+        void updateListTitle(int theListID, String newTitle);
     }
 
     private class DownloadListsTask extends AsyncTask<String, Void, String> {
@@ -244,7 +257,8 @@ public class StationFragment extends Fragment {
 
             // Everything is good, show the list of courses.
             if (!list.isEmpty()) {
-                mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(list, mListener, mDeleteListListener));
+                mRecyclerView.setAdapter(new MyDoItListRecyclerViewAdapter(list, mListener,
+                                                        mDeleteListListener, mListTitleListener));
 
                 if (mStationDB == null) {
                     mStationDB = new StationDB(getActivity());
@@ -263,5 +277,4 @@ public class StationFragment extends Fragment {
             }
         }
     }
-
 }
