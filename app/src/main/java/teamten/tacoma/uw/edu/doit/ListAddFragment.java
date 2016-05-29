@@ -64,7 +64,7 @@ public class ListAddFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_list, container, false);
 
-        mListTitleEditText = (EditText) v.findViewById(R.id.task_title);
+        mListTitleEditText = (EditText) v.findViewById(R.id.list_title_ET);
 
         //unbundle the taskAction value
         data = getArguments();

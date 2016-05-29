@@ -35,7 +35,7 @@ public class TaskAddFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_task_add, container, false);
-        mTaskTitleEditText = (EditText) v.findViewById(R.id.task_title);
+        mTaskTitleEditText = (EditText) v.findViewById(R.id.task_title_ET);
         Button addListButton = (Button) v.findViewById(R.id.floating_action_button);
         addListButton.setOnClickListener(new View.OnClickListener() {
             @Override
