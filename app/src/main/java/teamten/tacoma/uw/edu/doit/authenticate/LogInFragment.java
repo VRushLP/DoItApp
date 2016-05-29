@@ -88,7 +88,6 @@ public class LogInFragment extends Fragment {
         });
 
         getActivity().setTitle("Log In");
-
         return v;
     }
 
