@@ -144,7 +144,7 @@ public class StationFragment extends Fragment {
             e.printStackTrace();
         }
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         fab.hide();
 
         return view;
@@ -195,7 +195,6 @@ public class StationFragment extends Fragment {
     public interface OnDoItStationFragmentInteractionListener {
         void onDoItListItemInteraction(DoItList item);
     }
-
 
     public interface DeleteListClickListener {
         void itemClickedToBeDeleted(DoItList item);

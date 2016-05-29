@@ -39,7 +39,8 @@ public class DoItListDisplayFragment extends Fragment {
     private OnTaskDisplayInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private TextView mListTitleTextView;
-//    private UpdateListTitleListener mListTitleListener;
+    private DeleteTaskListener mDeleteListener;
+    private EditTaskTitleListener mEditListener;
     private DoItList mListItem;
     private DoItList mDoItList = null;
 
@@ -69,11 +70,9 @@ public class DoItListDisplayFragment extends Fragment {
             Log.i(TAG, "args was not null");
             mDoItList= (DoItList) args.get("DoItTaskList");
             Log.i(TAG, "" + (mDoItList != null));
-
             mListItem = (DoItList) args.getSerializable(LIST_ITEM_SELECTED);
             //Log.i(TAG, "mListItem = " + mListItem.getTitle());
 //            mListTitleTextView.setText(mDoItList.getTitle());
-
 //            updateView(mDoItList);
             getActivity().setTitle(mDoItList.getTitle());
         } else{
@@ -95,12 +94,12 @@ public class DoItListDisplayFragment extends Fragment {
             mRecyclerView = (RecyclerView) view;
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             if(mDoItList != null){
-                mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.getTasks(), mListener));
+                mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.getTasks(), mListener, mDeleteListener, mEditListener));
             }
         }
 
         //ensure fab is visible.
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         fab.show();
         return view;
     }
@@ -118,8 +117,6 @@ public class DoItListDisplayFragment extends Fragment {
         //append arguments to the url
         sb.append("?cmd=getAll&id=");
         sb.append(mListItem.getId());
-
-//        sb.append(mDoItList.getId());
         Log.i(TAG, sb.toString());
         //example URL: http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=getAll&id=61
         return sb.toString();
@@ -136,12 +133,20 @@ public class DoItListDisplayFragment extends Fragment {
                     + " must implement OnTaskDisplayInteractionListener");
         }
 
-//        if (context instanceof UpdateListTitleListener) {
-//            mListTitleListener = (UpdateListTitleListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement UpdateListTitleListener");
-//        }
+        if (context instanceof DeleteTaskListener) {
+            mDeleteListener = (DeleteTaskListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement DeleteTaskListener");
+        }
+
+        if (context instanceof EditTaskTitleListener) {
+            mEditListener = (EditTaskTitleListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement DeleteTaskListener");
+        }
+
     }
 
     /**
@@ -154,9 +159,13 @@ public class DoItListDisplayFragment extends Fragment {
         void onDoItTaskInteraction(DoItTask item);
     }
 
-//    public interface UpdateListTitleListener {
-//        void updateListTitle(int theListID, String newTitle);
-//    }
+    public interface DeleteTaskListener {
+        void deleteTask(DoItTask item);
+    }
+
+    public interface EditTaskTitleListener {
+        void editTaskTitle(int id, String newTitle);
+    }
 
     public void updateView(DoItList list) {
         if (list != null) {
@@ -169,16 +178,6 @@ public class DoItListDisplayFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     */
-//    public interface OnTaskDisplayInteractionListener {
-//        void onListFragmentInteraction(DoItTask item);
-//    }
 
     /**
      * A task that gets all the tasks associated with a given list in the background of the application.
@@ -228,7 +227,8 @@ public class DoItListDisplayFragment extends Fragment {
 
             // Everything is good, show the tasks.
             if (!mDoItList.mList.isEmpty()) {
-                mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.mList, mListener));
+                mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.mList,
+                        mListener, mDeleteListener, mEditListener));
             }
         }
     }
