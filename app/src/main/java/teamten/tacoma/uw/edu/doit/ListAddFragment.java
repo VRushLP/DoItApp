@@ -72,7 +72,7 @@ public class ListAddFragment extends Fragment {
 
         // hide floating button
         FloatingActionButton floatingActionButton = (FloatingActionButton)
-                getActivity().findViewById(R.id.new_list_button);
+                getActivity().findViewById(R.id.fab);
         floatingActionButton.hide();
 
         Button addListButton = (Button) v.findViewById(R.id.floating_action_button);
@@ -91,7 +91,7 @@ public class ListAddFragment extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.hide();
 
         return v;

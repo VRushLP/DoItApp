@@ -169,7 +169,7 @@ public class DoItListDisplayFragment extends Fragment {
 
 
         //ensure fab is visible.
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.show();
         return view;
     }

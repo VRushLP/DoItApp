@@ -45,7 +45,7 @@ public class TaskAddFragment extends Fragment {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.new_list_button);
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         fab.hide();
 
         mListToAddTo = getArguments().getInt("ListID");

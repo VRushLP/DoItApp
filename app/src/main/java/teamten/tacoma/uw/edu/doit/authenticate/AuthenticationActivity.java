@@ -212,5 +212,4 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
             }
         }
     }
-
 }
