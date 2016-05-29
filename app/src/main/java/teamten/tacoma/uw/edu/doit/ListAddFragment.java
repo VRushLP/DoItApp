@@ -64,7 +64,7 @@ public class ListAddFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_list, container, false);
 
-        mListTitleEditText = (EditText) v.findViewById(R.id.list_title_ET);
+        mListTitleEditText = (EditText) v.findViewById(R.id.task_title);
 
         //unbundle the taskAction value
         data = getArguments();
@@ -84,7 +84,7 @@ public class ListAddFragment extends Fragment {
             }
         });
 
-        Button cancelButton = (Button) v.findViewById(R.id.cancel_list_title);
+        Button cancelButton = (Button) v.findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

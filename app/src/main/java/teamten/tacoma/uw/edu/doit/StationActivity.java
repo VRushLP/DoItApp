@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
@@ -31,10 +33,12 @@ import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 public class StationActivity extends AppCompatActivity implements
         StationFragment.OnDoItStationFragmentInteractionListener,
-        DoItListDisplayFragment.OnTaskDisplayInteractionListener,
-        ListAddFragment.ListAddListener,
         StationFragment.DeleteListClickListener,
         StationFragment.UpdateListTitleListener,
+        DoItListDisplayFragment.OnTaskDisplayInteractionListener,
+        DoItListDisplayFragment.EditTaskTitleListener,
+        DoItListDisplayFragment.DeleteTaskListener,
+        ListAddFragment.ListAddListener,
         TaskAddFragment.TaskAddListener {
 
     private android.support.v4.app.FragmentManager m; //assigned but never used?
@@ -166,7 +170,7 @@ public class StationActivity extends AppCompatActivity implements
         listURL += "&listID=" + item.getListID();
         Log.i("Delete", listURL);
 
-        AddList_AsyncTask task = new AddList_AsyncTask("delete");
+        StationAsyncTask task = new StationAsyncTask("delete");
         task.execute(listURL);
     }
 
@@ -174,7 +178,7 @@ public class StationActivity extends AppCompatActivity implements
     @Override
     public void updateListTitle(int theListID, String theNewTitle) {
         // change name to UpdateOrAddList_AsynTask
-        AddList_AsyncTask task = new AddList_AsyncTask("update");
+        StationAsyncTask task = new StationAsyncTask("update");
         String updateURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=update";
         updateURL += "&listID=" + theListID;
         updateURL += "&title=" + theNewTitle;
@@ -206,8 +210,8 @@ public class StationActivity extends AppCompatActivity implements
 
     @Override
     public void addList(String url, String taskAction) {
-        AddList_AsyncTask task = new AddList_AsyncTask(taskAction);
-        task.execute(url.toString());
+        StationAsyncTask task = new StationAsyncTask(taskAction);
+        task.execute(url);
         // Takes you back to the previous fragment by popping the current fragment out.
         getSupportFragmentManager().popBackStackImmediate();
     }
@@ -219,9 +223,31 @@ public class StationActivity extends AppCompatActivity implements
         getSupportFragmentManager().popBackStackImmediate(); //go back
     }
 
-    private class AddList_AsyncTask extends AsyncTask<String, Void, String> {
+    @Override
+    public void deleteTask(DoItTask item) {
+        String url =
+                "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=delete&";
+        url += "&id=" + item.mTaskID;
+        Log.i(TAG, url);
+
+        StationAsyncTask task = new StationAsyncTask("delete");
+        task.execute(url);
+    }
+
+    @Override
+    public void editTaskTitle(int id, String newTitle) {
+        String url =
+                "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=edit";
+        url += "&id=" + id;
+        url += "&edit=" + Uri.encode(newTitle);
+        Log.i(TAG, url);
+        StationAsyncTask task = new StationAsyncTask("edit");
+        task.execute(url);
+    }
+
+    private class StationAsyncTask extends AsyncTask<String, Void, String> {
         private String mTaskAction;
-        public AddList_AsyncTask(String taskAction) {
+        public StationAsyncTask(String taskAction) {
             mTaskAction = taskAction;
         }
 
@@ -317,7 +343,7 @@ public class StationActivity extends AppCompatActivity implements
                     }
 
                 } catch (Exception e) {
-                    response = "Unable to add list, Reason: "
+                    response = "Unable to add task, Reason: "
                             + e.getMessage();
                 } finally {
                     if (urlConnection != null)

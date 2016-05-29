@@ -19,8 +19,8 @@ public class DoItTask {
     public static final String TAG = "DO_IT_TASK";
 
     public String mName;
-    int mTaskID;
-    int mCheckedOff;
+    public int mTaskID;
+    public int mCheckedOff;
 
     private final static String TEXT_INPUT = "textInput";
     private final static String TASK_ID = "taskID";
