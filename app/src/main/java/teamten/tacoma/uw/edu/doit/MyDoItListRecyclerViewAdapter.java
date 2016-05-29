@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import teamten.tacoma.uw.edu.doit.model.DoItList;
@@ -18,20 +19,20 @@ import java.util.List;
 
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "MyDoItListRecyclerViewAdapter";
+    private static final String TAG = "DoItListRecyclerView";
     private final List<DoItList> listOfListsData;
     private final StationFragment.OnDoItStationFragmentInteractionListener mListener;
     private StationFragment.DeleteListClickListener mDeleteListListener;
-
+    private StationFragment.UpdateListTitleListener mListTitleListener;
 
     public MyDoItListRecyclerViewAdapter(List<DoItList> items, StationFragment.OnDoItStationFragmentInteractionListener listener,
-                                         StationFragment.DeleteListClickListener deleteListListener) {
+                                         StationFragment.DeleteListClickListener deleteListListener,
+                                         StationFragment.UpdateListTitleListener listTitleListener) {
         listOfListsData = items;
         mListener = listener;
         mDeleteListListener = deleteListListener;
+        mListTitleListener = listTitleListener;
     }
-
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,7 +40,6 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                 .inflate(R.layout.fragment_doitlist, parent, false);
         return new ViewHolder(view);
     }
-
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -52,7 +52,6 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-
                     mListener.onDoItListItemInteraction(holder.mListItem);
                     notifyDataSetChanged();
                 }
@@ -61,54 +60,86 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
 
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                Log.i(TAG, "RecyclerAdapter: item clicked on LONG CLICK");
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+            public boolean onLongClick(final View v) {
+                Log.i(TAG, "RecyclerAdapter: item clicked on LONG CLICK");
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
 
                 // set title
                 alertDialogBuilder.setTitle("List Action");
 
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("Click cancel to exit action!")
-                        .setCancelable(false)
-                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // if this button is clicked, close
-                                // current activity
-                                listOfListsData.remove(position);
-                                notifyItemRemoved(position);
-                                mDeleteListListener.itemClickedToBeDeleted(holder.mListItem); // listener
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // if this button is clicked, just close
-                                // the dialog box and do nothing
-                                dialog.cancel();
+                alertDialogBuilder.setItems(R.array.pick_list_action, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                switch (which) {
+                                    case 0:
+                                        // make dialog box and send info below
+                                        LayoutInflater li = LayoutInflater.from(v.getContext());
+                                        View promptsView = li.inflate(R.layout.update_list_title_prompt, null);
+                                        AlertDialog.Builder alertDialogBuilderUpdate = new AlertDialog.Builder(
+                                                v.getContext());
+
+                                        // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
+                                        alertDialogBuilderUpdate.setView(promptsView);
+
+                                        final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
+
+                                        // set dialog message
+                                        alertDialogBuilderUpdate
+                                                .setCancelable(false)
+                                                .setPositiveButton("OK",
+                                                        new DialogInterface.OnClickListener() {
+                                                            public void onClick(
+                                                                    DialogInterface dialog,
+                                                                    int id) {
+                                                                // get user input and set
+                                                                String newTitle =  userInput.getText().toString();
+                                                                if (newTitle != "") {
+                                                                    // query database
+                                                                    mListTitleListener.updateListTitle(holder.mListItem.getListID(), newTitle);
+//
+                                                                    holder.mListItem.setTitle(newTitle);
+                                                                    notifyDataSetChanged();
+                                                                }
+                                                            }
+                                                        })
+                                                .setNegativeButton("Cancel",
+                                                        new DialogInterface.OnClickListener() {
+                                                            public void onClick(
+                                                                    DialogInterface dialog,
+                                                                    int id) {
+                                                                dialog.cancel();
+                                                            }
+                                                        });
+
+                                        AlertDialog alertDialogUpdate = alertDialogBuilderUpdate.create();
+                                        alertDialogUpdate.show();
+                                        break;
+                                    case 1:
+                                        listOfListsData.remove(position);
+                                        notifyItemRemoved(position);
+                                        mDeleteListListener.itemClickedToBeDeleted(holder.mListItem);
+                                        break;
+                                    case 2:
+                                        System.out.println("Dialog button clicked: Cancel");
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
+                alertDialogBuilder.create().show();
                 return true;
             }
         });
-
     }
-
 
     @Override
     public int getItemCount() {
         return listOfListsData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mTitleView;
         public DoItList mListItem;
@@ -124,12 +155,5 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
         public String toString() {
             return super.toString() + " '" + mTitleView.getText() + "'";
         }
-
-
-        @Override
-        public void onClick(View v) {
-
-        }
     }
-
 }

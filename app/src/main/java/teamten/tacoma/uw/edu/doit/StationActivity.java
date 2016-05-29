@@ -34,7 +34,7 @@ public class StationActivity extends AppCompatActivity implements
         DoItListDisplayFragment.OnTaskDisplayInteractionListener,
         ListAddFragment.ListAddListener,
         StationFragment.DeleteListClickListener,
-        DoItListDisplayFragment.UpdateListTitleListener,
+        StationFragment.UpdateListTitleListener,
         TaskAddFragment.TaskAddListener {
 
     private static final String TAG = "StationActivity";
@@ -43,7 +43,6 @@ public class StationActivity extends AppCompatActivity implements
     private String userEmailSharePref;
     private String userIdSharePref;
     private static String mUserID; //assigned but never used?
-
     private static int taskViewMode = 0; //verbose by default
 
     @Override
@@ -52,10 +51,11 @@ public class StationActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_do_it_station);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         m = getSupportFragmentManager();
 
+        setTitle("Station");
         Bundle bundle = getIntent().getExtras();
         if (bundle!= null) {// to avoid the NullPointerException
             mUserID = bundle.getString("userID");
@@ -78,6 +78,7 @@ public class StationActivity extends AppCompatActivity implements
         fragment.setArguments(args);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.hide();
         if(fab != null){
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override

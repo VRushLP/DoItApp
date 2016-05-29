@@ -101,14 +101,14 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         // sets login credentials within sharedPreferences
         // putting the key of the sharedPref into a string resource
         // will allow universal access to the key to then obtain value
-        mSharedPreferences.edit().putString("@string/userEmail", email).apply();
+        mSharedPreferences.edit().putString("@string/userEmail", email).commit();
         String buildURL = USER_LOGIN_URL;
 
         buildURL += "email=" + email + "&pwd=" + pwd;
         Log.i("AuthenticationActivity", buildURL);
         new  VerifyLoginAndRetrieveUserIdTask().execute(buildURL);
 
-        mSharedPreferences.edit().putString("@string/userID", mUserID).apply();
+        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
         String mUserIDSP = mSharedPreferences.getString("@string/userID", null);
 //        System.out.println("AuthenticationActivity mUserID= " + mUserIDSP);
         i = new Intent(this, StationActivity.class);
@@ -184,7 +184,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 String userID = (String) jsonObject.get("userid");
-                mSharedPreferences.edit().putString("@string/userID", userID).apply();
+                mSharedPreferences.edit().putString("@string/userID", userID).commit();
 //                System.out.println("AuthenticationActivity: onPostExecute userID: " + userID);
 
                 Bundle args = new Bundle();

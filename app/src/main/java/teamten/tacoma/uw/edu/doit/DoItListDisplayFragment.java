@@ -39,7 +39,7 @@ public class DoItListDisplayFragment extends Fragment {
     private OnTaskDisplayInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private TextView mListTitleTextView;
-    private UpdateListTitleListener mListTitleListener;
+//    private UpdateListTitleListener mListTitleListener;
     private DoItList mListItem;
     private DoItList mDoItList = null;
 
@@ -52,19 +52,6 @@ public class DoItListDisplayFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-//        Bundle args = getArguments();
-//        if (args != null) {
-//            // Set article based on argument passed in
-//            mListItem = (DoItList) args.getSerializable(LIST_ITEM_SELECTED);
-//            Log.i(TAG, "mListItem = " + mListItem.getTitle());
-//            updateView(mListItem);
-//
-//            Log.i(TAG, "args was not null");
-//            mDoItList = (DoItList) args.getSerializable("DoItTaskList");
-//            Log.i(TAG, "" + (mDoItList != null));
-//        } else{
-//            Log.e(TAG, "args was null");
-//        }
     }
 
     @Override
@@ -74,7 +61,8 @@ public class DoItListDisplayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_doittask_list, container, false);
 //        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
         // put textView in fragment_doittask_list
-        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+//        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+
         Log.i(TAG, "OnCreateView called");
         Bundle args = getArguments();
         if(args != null){
@@ -87,6 +75,7 @@ public class DoItListDisplayFragment extends Fragment {
 //            mListTitleTextView.setText(mDoItList.getTitle());
 
 //            updateView(mDoItList);
+            getActivity().setTitle(mDoItList.getTitle());
         } else{
             Log.e(TAG, "args was null");
         }
@@ -109,64 +98,6 @@ public class DoItListDisplayFragment extends Fragment {
                 mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.getTasks(), mListener));
             }
         }
-
-
-
-//        // long press on textview to update list's title
-//        mListTitleTextView.setOnLongClickListener(new View.OnLongClickListener() {
-//
-//            @Override
-//            public boolean onLongClick(View v) {
-//                // get update_list_title_prompt.xml_title_prompt.xml view
-//                LayoutInflater li = LayoutInflater.from(getContext());
-//                View promptsView = li.inflate(R.layout.update_list_title_prompt, null);
-//
-//                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-//                        getContext());
-//
-//                // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
-//                alertDialogBuilder.setView(promptsView);
-//
-//                final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
-//
-//                // set dialog message
-//                alertDialogBuilder
-//                        .setCancelable(false)
-//                        .setPositiveButton("OK",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(
-//                                            DialogInterface dialog,
-//                                            int id) {
-//                                        // get user input and set it to
-//                                        // result
-//                                        // edit text
-//                                        String newTitle =  userInput.getText().toString();
-//                                        if (newTitle != "") {
-//                                            mListTitleTextView.setText(newTitle);
-//                                            // query database
-//
-//                                            mListTitleListener.updateListTitle(mDoItList.getListID(), newTitle);
-//                                        }
-//                                    }
-//                                })
-//                        .setNegativeButton("Cancel",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(
-//                                            DialogInterface dialog,
-//                                            int id) {
-//                                        dialog.cancel();
-//                                    }
-//                                });
-//
-//                // create alert dialog
-//                AlertDialog alertDialog = alertDialogBuilder.create();
-//
-//                // show it
-//                alertDialog.show();
-//                return false;
-//            }
-//        });
-
 
         //ensure fab is visible.
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
@@ -205,12 +136,12 @@ public class DoItListDisplayFragment extends Fragment {
                     + " must implement OnTaskDisplayInteractionListener");
         }
 
-        if (context instanceof UpdateListTitleListener) {
-            mListTitleListener = (UpdateListTitleListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement UpdateListTitleListener");
-        }
+//        if (context instanceof UpdateListTitleListener) {
+//            mListTitleListener = (UpdateListTitleListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement UpdateListTitleListener");
+//        }
     }
 
     /**
@@ -223,9 +154,9 @@ public class DoItListDisplayFragment extends Fragment {
         void onDoItTaskInteraction(DoItTask item);
     }
 
-    public interface UpdateListTitleListener {
-        void updateListTitle(int theListID, String newTitle);
-    }
+//    public interface UpdateListTitleListener {
+//        void updateListTitle(int theListID, String newTitle);
+//    }
 
     public void updateView(DoItList list) {
         if (list != null) {
