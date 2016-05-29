@@ -239,7 +239,7 @@ public class StationActivity extends AppCompatActivity implements
         String url =
                 "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=edit";
         url += "&id=" + id;
-        url += "&edit=" + Uri.encode(newTitle);
+        url += "&newtext=" + Uri.encode(newTitle);
         Log.i(TAG, url);
         StationAsyncTask task = new StationAsyncTask("edit");
         task.execute(url);

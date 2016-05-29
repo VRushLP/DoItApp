@@ -45,7 +45,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 //        holder.mItem = mValues.get(position);
 //        holder.mIdView.setText(mValues.get(position).id);
-        holder.taskID = mValues.get(position).mTaskID;
+        holder.heldTask = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).mName);
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,8 +90,9 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                                             // get user input and set
                                             String newTitle =  userInput.getText().toString();
                                             if (newTitle != "") {
-                                                mEditListener.editTaskTitle(holder.taskID, newTitle);
-                                                holder.mContentView.setText(newTitle);
+                                                mEditListener.editTaskTitle(holder.heldTask.mTaskID, newTitle);
+                                                Log.i("Debug", "" + holder.heldTask.mTaskID);
+                                                holder.heldTask.mName= newTitle;
                                                 notifyDataSetChanged();
                                             }
                                         }
@@ -135,7 +136,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
-        public int taskID;
+        public DoItTask heldTask;
 
         public ViewHolder(View view) {
             super(view);
