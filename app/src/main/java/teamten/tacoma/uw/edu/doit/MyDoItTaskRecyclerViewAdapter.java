@@ -1,6 +1,7 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -43,15 +44,27 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-//        holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).id);
-        holder.heldTask = mValues.get(position);
+        holder.mHeldTask = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).mName);
+        switch(holder.mHeldTask.mDeleted){
+            case 0:
+                holder.mContentView.setTextColor(Color.BLACK);
+                break;
+            case 1:
+                holder.mContentView.setTextColor(Color.DKGRAY);
+                break;
+        }
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mInteractionListener != null) {
-                    mInteractionListener.onDoItTaskInteraction(mValues.get(holder.getAdapterPosition()));
+                    mInteractionListener.onDoItTaskInteraction(mValues.get(position));
+                    if(holder.mHeldTask.mDeleted == 1){
+                        holder.mContentView.setTextColor(Color.RED);
+                    } else {
+                        holder.mContentView.setTextColor(Color.BLACK);
+                    }
                     notifyDataSetChanged();
                 }
             }
@@ -64,7 +77,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
 
             final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
             // set title
-            alertDialogBuilder.setTitle("Task Manager.");
+            alertDialogBuilder.setTitle("Task Manager");
 
             alertDialogBuilder.setItems(R.array.pick_list_action, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
@@ -90,9 +103,9 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                                             // get user input and set
                                             String newTitle =  userInput.getText().toString();
                                             if (newTitle != "") {
-                                                mEditListener.editTaskTitle(holder.heldTask.mTaskID, newTitle);
-                                                Log.i("Debug", "" + holder.heldTask.mTaskID);
-                                                holder.heldTask.mName= newTitle;
+                                                mEditListener.editTaskTitle(holder.mHeldTask.mTaskID, newTitle);
+                                                Log.i("Debug", "" + holder.mHeldTask.mTaskID);
+                                                holder.mHeldTask.mName= newTitle;
                                                 notifyDataSetChanged();
                                             }
                                         }
@@ -112,7 +125,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                             Log.i(TAG, "Delete selected");
                             mValues.remove(position);
                             notifyItemRemoved(position);
-                            mDeleteListener.deleteTask(holder.heldTask);
+                            mDeleteListener.deleteTask(holder.mHeldTask);
                             break;
                         case 2:
                             Log.i(TAG, "Dialog canceled");
@@ -136,12 +149,12 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
-        public DoItTask heldTask;
+        public DoItTask mHeldTask;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-//            mIdView = (TextView) view.findViewById(R.id.id);
+            mView.setClickable(true);
             mContentView = (CheckedTextView) view.findViewById(R.id.content);
         }
 

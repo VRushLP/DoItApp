@@ -65,6 +65,14 @@ if($command != null){
 					echo '{"result": "successfully removed record"}';
 				} 
 			} 
+		} else if($command == "mark"){
+			$taskID = $_GET['id'];
+			$markedAs = $_GET['as'];
+			$sql = "UPDATE tasks SET isDeleted = $markedAs WHERE taskID = $taskID";
+			if ($db->query($sql)) {
+				echo '{"result": "successfully updated record"}';
+			}
+			//UPDATE tasks SET isDeleted = 1 WHERE taskID = 39;
 		} else {
 			echo "Something's wrong with the G-Diffuser!";
 		}

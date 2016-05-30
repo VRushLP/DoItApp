@@ -41,11 +41,8 @@ public class StationActivity extends AppCompatActivity implements
         TaskAddFragment.TaskAddListener {
 
     private static final String TAG = "StationActivity";
-
-    private android.support.v4.app.FragmentManager m; //assigned but never used?
     private String userEmailSharePref;
     private String userIdSharePref;
-    private static String mUserID; //assigned but never used?
     private static int taskViewMode = 0; //verbose by default
 
     @Override
@@ -56,13 +53,9 @@ public class StationActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        m = getSupportFragmentManager();
 
         setTitle("Station");
         Bundle bundle = getIntent().getExtras();
-        if (bundle!= null) {// to avoid the NullPointerException
-            mUserID = bundle.getString("userID");
-        }
 
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
@@ -198,7 +191,16 @@ public class StationActivity extends AppCompatActivity implements
     }
 
     public void onDoItTaskInteraction(DoItTask item) {
-        item.checkOff();
+        if(item.mDeleted == 1){
+            item.mDeleted = 0;
+        } else {
+            item.mDeleted = 1;
+        }
+
+        String markURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=mark";
+        markURL += "&id=" + item.mTaskID;
+        markURL += "&as=" + item.mDeleted;
+        new StationAsyncTask("mark task").execute(markURL);
     }
 
     @Override
