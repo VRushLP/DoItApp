@@ -135,6 +135,9 @@ public class StationActivityTest extends
         assertTrue("Task delete failed", textFound);
     }
 
+    // Test task dependencies and features
+
+    // Test delete/update on list with tasks?
 
 //    public void testLogout() {
 //        solo.clickOnView(getActivity().findViewById(R.id.action_logout));
