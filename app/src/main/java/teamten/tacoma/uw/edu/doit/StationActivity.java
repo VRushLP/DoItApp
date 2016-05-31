@@ -155,6 +155,21 @@ public class StationActivity extends AppCompatActivity implements
                     });
             settingsAlertDialog.show();
 
+        }  else if (id == R.id.action_share) {
+            Toast.makeText(this, "Share button clicked",
+                    Toast.LENGTH_SHORT)
+                    .show();
+            // create the send intent
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            // set the type
+            shareIntent.setType("text/plain");
+            // build message to be shared
+            String shareMessage = "Don't let your dreams be dreams. Just Do It!";
+            // add message
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+            // start the chooser for sharing
+            startActivity(Intent.createChooser(shareIntent, "Share the Motivation"));
+
         }
         return super.onOptionsItemSelected(item);
     }
