@@ -191,15 +191,11 @@ public class StationActivity extends AppCompatActivity implements
     }
 
     public void onDoItTaskInteraction(DoItTask item) {
-        if(item.mDeleted == 1){
-            item.mDeleted = 0;
-        } else {
-            item.mDeleted = 1;
-        }
-
+        item.checkOff();
         String markURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=mark";
         markURL += "&id=" + item.mTaskID;
         markURL += "&as=" + item.mDeleted;
+        Log.i(TAG, markURL);
         new StationAsyncTask("mark task").execute(markURL);
     }
 

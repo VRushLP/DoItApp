@@ -2,6 +2,7 @@ package teamten.tacoma.uw.edu.doit;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -46,12 +47,15 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mHeldTask = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).mName);
-        switch(holder.mHeldTask.mDeleted){
+        switch(holder.mHeldTask.mCheckedOff){
             case 0:
-                holder.mContentView.setTextColor(Color.BLACK);
+//                holder.mContentView.setTextColor(Color.GREEN);
+                holder.mContentView.setPaintFlags(
+                        holder.mContentView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 break;
             case 1:
-                holder.mContentView.setTextColor(Color.DKGRAY);
+//                holder.mContentView.setTextColor(Color.RED);
+                holder.mContentView.setPaintFlags(0);
                 break;
         }
 
@@ -60,11 +64,6 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
             public void onClick(View v) {
                 if (mInteractionListener != null) {
                     mInteractionListener.onDoItTaskInteraction(mValues.get(position));
-                    if(holder.mHeldTask.mDeleted == 1){
-                        holder.mContentView.setTextColor(Color.RED);
-                    } else {
-                        holder.mContentView.setTextColor(Color.BLACK);
-                    }
                     notifyDataSetChanged();
                 }
             }
