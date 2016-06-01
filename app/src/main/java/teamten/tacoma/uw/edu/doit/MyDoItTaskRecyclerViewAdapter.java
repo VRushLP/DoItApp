@@ -78,7 +78,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
             // set title
             alertDialogBuilder.setTitle("Task Manager");
 
-            alertDialogBuilder.setItems(R.array.pick_list_action, new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setItems(R.array.task_long_click_action_list, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
                         case 0:
@@ -101,7 +101,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                                             DialogInterface dialog, int id) {
                                             // get user input and set
                                             String newTitle =  userInput.getText().toString();
-                                            if (newTitle != "") {
+                                            if (!newTitle.equals("")) {
                                                 mEditListener.editTaskTitle(holder.mHeldTask.mTaskID, newTitle);
                                                 Log.i("Debug", "" + holder.mHeldTask.mTaskID);
                                                 holder.mHeldTask.mName= newTitle;
@@ -121,15 +121,19 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                             alertDialogUpdate.show();
                             break;
                         case 1:
+                            Log.i(TAG, "Update dependency selected");
+                            break;
+                        case 2:
                             Log.i(TAG, "Delete selected");
                             mValues.remove(position);
                             notifyItemRemoved(position);
                             mDeleteListener.deleteTask(holder.mHeldTask);
                             break;
-                        case 2:
+                        case 3:
                             Log.i(TAG, "Dialog canceled");
                             break;
                         default:
+                            Log.wtf(TAG, "How'd you get here?");
                             break;
                     }
                 }

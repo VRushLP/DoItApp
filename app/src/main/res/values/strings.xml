@@ -24,4 +24,11 @@
         <item>Delete</item>
         <item>Cancel</item>
     </string-array>
+
+    <string-array name="task_long_click_action_list">
+        <item>Update Task Description</item>
+        <item>Update Task Dependency</item>
+        <item>Permanently Delete this task</item>
+        <item>Cancel</item>
+    </string-array>
 </resources>
