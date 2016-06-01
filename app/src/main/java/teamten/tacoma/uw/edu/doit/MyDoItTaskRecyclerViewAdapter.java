@@ -137,7 +137,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                             // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
                             dependencyBuilder.setView(updateDependencyView);
                             final EditText dependencyInput = (EditText) updateDependencyView.findViewById(R.id.edit_dependency_ET);
-                            dependencyInput.setRawInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                            dependencyInput.setRawInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
 
                             // set dialog message
                             dependencyBuilder
