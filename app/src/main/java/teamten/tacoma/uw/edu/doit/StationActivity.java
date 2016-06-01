@@ -37,15 +37,13 @@ public class StationActivity extends AppCompatActivity implements
         DoItListDisplayFragment.OnTaskDisplayInteractionListener,
         DoItListDisplayFragment.EditTaskTitleListener,
         DoItListDisplayFragment.DeleteTaskListener,
+        DoItListDisplayFragment.EditTaskDependencyListener,
         ListAddFragment.ListAddListener,
         TaskAddFragment.TaskAddListener {
 
     private static final String TAG = "StationActivity";
-
-    private android.support.v4.app.FragmentManager m; //assigned but never used?
     private String userEmailSharePref;
     private String userIdSharePref;
-    private static String mUserID; //assigned but never used?
     private static int taskViewMode = 0; //verbose by default
 
     @Override
@@ -56,13 +54,9 @@ public class StationActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        m = getSupportFragmentManager();
 
         setTitle("Station");
         Bundle bundle = getIntent().getExtras();
-        if (bundle!= null) {// to avoid the NullPointerException
-            mUserID = bundle.getString("userID");
-        }
 
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
@@ -150,7 +144,7 @@ public class StationActivity extends AppCompatActivity implements
                     .setItems(R.array.view_types, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             taskViewMode = which;
-                            Log.i(TAG, ""+ taskViewMode);
+                            Log.i(TAG, "Selected"+ taskViewMode);
                         }
                     });
             settingsAlertDialog.show();
@@ -214,6 +208,11 @@ public class StationActivity extends AppCompatActivity implements
 
     public void onDoItTaskInteraction(DoItTask item) {
         item.checkOff();
+        String markURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=mark";
+        markURL += "&id=" + item.mTaskID;
+        markURL += "&as=" + item.mCheckedOff;
+        Log.i(TAG, markURL);
+        new StationAsyncTask("mark task").execute(markURL);
     }
 
     @Override
@@ -266,6 +265,16 @@ public class StationActivity extends AppCompatActivity implements
                 "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=edit";
         url += "&id=" + id;
         url += "&newtext=" + Uri.encode(newTitle);
+        Log.i(TAG, url);
+        new StationAsyncTask("edit task").execute(url);
+    }
+
+    @Override
+    public void editTaskDependency(int id, int dependency) {
+        String url =
+                "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=depend";
+        url += "&id=" + id;
+        url += "&dependsOn=" + dependency;
         Log.i(TAG, url);
         new StationAsyncTask("edit task").execute(url);
     }

@@ -22,17 +22,19 @@ public class DoItTask implements Serializable {
     public String mName;
     public int mTaskID;
     public int mCheckedOff;
-    public int mDeleted;
+    public int mDependency;
 
     private final static String TEXT_INPUT = "textInput";
     private final static String TASK_ID = "taskID";
     private static final String IS_DELETED = "isDeleted";
+    private static final String DEPENDENCY = "dependsOn";
 
-    public DoItTask(String taskName, int taskId, /*int checked,*/ int deleted){
+
+    public DoItTask(String taskName, int taskId, int checked,int dependsOn){
         mName = taskName;
         mTaskID = taskId;
-//        mCheckedOff = checked;
-        mDeleted = deleted;
+        mCheckedOff = checked;
+        mDependency = dependsOn;
     }
 
     public void checkOff() {
@@ -66,7 +68,7 @@ public class DoItTask implements Serializable {
                 for (int i = 0; i < arr.length(); i++) {
                     JSONObject obj = arr.getJSONObject(i);
                     DoItTask parsedTask = new DoItTask(obj.getString(DoItTask.TEXT_INPUT),
-                            obj.getInt(DoItTask.TASK_ID), obj.getInt(DoItTask.IS_DELETED));
+                            obj.getInt(DoItTask.TASK_ID), obj.getInt(DoItTask.IS_DELETED), obj.getInt(DoItTask.DEPENDENCY));
 
                     if(!list.contains(parsedTask)){
                         list.add(parsedTask);

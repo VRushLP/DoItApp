@@ -16,7 +16,7 @@ if($command != null){
 			$listID = $_GET['id'];
 			$textInput = '';
 			
-			$select_sql = "SELECT tasks.taskID, tasks.textInput, tasks.isDeleted FROM tasks JOIN taskRights ON tasks.taskID = taskRights.taskID WHERE taskRights.listID=$listID";
+			$select_sql = "SELECT tasks.taskID, tasks.textInput, tasks.isDeleted, tasks.dependsOn FROM tasks JOIN taskRights ON tasks.taskID = taskRights.taskID WHERE taskRights.listID=$listID";
 
 			$query = $db->query($select_sql);
 			$tasks = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -65,6 +65,21 @@ if($command != null){
 					echo '{"result": "successfully removed record"}';
 				} 
 			} 
+		} else if($command == "mark"){
+			$taskID = $_GET['id'];
+			$markedAs = $_GET['as'];
+			$sql = "UPDATE tasks SET isDeleted = $markedAs WHERE taskID = $taskID";
+			if ($db->query($sql)) {
+				echo '{"result": "successfully updated record"}';
+			}
+			//UPDATE tasks SET isDeleted = 1 WHERE taskID = 39;
+		} else if ($command == "depend"){
+			$taskID = $_GET['id'];
+			$toDependOn = $_GET['dependsOn'];
+			$sql = "UPDATE tasks SET dependsOn = $toDependOn WHERE taskID = $taskID";
+			if ($db->query($sql)) {
+				echo '{"result": "successfully updated record"}';
+			}			
 		} else {
 			echo "Something's wrong with the G-Diffuser!";
 		}
