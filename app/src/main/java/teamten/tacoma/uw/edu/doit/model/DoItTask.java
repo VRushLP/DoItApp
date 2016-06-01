@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * <p/>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class DoItTask {
+public class DoItTask implements Serializable {
 
     public static final String TAG = "DO_IT_TASK";
 
