@@ -37,6 +37,7 @@ public class StationActivity extends AppCompatActivity implements
         DoItListDisplayFragment.OnTaskDisplayInteractionListener,
         DoItListDisplayFragment.EditTaskTitleListener,
         DoItListDisplayFragment.DeleteTaskListener,
+        DoItListDisplayFragment.EditTaskDependencyListener,
         ListAddFragment.ListAddListener,
         TaskAddFragment.TaskAddListener {
 
@@ -249,6 +250,16 @@ public class StationActivity extends AppCompatActivity implements
                 "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=edit";
         url += "&id=" + id;
         url += "&newtext=" + Uri.encode(newTitle);
+        Log.i(TAG, url);
+        new StationAsyncTask("edit task").execute(url);
+    }
+
+    @Override
+    public void editTaskDependency(int id, int dependency) {
+        String url =
+                "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=depend";
+        url += "&id=" + id;
+        url += "&dependsOn=" + dependency;
         Log.i(TAG, url);
         new StationAsyncTask("edit task").execute(url);
     }

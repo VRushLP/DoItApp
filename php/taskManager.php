@@ -73,6 +73,13 @@ if($command != null){
 				echo '{"result": "successfully updated record"}';
 			}
 			//UPDATE tasks SET isDeleted = 1 WHERE taskID = 39;
+		} else if ($command == "depend"){
+			$taskID = $_GET['id'];
+			$toDependOn = $_GET['dependsOn'];
+			$sql = "UPDATE tasks SET dependsOn = $toDependOn WHERE taskID = $taskID";
+			if ($db->query($sql)) {
+				echo '{"result": "successfully updated record"}';
+			}			
 		} else {
 			echo "Something's wrong with the G-Diffuser!";
 		}

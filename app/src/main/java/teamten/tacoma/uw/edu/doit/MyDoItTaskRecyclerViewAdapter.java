@@ -27,15 +27,18 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     private final OnTaskDisplayInteractionListener mInteractionListener;
     private final DoItListDisplayFragment.DeleteTaskListener mDeleteListener;
     private final DoItListDisplayFragment.EditTaskTitleListener mEditListener;
+    private final DoItListDisplayFragment.EditTaskDependencyListener mDependencyListener;
 
     public MyDoItTaskRecyclerViewAdapter(List<DoItTask> items,
                                          OnTaskDisplayInteractionListener interactionListener,
                                          DoItListDisplayFragment.DeleteTaskListener mDeleteListener,
-                                         DoItListDisplayFragment.EditTaskTitleListener mEditListener) {
+                                         DoItListDisplayFragment.EditTaskTitleListener mEditListener,
+                                         DoItListDisplayFragment.EditTaskDependencyListener mDependencyListener) {
         mValues = items;
         mInteractionListener = interactionListener;
         this.mDeleteListener = mDeleteListener;
         this.mEditListener = mEditListener;
+        this.mDependencyListener = mDependencyListener;
     }
 
     @Override
@@ -155,6 +158,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                                                         Log.i(TAG, "There's no task by that ID in this list!");
                                                     } else{
                                                         holder.mHeldTask.mDependency = actualInput;
+                                                        mDependencyListener.editTaskDependency(holder.mHeldTask.mTaskID, holder.mHeldTask.mDependency);
                                                         Log.i(TAG, "Dependency Changed" + holder.mHeldTask.mDependency);
                                                         notifyDataSetChanged();
                                                     }
@@ -191,7 +195,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
         });
     }
 
-    public boolean containsDependency(int check){
+    private boolean containsDependency(int check){
         for(DoItTask t : mValues){
             if(check == t.mTaskID) return true;
         }

@@ -41,6 +41,7 @@ public class DoItListDisplayFragment extends Fragment {
     private TextView mListTitleTextView;
     private DeleteTaskListener mDeleteListener;
     private EditTaskTitleListener mEditListener;
+    private EditTaskDependencyListener mDependencyListener;
     private DoItList mListItem;
     private DoItList mDoItList = null;
 
@@ -94,7 +95,9 @@ public class DoItListDisplayFragment extends Fragment {
             mRecyclerView = (RecyclerView) view;
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             if(mDoItList != null){
-                mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.getTasks(), mListener, mDeleteListener, mEditListener));
+                mRecyclerView.setAdapter(
+                        new MyDoItTaskRecyclerViewAdapter(
+                                mDoItList.getTasks(), mListener, mDeleteListener, mEditListener, mDependencyListener));
             }
         }
 
@@ -149,6 +152,12 @@ public class DoItListDisplayFragment extends Fragment {
                     + " must implement DeleteTaskListener");
         }
 
+        if (context instanceof EditTaskDependencyListener) {
+            mDependencyListener = (EditTaskDependencyListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement DeleteTaskListener");
+        }
     }
 
     /**
@@ -167,6 +176,10 @@ public class DoItListDisplayFragment extends Fragment {
 
     public interface EditTaskTitleListener {
         void editTaskTitle(int id, String newTitle);
+    }
+
+    public interface EditTaskDependencyListener {
+        public void editTaskDependency(int id, int dependency);
     }
 
     public void updateView(DoItList list) {
@@ -230,7 +243,7 @@ public class DoItListDisplayFragment extends Fragment {
             // Everything is good, show the tasks.
             if (!mDoItList.mList.isEmpty()) {
                 mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.mList,
-                        mListener, mDeleteListener, mEditListener));
+                        mListener, mDeleteListener, mEditListener, mDependencyListener));
             }
         }
     }
