@@ -257,8 +257,8 @@ public class StationFragment extends Fragment {
             result = DoItList.parseListOfTasksJSON(result, list);
             // Something wrong with the JSON returned.
             if (result != null) {
-                Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
-                        .show();
+//                Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
+//                        .show();
                 return;
             }
 

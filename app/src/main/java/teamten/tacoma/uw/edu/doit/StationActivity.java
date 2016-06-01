@@ -324,14 +324,21 @@ public class StationActivity extends AppCompatActivity implements
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
-                    Toast.makeText(getApplicationContext(), "List successfully "+ mTaskAction +"ed!"
-                            , Toast.LENGTH_LONG)
-                            .show();
+                    if (mTaskAction.equals("delete")) {
+                        Toast.makeText(getApplicationContext(), "List successfully " + mTaskAction + "d!"
+                                , Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "List successfully " + mTaskAction + "ed!"
+                                , Toast.LENGTH_SHORT)
+                                .show();
+                    }
+
                 } else {
-                    Toast.makeText(getApplicationContext(), "Failed to "+ mTaskAction +": "
-                                    + jsonObject.get("error")
-                            , Toast.LENGTH_LONG)
-                            .show();
+//                    Toast.makeText(getApplicationContext(), "Failed to "+ mTaskAction +": "
+//                                    + jsonObject.get("error")
+//                            , Toast.LENGTH_LONG)
+//                            .show();
                 }
             } catch (JSONException e) {
                 Toast.makeText(getApplicationContext(), "Something wrong with the data" +

@@ -72,7 +72,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                         case 0:
                             // make dialog box and send info below
                             LayoutInflater li = LayoutInflater.from(v.getContext());
-                            View promptsView = li.inflate(R.layout.update_list_title_prompt, null);
+                            View promptsView = li.inflate(R.layout.update_task_descrip_prompt, null);
                             AlertDialog.Builder alertDialogBuilderUpdate = new AlertDialog.Builder(
                                     v.getContext());
 

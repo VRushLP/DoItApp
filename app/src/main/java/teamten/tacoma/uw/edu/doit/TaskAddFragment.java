@@ -7,6 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,6 +35,7 @@ public class TaskAddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);     // finds if options on Menu exist
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_task_add, container, false);
         mTaskTitleEditText = (EditText) v.findViewById(R.id.task_title_ET);
@@ -40,8 +43,21 @@ public class TaskAddFragment extends Fragment {
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = buildTaskURL(v);
-                mListener.addTask(url);
+                String userInputTask = mTaskTitleEditText.getText().toString();
+                if (userInputTask.length() > 0) {
+                    String url = buildTaskURL(v);
+                    mListener.addTask(url);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Task description must be at least 1 character long.", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        });
+        Button cancelButton = (Button) v.findViewById(R.id.add_task_cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
@@ -50,6 +66,13 @@ public class TaskAddFragment extends Fragment {
 
         mListToAddTo = getArguments().getInt("ListID");
         return v;
+    }
+
+    // on viewing of fragment, decide whether to show/hide MenuItems
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem addListItem = menu.findItem(R.id.action_add_list);
+        addListItem.setVisible(false);
     }
 
     @Override
