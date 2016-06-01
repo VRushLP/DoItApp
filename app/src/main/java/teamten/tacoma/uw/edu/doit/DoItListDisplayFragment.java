@@ -106,6 +106,8 @@ public class DoItListDisplayFragment extends Fragment {
 
     public int getCurrentListID(){ return mDoItList.getId(); };
 
+
+
     /**
      * Builds a String for the URL of getting all the tasks for the list associated with this Fragment.
      * @return

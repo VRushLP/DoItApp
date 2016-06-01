@@ -16,7 +16,7 @@ if($command != null){
 			$listID = $_GET['id'];
 			$textInput = '';
 			
-			$select_sql = "SELECT tasks.taskID, tasks.textInput, tasks.isDeleted FROM tasks JOIN taskRights ON tasks.taskID = taskRights.taskID WHERE taskRights.listID=$listID";
+			$select_sql = "SELECT tasks.taskID, tasks.textInput, tasks.isDeleted, tasks.dependsOn FROM tasks JOIN taskRights ON tasks.taskID = taskRights.taskID WHERE taskRights.listID=$listID";
 
 			$query = $db->query($select_sql);
 			$tasks = $query->fetchAll(PDO::FETCH_ASSOC);

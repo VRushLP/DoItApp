@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import teamten.tacoma.uw.edu.doit.DoItListDisplayFragment.OnTaskDisplayInteractionListener;
+import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 import java.util.List;
@@ -44,9 +46,11 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mHeldTask = mValues.get(position);
-        holder.mContentView.setText(mValues.get(position).mName);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final int realPosition = holder.getAdapterPosition();
+        holder.mHeldTask = mValues.get(realPosition);
+        String displayText = "(" + mValues.get(realPosition).mTaskID+") " + mValues.get(realPosition).mName;
+        holder.mContentView.setText(displayText);
         switch(holder.mHeldTask.mCheckedOff){
             case 0:
 //                holder.mContentView.setTextColor(Color.RED);
@@ -63,7 +67,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
             @Override
             public void onClick(View v) {
                 if (mInteractionListener != null) {
-                    mInteractionListener.onDoItTaskInteraction(mValues.get(position));
+                    mInteractionListener.onDoItTaskInteraction(mValues.get(realPosition));
                     notifyDataSetChanged();
                 }
             }
@@ -80,17 +84,18 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
 
             alertDialogBuilder.setItems(R.array.task_long_click_action_list, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    LayoutInflater li = LayoutInflater.from(v.getContext());
                     switch (which) {
                         case 0:
                             // make dialog box and send info below
-                            LayoutInflater li = LayoutInflater.from(v.getContext());
-                            View promptsView = li.inflate(R.layout.update_list_title_prompt, null);
+
+                            View updateNameView = li.inflate(R.layout.update_list_title_prompt, null);
                             AlertDialog.Builder alertDialogBuilderUpdate = new AlertDialog.Builder(
                                     v.getContext());
 
                             // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
-                            alertDialogBuilderUpdate.setView(promptsView);
-                            final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
+                            alertDialogBuilderUpdate.setView(updateNameView);
+                            final EditText userInput = (EditText) updateNameView.findViewById(R.id.editTextDialogUserInput);
 
                             // set dialog message
                             alertDialogBuilderUpdate
@@ -122,12 +127,53 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                             break;
                         case 1:
                             Log.i(TAG, "Update dependency selected");
+                            View updateDependencyView = li.inflate(R.layout.update_task_dependency_prompt, null);
+                            AlertDialog.Builder dependencyBuilder = new AlertDialog.Builder(
+                                    v.getContext());
 
+                            // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
+                            dependencyBuilder.setView(updateDependencyView);
+                            final EditText dependencyInput = (EditText) updateDependencyView.findViewById(R.id.edit_dependency_ET);
+                            dependencyInput.setRawInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+                            // set dialog message
+                            dependencyBuilder
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(
+                                                        DialogInterface dialog, int id) {
+                                                    // get user input and set
+                                                    String newDependency =  dependencyInput.getText().toString();
+                                                    int actualInput = Integer.parseInt(newDependency);
+
+                                                    if(actualInput == holder.mHeldTask.mTaskID){
+                                                        //TODO toast an error message or something
+                                                        Log.i(TAG, "Tasks can't depend on themselves!");
+                                                    } else if(!containsDependency(actualInput)){
+                                                        //TODO toast an error message or something
+                                                        Log.i(TAG, "There's no task by that ID in this list!");
+                                                    } else{
+                                                        holder.mHeldTask.mDependency = actualInput;
+                                                        Log.i(TAG, "Dependency Changed" + holder.mHeldTask.mDependency);
+                                                        notifyDataSetChanged();
+                                                    }
+                                                }
+                                            })
+                                    .setNegativeButton("Cancel",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(
+                                                        DialogInterface dialog,
+                                                        int id) {
+                                                    dialog.cancel();
+                                                }
+                                            });
+                            dependencyBuilder.create().show();
                             break;
                         case 2:
                             Log.i(TAG, "Delete selected");
-                            mValues.remove(position);
-                            notifyItemRemoved(position);
+                            mValues.remove(realPosition);
+                            notifyItemRemoved(realPosition);
                             mDeleteListener.deleteTask(holder.mHeldTask);
                             break;
                         case 3:
@@ -145,8 +191,11 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
         });
     }
 
-    public void dialogUpdateLongClick(){
-
+    public boolean containsDependency(int check){
+        for(DoItTask t : mValues){
+            if(check == t.mTaskID) return true;
+        }
+        return false;
     }
 
     @Override
