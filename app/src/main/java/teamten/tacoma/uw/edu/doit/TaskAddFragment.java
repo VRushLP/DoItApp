@@ -45,6 +45,14 @@ public class TaskAddFragment extends Fragment {
             }
         });
 
+        Button cancelButton = (Button) v.findViewById(R.id.add_task_cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         fab.hide();
 
