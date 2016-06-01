@@ -194,7 +194,7 @@ public class StationActivity extends AppCompatActivity implements
         item.checkOff();
         String markURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=mark";
         markURL += "&id=" + item.mTaskID;
-        markURL += "&as=" + item.mDeleted;
+        markURL += "&as=" + item.mCheckedOff;
         Log.i(TAG, markURL);
         new StationAsyncTask("mark task").execute(markURL);
     }

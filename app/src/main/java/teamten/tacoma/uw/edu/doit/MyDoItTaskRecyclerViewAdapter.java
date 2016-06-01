@@ -49,13 +49,13 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
         holder.mContentView.setText(mValues.get(position).mName);
         switch(holder.mHeldTask.mCheckedOff){
             case 0:
+//                holder.mContentView.setTextColor(Color.RED);
+                holder.mContentView.setPaintFlags(0);
+                break;
+            case 1:
 //                holder.mContentView.setTextColor(Color.GREEN);
                 holder.mContentView.setPaintFlags(
                         holder.mContentView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                break;
-            case 1:
-//                holder.mContentView.setTextColor(Color.RED);
-                holder.mContentView.setPaintFlags(0);
                 break;
         }
 
@@ -122,6 +122,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                             break;
                         case 1:
                             Log.i(TAG, "Update dependency selected");
+
                             break;
                         case 2:
                             Log.i(TAG, "Delete selected");
@@ -142,6 +143,10 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
             return true;
             }
         });
+    }
+
+    public void dialogUpdateLongClick(){
+
     }
 
     @Override

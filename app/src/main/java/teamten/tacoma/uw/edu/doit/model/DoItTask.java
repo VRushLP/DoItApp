@@ -21,17 +21,15 @@ public class DoItTask {
     public String mName;
     public int mTaskID;
     public int mCheckedOff;
-    public int mDeleted;
 
     private final static String TEXT_INPUT = "textInput";
     private final static String TASK_ID = "taskID";
     private static final String IS_DELETED = "isDeleted";
 
-    public DoItTask(String taskName, int taskId, /*int checked,*/ int deleted){
+    public DoItTask(String taskName, int taskId, int checked){
         mName = taskName;
         mTaskID = taskId;
-//        mCheckedOff = checked;
-        mDeleted = deleted;
+        mCheckedOff = checked;
     }
 
     public void checkOff() {
