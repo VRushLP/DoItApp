@@ -38,12 +38,11 @@ public class DoItListDisplayFragment extends Fragment {
 
     private OnTaskDisplayInteractionListener mListener;
     private RecyclerView mRecyclerView;
-    private TextView mListTitleTextView;
     private DeleteTaskListener mDeleteListener;
     private EditTaskTitleListener mEditListener;
     private EditTaskDependencyListener mDependencyListener;
-    private DoItList mListItem;
     private DoItList mDoItList = null;
+    private int mHowDisplay = 0;
 
     protected static String LIST_ITEM_SELECTED = "ListItemSelected";
 
@@ -71,7 +70,8 @@ public class DoItListDisplayFragment extends Fragment {
             Log.i(TAG, "args was not null");
             mDoItList= (DoItList) args.get("DoItTaskList");
             Log.i(TAG, "" + (mDoItList != null));
-            mListItem = (DoItList) args.getSerializable(LIST_ITEM_SELECTED);
+            mHowDisplay = args.getInt("taskViewMode");
+            Log.i(TAG, "Display mode: " + mHowDisplay);
             //Log.i(TAG, "mListItem = " + mListItem.getTitle());
 //            mListTitleTextView.setText(mDoItList.getTitle());
 //            updateView(mDoItList);
@@ -97,7 +97,8 @@ public class DoItListDisplayFragment extends Fragment {
             if(mDoItList != null){
                 mRecyclerView.setAdapter(
                         new MyDoItTaskRecyclerViewAdapter(
-                                mDoItList.getTasks(), mListener, mDeleteListener, mEditListener, mDependencyListener));
+                                mDoItList.getTasks(),
+                                mListener, mDeleteListener, mEditListener, mDependencyListener));
             }
         }
 
@@ -121,7 +122,7 @@ public class DoItListDisplayFragment extends Fragment {
         StringBuilder sb = new StringBuilder(TASK_MANAGER_URL);
         //append arguments to the url
         sb.append("?cmd=getAll&id=");
-        sb.append(mListItem.getId());
+        sb.append(mDoItList.getId());
         Log.i(TAG, sb.toString());
         //example URL: http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=getAll&id=61
         return sb.toString();
@@ -180,12 +181,6 @@ public class DoItListDisplayFragment extends Fragment {
 
     public interface EditTaskDependencyListener {
         public void editTaskDependency(int id, int dependency);
-    }
-
-    public void updateView(DoItList list) {
-        if (list != null) {
-            mListTitleTextView.setText(list.getTitle());
-        }
     }
 
     @Override

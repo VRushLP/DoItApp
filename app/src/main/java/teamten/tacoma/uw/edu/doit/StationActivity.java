@@ -144,7 +144,7 @@ public class StationActivity extends AppCompatActivity implements
                     .setItems(R.array.view_types, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             taskViewMode = which;
-                            Log.i(TAG, ""+ taskViewMode);
+                            Log.i(TAG, "Selected"+ taskViewMode);
                         }
                     });
             settingsAlertDialog.show();

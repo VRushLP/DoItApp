@@ -15,26 +15,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import teamten.tacoma.uw.edu.doit.DoItListDisplayFragment.OnTaskDisplayInteractionListener;
-import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTaskRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "DoItTaskRecyclerView";
-    private final List<DoItTask> mValues;
+
+    private final List<DoItTask> mAllTasks;
     private final OnTaskDisplayInteractionListener mInteractionListener;
     private final DoItListDisplayFragment.DeleteTaskListener mDeleteListener;
     private final DoItListDisplayFragment.EditTaskTitleListener mEditListener;
     private final DoItListDisplayFragment.EditTaskDependencyListener mDependencyListener;
 
-    public MyDoItTaskRecyclerViewAdapter(List<DoItTask> items,
-                                         OnTaskDisplayInteractionListener interactionListener,
+    public MyDoItTaskRecyclerViewAdapter(List<DoItTask> items,OnTaskDisplayInteractionListener interactionListener,
                                          DoItListDisplayFragment.DeleteTaskListener mDeleteListener,
                                          DoItListDisplayFragment.EditTaskTitleListener mEditListener,
                                          DoItListDisplayFragment.EditTaskDependencyListener mDependencyListener) {
-        mValues = items;
+        mAllTasks = items;
         mInteractionListener = interactionListener;
         this.mDeleteListener = mDeleteListener;
         this.mEditListener = mEditListener;
@@ -51,26 +51,31 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final int realPosition = holder.getAdapterPosition();
-        holder.mHeldTask = mValues.get(realPosition);
-        String displayText = "(" + mValues.get(realPosition).mTaskID+") " + mValues.get(realPosition).mName;
+        holder.mHeldTask = mAllTasks.get(realPosition);
+        String displayText = "(" + mAllTasks.get(realPosition).mTaskID+") " + mAllTasks.get(realPosition).mName;
         holder.mContentView.setText(displayText);
         switch(holder.mHeldTask.mCheckedOff){
             case 0:
-//                holder.mContentView.setTextColor(Color.RED);
                 holder.mContentView.setPaintFlags(0);
                 break;
             case 1:
-//                holder.mContentView.setTextColor(Color.GREEN);
                 holder.mContentView.setPaintFlags(
                         holder.mContentView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 break;
         }
 
+        if(checkForGreyOut(holder.mHeldTask)){
+            holder.mContentView.setTextColor(Color.LTGRAY);
+        } else {
+            holder.mContentView.setTextColor(Color.BLACK);
+        }
+
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mInteractionListener != null) {
-                    mInteractionListener.onDoItTaskInteraction(mValues.get(realPosition));
+                    mInteractionListener.onDoItTaskInteraction(mAllTasks.get(realPosition));
                     notifyDataSetChanged();
                 }
             }
@@ -153,7 +158,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                                                     if(actualInput == holder.mHeldTask.mTaskID){
                                                         //TODO toast an error message or something
                                                         Log.i(TAG, "Tasks can't depend on themselves!");
-                                                    } else if(!containsDependency(actualInput)){
+                                                    } else if(!containsPassedDependency(actualInput)){
                                                         //TODO toast an error message or something
                                                         Log.i(TAG, "There's no task by that ID in this list!");
                                                     } else{
@@ -175,12 +180,19 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                             dependencyBuilder.create().show();
                             break;
                         case 2:
+                            Log.i(TAG, "Remove Dependency Selected");
+                            holder.mHeldTask.mDependency = -1;
+                            mDependencyListener.editTaskDependency(holder.mHeldTask.mTaskID, holder.mHeldTask.mDependency);
+                            Log.i(TAG, "Dependency Changed" + holder.mHeldTask.mDependency);
+                            notifyDataSetChanged();
+                            break;
+                        case 3:
                             Log.i(TAG, "Delete selected");
-                            mValues.remove(realPosition);
+                            mAllTasks.remove(realPosition);
                             notifyItemRemoved(realPosition);
                             mDeleteListener.deleteTask(holder.mHeldTask);
                             break;
-                        case 3:
+                        case 4:
                             Log.i(TAG, "Dialog canceled");
                             break;
                         default:
@@ -195,16 +207,23 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
         });
     }
 
-    private boolean containsDependency(int check){
-        for(DoItTask t : mValues){
+    private boolean containsPassedDependency(int check){
+        for(DoItTask t : mAllTasks){
             if(check == t.mTaskID) return true;
+        }
+        return false;
+    }
+
+    private boolean checkForGreyOut(DoItTask theTask){
+        for(DoItTask t : mAllTasks){
+            if(theTask.mDependency == t.mTaskID && t.mCheckedOff == 0) return true;
         }
         return false;
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mAllTasks.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
