@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -63,6 +65,7 @@ public class DoItListDisplayFragment extends Fragment {
 //        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
         // put textView in fragment_doittask_list
 //        mListTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+        setHasOptionsMenu(true);     // finds if options on Menu exist
 
         Log.i(TAG, "OnCreateView called");
         Bundle args = getArguments();
@@ -106,6 +109,13 @@ public class DoItListDisplayFragment extends Fragment {
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         fab.show();
         return view;
+    }
+
+    // on viewing of fragment, decide whether to show/hide MenuItems
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem addListItem = menu.findItem(R.id.action_add_list);
+        addListItem.setVisible(false);
     }
 
     public int getCurrentListID(){ return mDoItList.getId(); };

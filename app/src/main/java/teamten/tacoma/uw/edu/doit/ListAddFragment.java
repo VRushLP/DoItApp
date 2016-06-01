@@ -54,8 +54,10 @@ public class ListAddFragment extends Fragment {
     // on viewing of fragment, decide whether to show/hide MenuItems
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_add_list);
-        item.setVisible(false);
+        MenuItem itemAdd = menu.findItem(R.id.action_add_list);
+        MenuItem itemShare = menu.findItem(R.id.action_share);
+        itemShare.setVisible(false);
+        itemAdd.setVisible(false);
     }
 
     @Override
