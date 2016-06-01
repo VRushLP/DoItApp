@@ -156,9 +156,9 @@ public class StationActivity extends AppCompatActivity implements
             settingsAlertDialog.show();
 
         }  else if (id == R.id.action_share) {
-            Toast.makeText(this, "Share button clicked",
-                    Toast.LENGTH_SHORT)
-                    .show();
+//            Toast.makeText(this, "Share button clicked",
+//                    Toast.LENGTH_SHORT)
+//                    .show();
             // create the send intent
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             // set the type

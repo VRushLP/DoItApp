@@ -80,8 +80,8 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 outputStreamWriter.write("email = " + email + ";");
                 outputStreamWriter.write("password = " + pwd);
                 outputStreamWriter.close();
-                Toast.makeText(this, email + " logged in successfully!", Toast.LENGTH_LONG)
-                        .show();
+//                Toast.makeText(this, email + " logged in successfully!", Toast.LENGTH_LONG)
+//                        .show();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -197,9 +197,9 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 finish();
 
                 if (status.equals("success")) {
-                    Toast.makeText(getApplicationContext(), "Database user data successfully retrieved! userID = " + userID
-                            , Toast.LENGTH_LONG)
-                            .show();
+//                    Toast.makeText(getApplicationContext(), "Database user data successfully retrieved! userID = " + userID
+//                            , Toast.LENGTH_LONG)
+//                            .show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Failed to retrieve: "
                                     + jsonObject.get("error")

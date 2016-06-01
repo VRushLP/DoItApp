@@ -139,8 +139,9 @@ public class StationFragment extends Fragment {
                 }
 
                 inputStream.close();
-                Toast.makeText(getActivity(), stringBuilder.toString(), Toast.LENGTH_SHORT)
-                        .show();
+                // shows user's email and password
+//                Toast.makeText(getActivity(), stringBuilder.toString(), Toast.LENGTH_SHORT)
+//                        .show();
             }
         } catch (Exception e) {
             e.printStackTrace();
