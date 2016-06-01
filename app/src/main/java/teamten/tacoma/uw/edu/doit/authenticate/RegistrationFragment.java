@@ -211,11 +211,11 @@ public class RegistrationFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
-                    Toast.makeText(getContext(), "User successfully added!"
+                    Toast.makeText(getContext(), "Account successfully registered!"
                             , Toast.LENGTH_LONG)
                             .show();
                 } else {
-                    Toast.makeText(getContext(), "Failed to add: "
+                    Toast.makeText(getContext(), "Failed to register account: "
                             + jsonObject.get("error")
                             , Toast.LENGTH_LONG)
                             .show();
