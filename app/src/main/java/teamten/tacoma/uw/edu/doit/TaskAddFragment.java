@@ -72,6 +72,8 @@ public class TaskAddFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         MenuItem addListItem = menu.findItem(R.id.action_add_list);
+        MenuItem itemShare = menu.findItem(R.id.action_share);
+        itemShare.setVisible(false);
         addListItem.setVisible(false);
     }
 
