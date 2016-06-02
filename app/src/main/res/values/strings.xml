@@ -4,8 +4,8 @@
 
     <string name="action_logout">Logout</string>
     <string name="LOGGEDIN">loggedin</string>
-    <string name="LOGIN_PREFS">edu.uw.tacoma.teamten.doit.PREFS</string>
-    <string name="LOGIN_FILE"> edu.uw.tacoma.teamten.doit.LOGIN_FILE</string>
+    <string name="PREFS_FILE">edu.uw.tacoma.teamten.doit.PREFS</string>
+    <string name="VIEW_MODE">viewmode</string>
 
     <string name="userEmail">userEmail</string>
     <string name="userPassword">userPwd</string>

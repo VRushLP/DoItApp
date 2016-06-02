@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
@@ -37,6 +38,7 @@ public class DoItListDisplayFragment extends Fragment {
     private final static String TASK_MANAGER_URL =
             "http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php";
     private static final String TAG = "DoItListDisplayFragment";
+    public static final int VERBOSE_VEW = 0;
 
     private OnTaskDisplayInteractionListener mListener;
     private RecyclerView mRecyclerView;
@@ -44,7 +46,8 @@ public class DoItListDisplayFragment extends Fragment {
     private EditTaskTitleListener mEditListener;
     private EditTaskDependencyListener mDependencyListener;
     private DoItList mDoItList = null;
-    private int mHowDisplay = 0;
+    private ArrayList<DoItTask> mCompactTasks = null;
+    private int mHowDisplay;
 
     protected static String LIST_ITEM_SELECTED = "ListItemSelected";
 
@@ -72,6 +75,7 @@ public class DoItListDisplayFragment extends Fragment {
         if(args != null){
             Log.i(TAG, "args was not null");
             mDoItList= (DoItList) args.get("DoItTaskList");
+            mCompactTasks = getTopLevelTasks();
             Log.i(TAG, "" + (mDoItList != null));
             mHowDisplay = args.getInt("taskViewMode");
             Log.i(TAG, "Display mode: " + mHowDisplay);
@@ -98,10 +102,7 @@ public class DoItListDisplayFragment extends Fragment {
             mRecyclerView = (RecyclerView) view;
             mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             if(mDoItList != null){
-                mRecyclerView.setAdapter(
-                        new MyDoItTaskRecyclerViewAdapter(
-                                mDoItList.getTasks(),
-                                mListener, mDeleteListener, mEditListener, mDependencyListener));
+                refreshView();
             }
         }
 
@@ -109,6 +110,32 @@ public class DoItListDisplayFragment extends Fragment {
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.task_add_floating_button);
         fab.show();
         return view;
+    }
+
+    private ArrayList<DoItTask> getTopLevelTasks() {
+        ArrayList<DoItTask> out = new ArrayList<>();
+        for(DoItTask t : mDoItList.getTasks()){
+            if(!out.contains(t)){
+                if(t.mDependency == -1){
+                    out.add(t);
+                } else {
+                    DoItTask temp = checkForTaskByID(t.mDependency);
+                    if (temp.mCheckedOff == 1){
+                        out.add(t);
+                    }
+                }
+            }
+        }
+        return out;
+    }
+
+    private DoItTask checkForTaskByID(int check){
+        for(DoItTask t : mDoItList.getTasks()){
+            if(t.mTaskID == check){
+                return t;
+            }
+        }
+        return null;
     }
 
     // on viewing of fragment, decide whether to show/hide MenuItems
@@ -119,8 +146,6 @@ public class DoItListDisplayFragment extends Fragment {
     }
 
     public int getCurrentListID(){ return mDoItList.getId(); };
-
-
 
     /**
      * Builds a String for the URL of getting all the tasks for the list associated with this Fragment.
@@ -190,13 +215,40 @@ public class DoItListDisplayFragment extends Fragment {
     }
 
     public interface EditTaskDependencyListener {
-        public void editTaskDependency(int id, int dependency);
+        void editTaskDependency(int id, int dependency);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void refreshView(){
+        mHowDisplay = getActivity().
+                getSharedPreferences(getString(R.string.PREFS_FILE), Context.MODE_PRIVATE)
+        .getInt(getString(R.string.VIEW_MODE), 0);
+        Log.i(TAG, "" + mHowDisplay);
+
+        if(mHowDisplay == VERBOSE_VEW){
+            setVerboseRecyclerView();
+        } else{
+            setCompactRecyclerView();
+        }
+    }
+
+    public void setVerboseRecyclerView(){
+        mRecyclerView.setAdapter(
+                new MyDoItTaskRecyclerViewAdapter(
+                        mDoItList.getTasks(),
+                        mListener, mDeleteListener, mEditListener, mDependencyListener));
+    }
+
+    public void setCompactRecyclerView(){
+        mRecyclerView.setAdapter(
+                new MyDoItTaskRecyclerViewAdapter(
+                        getTopLevelTasks(),
+                        mListener, mDeleteListener, mEditListener, mDependencyListener));
     }
 
     /**
@@ -247,8 +299,7 @@ public class DoItListDisplayFragment extends Fragment {
 
             // Everything is good, show the tasks.
             if (!mDoItList.mList.isEmpty()) {
-                mRecyclerView.setAdapter(new MyDoItTaskRecyclerViewAdapter(mDoItList.mList,
-                        mListener, mDeleteListener, mEditListener, mDependencyListener));
+                refreshView();
             }
         }
     }

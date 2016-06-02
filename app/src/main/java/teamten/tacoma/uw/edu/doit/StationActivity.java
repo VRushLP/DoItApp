@@ -44,7 +44,7 @@ public class StationActivity extends AppCompatActivity implements
     private static final String TAG = "StationActivity";
     private String userEmailSharePref;
     private String userIdSharePref;
-    private static int taskViewMode = 0; //verbose by default
+    private int taskViewMode; //verbose by default
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +59,16 @@ public class StationActivity extends AppCompatActivity implements
         Bundle bundle = getIntent().getExtras();
 
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
-        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
+        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.PREFS_FILE)
                 , Context.MODE_PRIVATE);
         userEmailSharePref = mSharedPreferences.getString("@string/userEmail", null);
         Log.i(TAG, "StationActivity onCreate email from shared pref: " + userEmailSharePref);
 
         userIdSharePref = mSharedPreferences.getString("@string/userID", null);
         Log.i(TAG, "StationActivity onCreate userID from shared pref: " + userIdSharePref);
+
+        taskViewMode = mSharedPreferences.getInt("@string/taskView", 0);
+        Log.i(TAG, "Read from shared pref:" + taskViewMode);
 
         Bundle args = new Bundle();
         args.putString("EMAIL", userEmailSharePref);
@@ -118,7 +121,7 @@ public class StationActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         if(id == R.id.action_logout){
-            getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE)
+            getSharedPreferences(getString(R.string.PREFS_FILE), Context.MODE_PRIVATE)
                     .edit().putBoolean(getString(R.string.LOGGEDIN), false)
                     .apply();
             Intent i = new Intent(this, AuthenticationActivity.class);
@@ -143,8 +146,21 @@ public class StationActivity extends AppCompatActivity implements
             settingsAlertDialog.setTitle(R.string.settings)
                     .setItems(R.array.view_types, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
+
+                            getSharedPreferences(getString(R.string.PREFS_FILE), 0).edit()
+                                    .putInt(getString(R.string.VIEW_MODE), which).apply();
                             taskViewMode = which;
-                            Log.i(TAG, "Selected"+ taskViewMode);
+
+                            Log.i(TAG, "Selected"+ which);
+                            Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
+                            Log.i(TAG, "Current Fragment: " + f.getClass().getCanonicalName());
+                            if (f instanceof DoItListDisplayFragment){
+                                if(taskViewMode == DoItListDisplayFragment.VERBOSE_VEW){
+                                    ((DoItListDisplayFragment) f).setVerboseRecyclerView();
+                                } else{
+                                    ((DoItListDisplayFragment) f).setCompactRecyclerView();
+                                }
+                            }
                         }
                     });
             settingsAlertDialog.show();
@@ -163,7 +179,6 @@ public class StationActivity extends AppCompatActivity implements
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
             // start the chooser for sharing
             startActivity(Intent.createChooser(shareIntent, "Share the Motivation"));
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -187,15 +202,12 @@ public class StationActivity extends AppCompatActivity implements
     @Override
     public void itemClickedToBeDeleted(DoItList item) {
         String listURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=";
-
         listURL += "delete";
         listURL += "&listID=" + item.getListID();
         Log.i(TAG, listURL);
-
         StationAsyncTask task = new StationAsyncTask("delete");
         task.execute(listURL);
     }
-
 
     @Override
     public void updateListTitle(int theListID, String theNewTitle) {
@@ -213,6 +225,11 @@ public class StationActivity extends AppCompatActivity implements
         markURL += "&as=" + item.mCheckedOff;
         Log.i(TAG, markURL);
         new StationAsyncTask("mark task").execute(markURL);
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
+
+        if (f instanceof DoItListDisplayFragment){
+            ((DoItListDisplayFragment) f).refreshView();
+        }
     }
 
     @Override

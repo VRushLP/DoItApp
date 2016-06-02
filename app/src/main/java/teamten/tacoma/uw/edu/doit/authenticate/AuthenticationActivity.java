@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,7 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -44,7 +42,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
     protected void onCreate(Bundle savedInstanceState) {
         mUserID = "";
         super.onCreate(savedInstanceState);
-        mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
+        mSharedPreferences = getSharedPreferences(getString(R.string.PREFS_FILE)
                 , Context.MODE_PRIVATE);
 
         if (mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {  // if not logged in, start login
@@ -75,7 +73,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
             //new LoginTask().execute(url);
             try {
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
-                        openFileOutput(getString(R.string.LOGIN_FILE)
+                        openFileOutput(getString(R.string.PREFS_FILE)
                                 , Context.MODE_PRIVATE));
                 outputStreamWriter.write("email = " + email + ";");
                 outputStreamWriter.write("password = " + pwd);

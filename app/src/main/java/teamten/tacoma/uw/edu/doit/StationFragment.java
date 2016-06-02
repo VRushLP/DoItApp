@@ -67,7 +67,7 @@ public class StationFragment extends Fragment {
         mStationDB = new StationDB(this.getContext());
 
         // adding userID to obtain their specific data
-        SharedPreferences mSharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
+        SharedPreferences mSharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.PREFS_FILE)
                 , Context.MODE_PRIVATE);
 
         String userIdSharePref = mSharedPreferences.getString("@string/userID", null);
@@ -126,7 +126,7 @@ public class StationFragment extends Fragment {
 
         try {
             InputStream inputStream = getActivity().openFileInput(
-                    getString(R.string.LOGIN_FILE));
+                    getString(R.string.PREFS_FILE));
 
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
