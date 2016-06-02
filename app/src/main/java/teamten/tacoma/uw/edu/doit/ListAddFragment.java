@@ -1,6 +1,7 @@
 package teamten.tacoma.uw.edu.doit;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -116,9 +117,10 @@ public class ListAddFragment extends Fragment {
             sb.append("email=");
             sb.append(userEmail);
 
-            String listTitle = mListTitleEditText.getText().toString();
+//            String listTitle = mListTitleEditText.getText().toString();
             sb.append("&title=");
-            sb.append(URLEncoder.encode(listTitle, "UTF-8"));
+//            sb.append(URLEncoder.encode(listTitle, "UTF-8"));
+            sb.append(Uri.encode(mListTitleEditText.getText().toString().trim()));
 
             String userID = data.getString("USERID");
             sb.append("&userID=");

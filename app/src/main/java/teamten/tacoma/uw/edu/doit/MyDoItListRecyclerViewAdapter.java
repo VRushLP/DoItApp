@@ -81,7 +81,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                                         // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
                                         alertDialogBuilderUpdate.setView(promptsView);
 
-                                        final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextDialogUserInput);
+                                        final EditText userInput = (EditText) promptsView.findViewById(R.id.editTextTitleDialogUserInput);
 
                                         // set dialog message
                                         alertDialogBuilderUpdate
@@ -93,7 +93,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                                                                     int id) {
                                                                 // get user input and set
                                                                 String newTitle =  userInput.getText().toString();
-                                                                if (newTitle.length() > 0 && !newTitle.equals("") ) {
+                                                                if (newTitle.length() > 0 && !newTitle.equals(" ") ) {
                                                                     // query database
                                                                     mListTitleListener.updateListTitle(holder.mListItem.getListID(), newTitle);
 //
