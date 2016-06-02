@@ -22,7 +22,6 @@ public class StationDB {
     private StationDBHelper mStationDBHelper;
     private SQLiteDatabase mSQLiteDatabase;
 
-
     public StationDB(Context context) {
         mStationDBHelper = new StationDBHelper(
                 context, DB_NAME, null, DB_VERSION);
@@ -94,7 +93,6 @@ public class StationDB {
     public void deleteStation() {
         mSQLiteDatabase.delete(TABLE_NAME, null, null);
     }
-
 
     class StationDBHelper extends SQLiteOpenHelper {
         private static final String CREATE_LIST_SQL =

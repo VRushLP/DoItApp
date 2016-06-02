@@ -10,10 +10,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p/>
- * TODO: Replace all uses of this class before publishing your app.
+ * A class that represents something to do!
+ * DoItTasks are always associated with a DoItList.
  */
 public class DoItTask implements Serializable {
 
@@ -29,7 +27,6 @@ public class DoItTask implements Serializable {
     private static final String IS_DELETED = "isDeleted";
     private static final String DEPENDENCY = "dependsOn";
 
-
     public DoItTask(String taskName, int taskId, int checked,int dependsOn){
         mName = taskName;
         mTaskID = taskId;
@@ -37,6 +34,10 @@ public class DoItTask implements Serializable {
         mDependency = dependsOn;
     }
 
+    /**
+     * Checks off a DoItTask.
+     * Checking a DoItTask off has implications for how it is drawn.
+     */
     public void checkOff() {
         if(mCheckedOff == 0){
             mCheckedOff = 1;
@@ -51,6 +52,9 @@ public class DoItTask implements Serializable {
         return this.mName + " " + this.mCheckedOff;
     }
 
+    /**
+     * Two DoItTasks are equal if they have the same ID.
+     */
     public boolean equals(Object o){
         if(o instanceof DoItTask){
             return ((DoItTask) o).mTaskID == this.mTaskID;
