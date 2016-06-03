@@ -119,7 +119,7 @@ public class ListAddFragment extends Fragment {
 
 //            String listTitle = mListTitleEditText.getText().toString();
             sb.append("&title=");
-//            sb.append(URLEncoder.encode(listTitle, "UTF-8"));
+//            sb.append(URLEncoder.encode(mListTitleEditText, "UTF-8"));
             sb.append(Uri.encode(mListTitleEditText.getText().toString().trim()));
 
             String userID = data.getString("USERID");
