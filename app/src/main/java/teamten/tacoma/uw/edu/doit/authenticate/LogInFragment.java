@@ -67,9 +67,6 @@ public class LogInFragment extends Fragment {
                 }
 
                 ((AuthenticationActivity) getActivity()).login(userEmail, pwd);
-//                USER_LOGIN_URL += "email=" + userEmail + "&pwd=" + pwd;
-//                Log.i("LoginFragment", USER_LOGIN_URL.toString());
-//                new  VerifyLoginAndRetrieveUserIdTask().execute(USER_LOGIN_URL);
             }
         });
 

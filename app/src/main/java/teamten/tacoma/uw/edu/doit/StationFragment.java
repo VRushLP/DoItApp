@@ -38,7 +38,7 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
  */
 public class StationFragment extends Fragment {
 
-    private static final String TAG = "STATION_FRAGMENT";
+    private static final String TAG = "StationFragment";
     private int mColumnCount = 1;
     //private String mUserID;
 
@@ -70,7 +70,7 @@ public class StationFragment extends Fragment {
         SharedPreferences mSharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.PREFS_FILE)
                 , Context.MODE_PRIVATE);
 
-        String userIdSharePref = mSharedPreferences.getString("@string/userID", null);
+        String userIdSharePref = mSharedPreferences.getString(getString(R.string.PREFS_USER_ID), null);
         Log.d(TAG, userIdSharePref);
         StringBuilder listURLBuilder = new StringBuilder();
 

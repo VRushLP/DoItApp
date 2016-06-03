@@ -119,7 +119,7 @@ public class DoItListDisplayFragment extends Fragment {
                     out.add(t);
                 } else {
                     DoItTask temp = checkForTaskByID(t.mDependency);
-                    if (temp.mCheckedOff == 1){
+                    if (temp != null && temp.mCheckedOff == 1){
                         out.add(t);
                     }
                 }
@@ -232,9 +232,9 @@ public class DoItListDisplayFragment extends Fragment {
     public void refreshView(){
         mHowDisplay = getActivity().
                 getSharedPreferences(getString(R.string.PREFS_FILE), Context.MODE_PRIVATE)
-        .getInt(getString(R.string.VIEW_MODE), 0);
-        Log.i(TAG, "" + mHowDisplay);
+                .getInt(getString(R.string.PREFS_VIEW_MODE), 0);
 
+        Log.i(TAG, "Display refreshed. Displaying as: " + mHowDisplay);
         if(mHowDisplay == VERBOSE_VEW){
             setVerboseRecyclerView();
         } else{

@@ -1,5 +1,6 @@
 package teamten.tacoma.uw.edu.doit.authenticate;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,7 +24,6 @@ import java.net.URL;
 
 import teamten.tacoma.uw.edu.doit.StationActivity;
 import teamten.tacoma.uw.edu.doit.R;
-import teamten.tacoma.uw.edu.doit.StationFragment;
 
 /**
  * AuthenticationActivity determines if a user is already logged in or
@@ -31,10 +31,10 @@ import teamten.tacoma.uw.edu.doit.StationFragment;
  */
 public class AuthenticationActivity extends AppCompatActivity implements LogInFragment.LoginInteractionListener {
 
+    private static final String TAG = "AuthenticationActivity";
     /* holds the applications preferences */
     private SharedPreferences mSharedPreferences;
     private String mUserID;
-    private Intent i;
     private static String USER_LOGIN_URL =
             "http://cssgate.insttech.washington.edu/~_450atm10/android/login.php?";
 
@@ -45,12 +45,9 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         mSharedPreferences = getSharedPreferences(getString(R.string.PREFS_FILE)
                 , Context.MODE_PRIVATE);
 
-        if (mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {  // if not logged in, start login
-            Intent i = new Intent(this, StationActivity.class);
-            startActivity(i);
-            finish();
-        } else { //They are logged in already,
-            //TODO check db against the name and pw of the logged in user to return the correct lists.
+        if (mSharedPreferences.getBoolean(getString(R.string.PREFS_LOGGEDIN), false)) { //They are logged in already,
+            startStationActivity();
+        } else { // if not logged in, start login
             setContentView(R.layout.activity_authentication);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.authentication_activity_container, new LogInFragment())
@@ -59,6 +56,17 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
     }
 
     /**
+     * Contains the methods necessary to start the StationActivity
+     * from the AuthenticationActivity.
+     */
+    protected void startStationActivity() {
+        Intent i = new Intent(this, StationActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    /**
+     *
      * Attempts to log a user in.
      * If the email and password match fields stored within the database, the user is logged in.
      * @param email
@@ -92,29 +100,19 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
             return;
         }
 
-        mSharedPreferences
-                .edit()
-                .putBoolean(getString(R.string.LOGGEDIN), true)
-                .apply();
-
         // sets login credentials within sharedPreferences
         // putting the key of the sharedPref into a string resource
         // will allow universal access to the key to then obtain value
-        mSharedPreferences.edit().putString("@string/userEmail", email).commit();
+
+        mSharedPreferences.edit().putString(getString(R.string.PREFS_USER_EMAIL), email).commit();
         String buildURL = USER_LOGIN_URL;
 
         buildURL += "email=" + email + "&pwd=" + pwd;
-        Log.i("AuthenticationActivity", buildURL);
+        Log.i(TAG, "Authentication URL was: " + buildURL);
         new  VerifyLoginAndRetrieveUserIdTask().execute(buildURL);
 
-        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
-        String mUserIDSP = mSharedPreferences.getString("@string/userID", null);
-//        System.out.println("AuthenticationActivity mUserID= " + mUserIDSP);
-        i = new Intent(this, StationActivity.class);
-        Intent i = new Intent(this, StationActivity.class);
-        i.putExtra("userID", mUserIDSP);
-        startActivity(i);
-        finish();
+        mSharedPreferences.edit().putString(getString(R.string.PREFS_USER_ID), mUserID).commit();
+        Log.i(TAG, "AuthenticationActivity mUserID= " + mUserID);
     }
 
     /**
@@ -124,6 +122,18 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
     private class VerifyLoginAndRetrieveUserIdTask extends AsyncTask<String, Void, String> {
 
         private static final String TAG = "RetrieveUserIdTask";
+        ProgressDialog progress;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            progress = new ProgressDialog(AuthenticationActivity.this);
+            progress.setMessage("Hold on while we check that...");
+            progress.setIndeterminate(false);
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.show();
+        }
+
 
         /**
          * Checks connection for service.
@@ -171,6 +181,11 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
          */
         @Override
         protected void onPostExecute(String result) {
+            if(progress != null){
+                progress.dismiss();
+                progress = null;
+
+            }
             // Something wrong with the network or the URL.
             try {
 //                JSONObject jsonObject = new JSONObject(result).getJSONObject("categories");
@@ -183,22 +198,15 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 String userID = (String) jsonObject.get("userid");
-                mSharedPreferences.edit().putString("@string/userID", userID).commit();
-//                System.out.println("AuthenticationActivity: onPostExecute userID: " + userID);
-
-                Bundle args = new Bundle();
-                args.putString("USERIDAUTH", userID);
-                StationFragment fragment = new StationFragment();
-                fragment.setArguments(args);
-
-                i.putExtra("userID", userID);
-                startActivity(i);
-                finish();
+                Log.i(TAG, "Authentication Activity onPostExecute ID: " + userID);
 
                 if (status.equals("success")) {
 //                    Toast.makeText(getApplicationContext(), "Database user data successfully retrieved! userID = " + userID
 //                            , Toast.LENGTH_LONG)
 //                            .show();
+                    mSharedPreferences.edit().putString(getString(R.string.PREFS_USER_ID), userID).commit();
+                    mSharedPreferences.edit().putBoolean(getString(R.string.PREFS_LOGGEDIN), true).apply();
+                    startStationActivity();
                 } else {
                     Toast.makeText(getApplicationContext(), "Failed to retrieve: "
                                     + jsonObject.get("error")
@@ -206,7 +214,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                             .show();
                 }
             } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "Something wrong with the php file/other" +
+                Toast.makeText(getApplicationContext(), "Something wrong with the php file/other " +
                         e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
