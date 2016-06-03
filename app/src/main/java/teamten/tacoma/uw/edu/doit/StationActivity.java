@@ -214,7 +214,7 @@ public class StationActivity extends AppCompatActivity implements
         StationAsyncTask task = new StationAsyncTask("update");
         String updateURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=update";
         updateURL += "&listID=" + theListID;
-        updateURL += "&title=" + theNewTitle;
+        updateURL += "&title=" + Uri.encode(theNewTitle);
         task.execute(updateURL);
     }
 
@@ -350,12 +350,12 @@ public class StationActivity extends AppCompatActivity implements
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
-                    if (mTaskAction.equals("delete")) {
-                        Toast.makeText(getApplicationContext(), "List successfully " + mTaskAction + "d!"
+                    if (mTaskAction.equals("add")) {
+                        Toast.makeText(getApplicationContext(), "List successfully " + mTaskAction + "ed!"
                                 , Toast.LENGTH_SHORT)
                                 .show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "List successfully " + mTaskAction + "ed!"
+                        Toast.makeText(getApplicationContext(), "List successfully " + mTaskAction + "d!"
                                 , Toast.LENGTH_SHORT)
                                 .show();
                     }
@@ -367,8 +367,9 @@ public class StationActivity extends AppCompatActivity implements
 //                            .show();
                 }
             } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "Something wrong with the data" +
-                        e.getMessage(), Toast.LENGTH_LONG).show();
+                // toast msg would only show up when task was deleted
+//                Toast.makeText(getApplicationContext(), "Something wrong with the data" +
+//                        e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }
