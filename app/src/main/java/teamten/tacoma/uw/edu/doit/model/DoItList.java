@@ -13,7 +13,8 @@ import java.util.Map;
 
 /**
  * Represents a single list within the application that holds
- * a collection of tasks.
+ * a collection of tasks. Implements Serializable to allow for device storage
+ * and easier retrieval from Bundles.
  */
 public class DoItList implements Serializable {
 
@@ -64,11 +65,11 @@ public class DoItList implements Serializable {
 
     /**
      * Parses the json string, returns an error message if unsuccessful.
-     * Returns list of tasks if success.
+     * Populates the list parameter if successful.
      * @param listOfTasksJSON
      * @return reason or null if successful.
      */
-    public static String parseListOfTasksJSON(String listOfTasksJSON, List<DoItList> list) {
+    public static String parseAllLists(String listOfTasksJSON, List<DoItList> list) {
         String reason = null;
         if (listOfTasksJSON != null) {
             try {

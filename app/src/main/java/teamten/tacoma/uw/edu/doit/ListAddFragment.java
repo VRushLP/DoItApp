@@ -19,7 +19,7 @@ import java.net.URLEncoder;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A fragment which allows for the adding of Lists to the app.
  */
 public class ListAddFragment extends Fragment {
 
@@ -29,7 +29,6 @@ public class ListAddFragment extends Fragment {
     private ListAddListener mListener;
     private EditText mListTitleEditText;
     private Bundle data;
-
 
     public ListAddFragment() {
         // Required empty public constructor
@@ -107,7 +106,11 @@ public class ListAddFragment extends Fragment {
         return v;
     }
 
-
+    /**
+     * Builds a
+     * @param v
+     * @return
+     */
     private String buildListURL(View v) {
         StringBuilder sb = new StringBuilder(LIST_ADD_URL);
         try {
@@ -136,6 +139,6 @@ public class ListAddFragment extends Fragment {
     }
 
     public interface ListAddListener{
-        public void addList(String url, String taskAction);
+        void addList(String url, String taskAction);
     }
 }

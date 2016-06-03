@@ -84,7 +84,7 @@ public class LogInFragment extends Fragment {
             }
         });
 
-        getActivity().setTitle("Log In");
+        getActivity().setTitle(getString(R.string.log_in_fragment_title));
         return v;
     }
 

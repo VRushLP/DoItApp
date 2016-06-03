@@ -1,5 +1,6 @@
 package teamten.tacoma.uw.edu.doit;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
@@ -224,6 +226,17 @@ public class DoItListDisplayFragment extends Fragment {
         mListener = null;
     }
 
+    public String getStringOfTasks(){
+        StringBuilder sb = new StringBuilder();
+
+        for(DoItTask t : mDoItList.getTasks()){
+            sb.append(t.mName);
+            sb.append('\n');
+        }
+
+        return sb.toString();
+    }
+
     /**
      * Refreshes the RecyclerView of the DoItListDisplayFragment.
      * Based on shared preferences this method either causes the fragment
@@ -242,14 +255,14 @@ public class DoItListDisplayFragment extends Fragment {
         }
     }
 
-    public void setVerboseRecyclerView(){
+    private void setVerboseRecyclerView(){
         mRecyclerView.setAdapter(
                 new MyDoItTaskRecyclerViewAdapter(
                         mDoItList.getTasks(),
                         mListener, mDeleteListener, mEditListener, mDependencyListener));
     }
 
-    public void setCompactRecyclerView(){
+    private void setCompactRecyclerView(){
         mRecyclerView.setAdapter(
                 new MyDoItTaskRecyclerViewAdapter(
                         getTopLevelTasks(),
@@ -260,6 +273,18 @@ public class DoItListDisplayFragment extends Fragment {
      * A task that gets all the tasks associated with a given list in the background of the application.
      */
     private class DownloadListsTask extends AsyncTask<String, Void, String> {
+
+        ProgressDialog progress;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            progress = new ProgressDialog(getActivity());
+            progress.setMessage("Retrieving Tasks...");
+            progress.setIndeterminate(false);
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.show();
+        }
 
         @Override
         protected String doInBackground(String... urls) {
@@ -290,7 +315,8 @@ public class DoItListDisplayFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-        // Something wrong with the network or the URL.
+            progress.dismiss();
+            // Something wrong with the network or the URL.
             Log.i(TAG, result);
             if (result.startsWith("Unable to")) {
                 Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)

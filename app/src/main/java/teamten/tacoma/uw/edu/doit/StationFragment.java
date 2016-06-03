@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import teamten.tacoma.uw.edu.doit.Data.StationDB;
+import teamten.tacoma.uw.edu.doit.Data.DoItAppDB;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 
 /**
@@ -39,14 +38,13 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
 public class StationFragment extends Fragment {
 
     private static final String TAG = "StationFragment";
-    private int mColumnCount = 1;
     //private String mUserID;
 
     //private static final String ARG_COLUMN_COUNT = "1";
     private String listURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=station";
 
     private RecyclerView mRecyclerView;
-    private StationDB mStationDB;
+    private DoItAppDB mStationDB;
     private List<DoItList> mListOfDoItLists;
 
     private OnDoItStationFragmentInteractionListener mListener;
@@ -64,7 +62,7 @@ public class StationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mStationDB = new StationDB(this.getContext());
+        mStationDB = new DoItAppDB(this.getContext());
 
         // adding userID to obtain their specific data
         SharedPreferences mSharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.PREFS_FILE)
@@ -84,19 +82,13 @@ public class StationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_doitlist_list, container, false);
-        getActivity().setTitle("Station");
+        getActivity().setTitle(getString(R.string.station_fragment_title));
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
-
-            if (mColumnCount <= 1) {
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         }
 
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -113,7 +105,7 @@ public class StationFragment extends Fragment {
                     Toast.LENGTH_SHORT) .show();
 
             if (mStationDB == null) {
-                mStationDB = new StationDB(getActivity());
+                mStationDB = new DoItAppDB(getActivity());
             }
             if (mListOfDoItLists == null) {
                 mListOfDoItLists = mStationDB.getDoItLists();
@@ -205,7 +197,7 @@ public class StationFragment extends Fragment {
     }
 
     public interface DeleteListClickListener {
-        void itemClickedToBeDeleted(DoItList item);
+        void deleteDoItList(DoItList item);
     }
 
     public interface UpdateListTitleListener {
@@ -255,7 +247,7 @@ public class StationFragment extends Fragment {
             }
 
             List<DoItList> list = new ArrayList<DoItList>();
-            result = DoItList.parseListOfTasksJSON(result, list);
+            result = DoItList.parseAllLists(result, list);
             // Something wrong with the JSON returned.
             if (result != null) {
 //                Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
@@ -269,7 +261,7 @@ public class StationFragment extends Fragment {
                                                         mDeleteListListener, mListTitleListener));
 
                 if (mStationDB == null) {
-                    mStationDB = new StationDB(getActivity());
+                    mStationDB = new DoItAppDB(getActivity());
                 }
 
                 // Delete old data so that you can refresh the local
@@ -279,7 +271,7 @@ public class StationFragment extends Fragment {
                 // Also, add to the local database
                 for (int i=0; i<list.size(); i++) {
                     DoItList single_list = list.get(i);
-                    mStationDB.insertStation(single_list.getListID(), single_list.getTitle(),
+                    mStationDB.insertList(single_list.getListID(), single_list.getTitle(),
                             single_list.getIsDeleted());
                 }
             }

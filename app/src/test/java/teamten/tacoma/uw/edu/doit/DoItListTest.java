@@ -63,7 +63,7 @@ public class DoItListTest extends TestCase {
     @Test
     public void testParseDoItListJSON() {
         String doItListJSON = "[{\"listID\":\"99\",\"title\":\"TestList99\",\"isDeleted\":\"0\"},{\"listID\":\"98\",\"title\":\"TestList98\",\"isDeleted\":\"0\"}]";
-        String message =  mDoItList.parseListOfTasksJSON(doItListJSON, new ArrayList<DoItList>());
+        String message =  mDoItList.parseAllLists(doItListJSON, new ArrayList<DoItList>());
 
         assertTrue("JSON With Valid String", message == null);
 
@@ -74,7 +74,7 @@ public class DoItListTest extends TestCase {
         try {
             String doItListJSON = "hello";
 
-            String message =  DoItList.parseListOfTasksJSON(doItListJSON, new ArrayList<DoItList>());
+            String message =  DoItList.parseAllLists(doItListJSON, new ArrayList<DoItList>());
             assertTrue("JSON With InValid String", !message.startsWith("Unable"));
         } catch (Exception e) {
 

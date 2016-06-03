@@ -12,6 +12,8 @@ import java.util.List;
 /**
  * A class that represents something to do!
  * DoItTasks are always associated with a DoItList.
+ * Implements Serializable to allow for local storage
+ * and easier retrieval from Bundles.
  */
 public class DoItTask implements Serializable {
 
@@ -62,7 +64,13 @@ public class DoItTask implements Serializable {
         return false;
     }
 
-    //parseJSONFile
+
+    /**
+     * Parses a JSON String for a list of tasks.
+     * @param listOfTasksJSON The JSON String to be parsed
+     * @param list the list to be populated on success.
+     * @return
+     */
     public static String parseTaskListJSON(String listOfTasksJSON, List<DoItTask> list) {
         String reason = null;
         if (listOfTasksJSON != null) {

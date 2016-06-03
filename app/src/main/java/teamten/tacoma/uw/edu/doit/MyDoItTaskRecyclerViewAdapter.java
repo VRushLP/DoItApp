@@ -13,13 +13,16 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import teamten.tacoma.uw.edu.doit.DoItListDisplayFragment.OnTaskDisplayInteractionListener;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An adapter to efficiently display DoItTasks. Implements multiple listeners for interaction.
+ */
 public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTaskRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "DoItTaskRecyclerView";
@@ -52,8 +55,10 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final int realPosition = holder.getAdapterPosition();
         holder.mHeldTask = mAllTasks.get(realPosition);
-        String displayText = "(" + mAllTasks.get(realPosition).mTaskID+") " + mAllTasks.get(realPosition).mName;
+        String displayText = "(" + mAllTasks.get(realPosition).mTaskID+") "
+                + mAllTasks.get(realPosition).mName;
         holder.mContentView.setText(displayText);
+        //It is intentional that tasks check for both color changes and strikethroughs every time.
         switch(holder.mHeldTask.mCheckedOff){
             case 0:
                 holder.mContentView.setPaintFlags(0);
@@ -77,7 +82,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                     mInteractionListener.onDoItTaskInteraction(mAllTasks.get(realPosition));
                     notifyDataSetChanged();
                 }
-            }
+        }
         });
 
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -95,6 +100,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                         switch (which) {
                             case 0:
                                 // make dialog box and send info below
+
                                 View updateNameView = li.inflate(R.layout.update_task_descrip_prompt, null);
                                 AlertDialog.Builder alertDialogBuilderUpdate = new AlertDialog.Builder(
                                         v.getContext());
@@ -135,8 +141,8 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                                 Log.i(TAG, "Update dependency selected");
                                 View updateDependencyView = li.inflate(R.layout.update_task_dependency_prompt, null);
                                 AlertDialog.Builder dependencyBuilder = new AlertDialog.Builder(
-                                        v.getContext());
-
+                                v.getContext());
+                                        v.getContext();
                                 // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
                                 dependencyBuilder.setView(updateDependencyView);
                                 final EditText dependencyInput = (EditText) updateDependencyView.findViewById(R.id.edit_dependency_ET);
@@ -205,6 +211,11 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
         });
     }
 
+    /**
+     * Checks if the displayed DoItList contains a DoItTask with the passed ID.
+     * @param check
+     * @return
+     */
     private boolean containsPassedDependency(int check){
         for(DoItTask t : mAllTasks){
             if(check == t.mTaskID) return true;
