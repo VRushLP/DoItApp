@@ -61,14 +61,15 @@ public class StationActivity extends AppCompatActivity implements
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
         SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.PREFS_FILE)
                 , Context.MODE_PRIVATE);
-        userEmailSharePref = mSharedPreferences.getString("@string/userEmail", null);
+
+        userEmailSharePref = mSharedPreferences.getString(getString(R.string.userEmail), null);
         Log.i(TAG, "StationActivity onCreate email from shared pref: " + userEmailSharePref);
 
-        userIdSharePref = mSharedPreferences.getString("@string/userID", null);
+        userIdSharePref = mSharedPreferences.getString(getString(R.string.userID), null);
         Log.i(TAG, "StationActivity onCreate userID from shared pref: " + userIdSharePref);
 
-        taskViewMode = mSharedPreferences.getInt("@string/taskView", 0);
-        Log.i(TAG, "Read from shared pref:" + taskViewMode);
+        taskViewMode = mSharedPreferences.getInt(getString(R.string.VIEW_MODE), 0);
+        Log.i(TAG, "Task View mode: " + taskViewMode);
 
         Bundle args = new Bundle();
         args.putString("EMAIL", userEmailSharePref);

@@ -31,10 +31,10 @@ import teamten.tacoma.uw.edu.doit.StationFragment;
  */
 public class AuthenticationActivity extends AppCompatActivity implements LogInFragment.LoginInteractionListener {
 
+    private static final String TAG = "AuthenticationActivity";
     /* holds the applications preferences */
     private SharedPreferences mSharedPreferences;
     private String mUserID;
-    private Intent i;
     private static String USER_LOGIN_URL =
             "http://cssgate.insttech.washington.edu/~_450atm10/android/login.php?";
 
@@ -45,17 +45,20 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         mSharedPreferences = getSharedPreferences(getString(R.string.PREFS_FILE)
                 , Context.MODE_PRIVATE);
 
-        if (mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {  // if not logged in, start login
-            Intent i = new Intent(this, StationActivity.class);
-            startActivity(i);
-            finish();
-        } else { //They are logged in already,
-            //TODO check db against the name and pw of the logged in user to return the correct lists.
+        if (mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) { //They are logged in already,
+            startStationActivity();
+        } else { // if not logged in, start login
             setContentView(R.layout.activity_authentication);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.authentication_activity_container, new LogInFragment())
                     .commit();
         }
+    }
+
+    protected void startStationActivity() {
+        Intent i = new Intent(this, StationActivity.class);
+        startActivity(i);
+        finish();
     }
 
     /**
@@ -99,21 +102,17 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
         // sets login credentials within sharedPreferences
         // putting the key of the sharedPref into a string resource
         // will allow universal access to the key to then obtain value
-        mSharedPreferences.edit().putString("@string/userEmail", email).commit();
+
+        mSharedPreferences.edit().putString(getString(R.string.userEmail), email).commit();
         String buildURL = USER_LOGIN_URL;
 
         buildURL += "email=" + email + "&pwd=" + pwd;
         Log.i("AuthenticationActivity", buildURL);
         new  VerifyLoginAndRetrieveUserIdTask().execute(buildURL);
 
-        mSharedPreferences.edit().putString("@string/userID", mUserID).commit();
-        String mUserIDSP = mSharedPreferences.getString("@string/userID", null);
-//        System.out.println("AuthenticationActivity mUserID= " + mUserIDSP);
-        i = new Intent(this, StationActivity.class);
-        Intent i = new Intent(this, StationActivity.class);
-        i.putExtra("userID", mUserIDSP);
-        startActivity(i);
-        finish();
+        mSharedPreferences.edit().putString(getString(R.string.userID), mUserID).commit();
+        Log.i(TAG, "AuthenticationActivity mUserID= " + mUserID);
+        startStationActivity();
     }
 
     /**
@@ -182,22 +181,16 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 String userID = (String) jsonObject.get("userid");
-                mSharedPreferences.edit().putString("@string/userID", userID).commit();
 //                System.out.println("AuthenticationActivity: onPostExecute userID: " + userID);
 
                 Bundle args = new Bundle();
                 args.putString("USERIDAUTH", userID);
-                StationFragment fragment = new StationFragment();
-                fragment.setArguments(args);
-
-                i.putExtra("userID", userID);
-                startActivity(i);
-                finish();
 
                 if (status.equals("success")) {
 //                    Toast.makeText(getApplicationContext(), "Database user data successfully retrieved! userID = " + userID
 //                            , Toast.LENGTH_LONG)
 //                            .show();
+                    mSharedPreferences.edit().putString(getString(R.string.userID), userID).commit();
                 } else {
                     Toast.makeText(getApplicationContext(), "Failed to retrieve: "
                                     + jsonObject.get("error")
