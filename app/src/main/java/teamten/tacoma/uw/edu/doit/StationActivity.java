@@ -59,22 +59,21 @@ public class StationActivity extends AppCompatActivity implements
         Bundle bundle = getIntent().getExtras();
 
         // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
-        SharedPreferences mSharedPreferences = getSharedPreferences(getString(R.string.PREFS_FILE)
-                , Context.MODE_PRIVATE);
+        SharedPreferences mSharedPreferences =
+                getSharedPreferences(getString(R.string.PREFS_FILE), Context.MODE_PRIVATE);
 
-        userEmailSharePref = mSharedPreferences.getString(getString(R.string.userEmail), null);
+        userEmailSharePref = mSharedPreferences.getString(getString(R.string.PREFS_USER_EMAIL), null);
         Log.i(TAG, "StationActivity onCreate email from shared pref: " + userEmailSharePref);
 
-        userIdSharePref = mSharedPreferences.getString(getString(R.string.userID), null);
+        userIdSharePref = mSharedPreferences.getString(getString(R.string.PREFS_USER_ID), null);
         Log.i(TAG, "StationActivity onCreate userID from shared pref: " + userIdSharePref);
 
-        taskViewMode = mSharedPreferences.getInt(getString(R.string.VIEW_MODE), 0);
+        taskViewMode = mSharedPreferences.getInt(getString(R.string.PREFS_VIEW_MODE), 0);
         Log.i(TAG, "Task View mode: " + taskViewMode);
 
         Bundle args = new Bundle();
         args.putString("EMAIL", userEmailSharePref);
         args.putString("USERID", userIdSharePref);
-
         StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
 
@@ -123,7 +122,7 @@ public class StationActivity extends AppCompatActivity implements
 
         if(id == R.id.action_logout){
             getSharedPreferences(getString(R.string.PREFS_FILE), Context.MODE_PRIVATE)
-                    .edit().putBoolean(getString(R.string.LOGGEDIN), false)
+                    .edit().putBoolean(getString(R.string.PREFS_LOGGEDIN), false)
                     .apply();
             Intent i = new Intent(this, AuthenticationActivity.class);
             startActivity(i);
@@ -149,7 +148,7 @@ public class StationActivity extends AppCompatActivity implements
                         public void onClick(DialogInterface dialog, int which) {
 
                             getSharedPreferences(getString(R.string.PREFS_FILE), 0).edit()
-                                    .putInt(getString(R.string.VIEW_MODE), which).apply();
+                                    .putInt(getString(R.string.PREFS_VIEW_MODE), which).apply();
                             taskViewMode = which;
 
                             Log.i(TAG, "Selected"+ which);

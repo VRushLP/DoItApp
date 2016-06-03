@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -227,9 +226,9 @@ public class DoItListDisplayFragment extends Fragment {
     public void refreshView(){
         mHowDisplay = getActivity().
                 getSharedPreferences(getString(R.string.PREFS_FILE), Context.MODE_PRIVATE)
-        .getInt(getString(R.string.VIEW_MODE), 0);
-        Log.i(TAG, "" + mHowDisplay);
+                .getInt(getString(R.string.PREFS_VIEW_MODE), 0);
 
+        Log.i(TAG, "Display refreshed. Displaying as: " + mHowDisplay);
         if(mHowDisplay == VERBOSE_VEW){
             setVerboseRecyclerView();
         } else{
