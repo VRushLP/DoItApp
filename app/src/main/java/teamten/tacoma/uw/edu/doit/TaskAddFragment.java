@@ -30,24 +30,7 @@ public class TaskAddFragment extends Fragment {
 
     public TaskAddFragment() {
         // Required empty public constructor
-    }import android.content.DialogInterface;
-    import android.graphics.Color;
-    import android.graphics.Paint;
-    import android.support.v7.app.AlertDialog;
-    import android.support.v7.widget.RecyclerView;
-    import android.text.InputType;
-    import android.util.Log;
-    import android.view.LayoutInflater;
-    import android.view.View;
-    import android.view.ViewGroup;
-    import android.widget.CheckedTextView;
-    import android.widget.EditText;
-    import android.widget.TextView;
-
-    import teamten.tacoma.uw.edu.doit.DoItListDisplayFragment.OnTaskDisplayInteractionListener;
-    import teamten.tacoma.uw.edu.doit.model.DoItTask;
-
-    import java.util.List;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
