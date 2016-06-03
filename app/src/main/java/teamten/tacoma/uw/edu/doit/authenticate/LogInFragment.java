@@ -91,7 +91,10 @@ public class LogInFragment extends Fragment {
         return v;
     }
 
+    /**
+     * A Listener to allow Activities to interact with this fragment.
+     */
     public interface LoginInteractionListener {
-        public void login(String email, String pwd);
+        void login(String email, String pwd);
     }
 }

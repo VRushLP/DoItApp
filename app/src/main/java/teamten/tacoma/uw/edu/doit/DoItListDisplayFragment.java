@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -30,8 +29,6 @@ import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
 /**
  * Displays a List of DoItTasks associated with a specific DoItList.
- * Activities containing this fragment MUST implement the {@link OnTaskDisplayInteractionListener}
- * interface.
  */
 public class DoItListDisplayFragment extends Fragment {
 
@@ -46,7 +43,6 @@ public class DoItListDisplayFragment extends Fragment {
     private EditTaskTitleListener mEditListener;
     private EditTaskDependencyListener mDependencyListener;
     private DoItList mDoItList = null;
-    private ArrayList<DoItTask> mCompactTasks = null;
     private int mHowDisplay;
 
     protected static String LIST_ITEM_SELECTED = "ListItemSelected";
@@ -75,7 +71,6 @@ public class DoItListDisplayFragment extends Fragment {
         if(args != null){
             Log.i(TAG, "args was not null");
             mDoItList= (DoItList) args.get("DoItTaskList");
-            mCompactTasks = getTopLevelTasks();
             Log.i(TAG, "" + (mDoItList != null));
             mHowDisplay = args.getInt("taskViewMode");
             Log.i(TAG, "Display mode: " + mHowDisplay);
@@ -112,6 +107,10 @@ public class DoItListDisplayFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Scans a DoItList for DoItTasks that have no dependencies,
+     * and returns a List containing all those elements.
+     */
     private ArrayList<DoItTask> getTopLevelTasks() {
         ArrayList<DoItTask> out = new ArrayList<>();
         for(DoItTask t : mDoItList.getTasks()){
@@ -129,9 +128,12 @@ public class DoItListDisplayFragment extends Fragment {
         return out;
     }
 
-    private DoItTask checkForTaskByID(int check){
+    /**
+     * Scans a list to see if a DoItTask with that ID exists.
+     */
+    private DoItTask checkForTaskByID(int idToCheckFor){
         for(DoItTask t : mDoItList.getTasks()){
-            if(t.mTaskID == check){
+            if(t.mTaskID == idToCheckFor){
                 return t;
             }
         }
@@ -145,7 +147,11 @@ public class DoItListDisplayFragment extends Fragment {
         addListItem.setVisible(false);
     }
 
-    public int getCurrentListID(){ return mDoItList.getId(); };
+    /**
+     * Gets the listID of the DoItList currently held in the DoItListDisplayFragment.
+     * @return
+     */
+    public int getCurrentListID(){ return mDoItList.getListID(); };
 
     /**
      * Builds a String for the URL of getting all the tasks for the list associated with this Fragment.
@@ -157,7 +163,7 @@ public class DoItListDisplayFragment extends Fragment {
         StringBuilder sb = new StringBuilder(TASK_MANAGER_URL);
         //append arguments to the url
         sb.append("?cmd=getAll&id=");
-        sb.append(mDoItList.getId());
+        sb.append(mDoItList.getListID());
         Log.i(TAG, sb.toString());
         //example URL: http://cssgate.insttech.washington.edu/~_450atm10/android/taskManager.php?cmd=getAll&id=61
         return sb.toString();
@@ -196,12 +202,6 @@ public class DoItListDisplayFragment extends Fragment {
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     */
     public interface OnTaskDisplayInteractionListener {
         void onDoItTaskInteraction(DoItTask item);
     }
@@ -224,6 +224,11 @@ public class DoItListDisplayFragment extends Fragment {
         mListener = null;
     }
 
+    /**
+     * Refreshes the RecyclerView of the DoItListDisplayFragment.
+     * Based on shared preferences this method either causes the fragment
+     * to update with Verbose or Compact View.
+     */
     public void refreshView(){
         mHowDisplay = getActivity().
                 getSharedPreferences(getString(R.string.PREFS_FILE), Context.MODE_PRIVATE)

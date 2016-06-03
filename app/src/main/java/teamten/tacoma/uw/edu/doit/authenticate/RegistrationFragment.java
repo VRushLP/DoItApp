@@ -30,6 +30,8 @@ import teamten.tacoma.uw.edu.doit.R;
  */
 public class RegistrationFragment extends Fragment {
 
+    private final static String USER_ADD_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm10/android/addUser.php?";
     /* text edit view for email */
     private EditText mEmailText;
     /* text edit view for password */
@@ -122,9 +124,6 @@ public class RegistrationFragment extends Fragment {
         getActivity().setTitle("Register New Account");
         return v;
     }
-
-    private final static String USER_ADD_URL =
-            "http://cssgate.insttech.washington.edu/~_450atm10/android/addUser.php?";
 
     /**
      * Given URL, build a url string for an http connection.
