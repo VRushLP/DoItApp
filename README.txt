@@ -28,6 +28,8 @@ Bug Fixes (From Phase 1 feedback)
     back button again closes the dialog. Hitting the back button when not logged in closes the 
     app without confirmation.
 
+ Please note that you should perform a fresh install of the app for it to work correctly. Several references to Shared Preference fields have changed.
+
 ----------------------------------------
 Use cases
 ----------------------------------------
