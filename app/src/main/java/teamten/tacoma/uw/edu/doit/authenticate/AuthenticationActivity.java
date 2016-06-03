@@ -190,6 +190,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
 //                    Toast.makeText(getApplicationContext(), "Database user data successfully retrieved! userID = " + userID
 //                            , Toast.LENGTH_LONG)
 //                            .show();
+                    mUserID = userID;
                     mSharedPreferences.edit().putString(getString(R.string.userID), userID).commit();
                 } else {
                     Toast.makeText(getApplicationContext(), "Failed to retrieve: "
