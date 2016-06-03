@@ -85,50 +85,55 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
         }
         });
 
-    holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(final View v) {
-            Log.i(TAG, "RecyclerAdapter: Task long click");
-            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
-            // set title
-            alertDialogBuilder.setTitle("Task Manager");
-            alertDialogBuilder.setItems(R.array.task_long_click_action_list, new DialogInterface.OnClickListener() {
+        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(final View v) {
+                Log.i(TAG, "RecyclerAdapter: Task long click");
+
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                // set title
+                alertDialogBuilder.setTitle("Task Manager");
+
+                alertDialogBuilder.setItems(R.array.task_long_click_action_list, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         LayoutInflater li = LayoutInflater.from(v.getContext());
                         switch (which) {
                             case 0:
                                 // make dialog box and send info below
-                                View updateNameView = li.inflate(R.layout.update_list_title_prompt, null);
-                                AlertDialog.Builder alertDialogBuilderUpdate =
-                                        new AlertDialog.Builder(v.getContext());
+
+                                View updateNameView = li.inflate(R.layout.update_task_descrip_prompt, null);
+                                AlertDialog.Builder alertDialogBuilderUpdate = new AlertDialog.Builder(
+                                        v.getContext());
 
                                 // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
                                 alertDialogBuilderUpdate.setView(updateNameView);
-                                final EditText userInput = (EditText) updateNameView.findViewById(R.id.editTextDialogUserInput);
+                                final EditText userInput = (EditText) updateNameView.findViewById(R.id.editTextTaskDialogUserInput);
 
                                 // set dialog message
                                 alertDialogBuilderUpdate
-                                .setCancelable(false)
-                                .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(
-                                    DialogInterface dialog, int id) {
-                                        // get user input and set
-                                        String newTitle =  userInput.getText().toString();
-                                        if (!newTitle.equals("")) {
-                                            mEditListener.editTaskTitle(holder.mHeldTask.mTaskID, newTitle);
-                                            Log.i("Debug", "" + holder.mHeldTask.mTaskID);
-                                            holder.mHeldTask.mName= newTitle;
-                                            notifyDataSetChanged();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick( DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
+                                        .setCancelable(false)
+                                        .setPositiveButton("OK",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(
+                                                            DialogInterface dialog, int id) {
+                                                        // get user input and set
+                                                        String newTitle =  userInput.getText().toString();
+                                                        if (!newTitle.equals("")) {
+                                                            mEditListener.editTaskTitle(holder.mHeldTask.mTaskID, newTitle);
+                                                            Log.i("Debug", "" + holder.mHeldTask.mTaskID);
+                                                            holder.mHeldTask.mName= newTitle;
+                                                            notifyDataSetChanged();
+                                                        }
+                                                    }
+                                                })
+                                        .setNegativeButton("Cancel",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(
+                                                            DialogInterface dialog,
+                                                            int id) {
+                                                        dialog.cancel();
+                                                    }
+                                                });
                                 AlertDialog alertDialogUpdate = alertDialogBuilderUpdate.create();
                                 alertDialogUpdate.show();
                                 break;
@@ -137,7 +142,7 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                                 View updateDependencyView = li.inflate(R.layout.update_task_dependency_prompt, null);
                                 AlertDialog.Builder dependencyBuilder = new AlertDialog.Builder(
                                 v.getContext());
-
+                                        v.getContext();
                                 // set update_list_title_prompt.xml_title_prompt.xml to alertdialog builder
                                 dependencyBuilder.setView(updateDependencyView);
                                 final EditText dependencyInput = (EditText) updateDependencyView.findViewById(R.id.edit_dependency_ET);
@@ -145,38 +150,37 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
 
                                 // set dialog message
                                 dependencyBuilder
-                                .setCancelable(false)
-                                .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(
-                                        DialogInterface dialog, int id) {
-                                    // get user input and set
-                                    String newDependency =  dependencyInput.getText().toString();
-                                    int actualInput = Integer.parseInt(newDependency);
+                                        .setCancelable(false)
+                                        .setPositiveButton("OK",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(
+                                                            DialogInterface dialog, int id) {
+                                                        // get user input and set
+                                                        String newDependency =  dependencyInput.getText().toString();
+                                                        int actualInput = Integer.parseInt(newDependency);
 
-                                        if(actualInput == holder.mHeldTask.mTaskID){
-                                            Toast.makeText(v.getContext(),
-                                                    R.string.self_dependency_error,
-                                                    Toast.LENGTH_LONG).show();
-                                            Log.i(TAG, "Tasks can't depend on themselves!");
-                                        } else if(!containsPassedDependency(actualInput)){
-                                            Toast.makeText(v.getContext(),
-                                                    R.string.no_task_by_that_id_error,
-                                                    Toast.LENGTH_LONG).show();
-                                            Log.i(TAG, "There's no task by that ID in this list!");
-                                        } else{
-                                            holder.mHeldTask.mDependency = actualInput;
-                                            mDependencyListener.editTaskDependency(holder.mHeldTask.mTaskID, holder.mHeldTask.mDependency);
-                                            Log.i(TAG, "Dependency Changed" + holder.mHeldTask.mDependency);
-                                            notifyDataSetChanged();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
+                                                        if(actualInput == holder.mHeldTask.mTaskID){
+                                                            //TODO toast an error message or something
+                                                            Log.i(TAG, "Tasks can't depend on themselves!");
+                                                        } else if(!containsPassedDependency(actualInput)){
+                                                            //TODO toast an error message or something
+                                                            Log.i(TAG, "There's no task by that ID in this list!");
+                                                        } else{
+                                                            holder.mHeldTask.mDependency = actualInput;
+                                                            mDependencyListener.editTaskDependency(holder.mHeldTask.mTaskID, holder.mHeldTask.mDependency);
+                                                            Log.i(TAG, "Dependency Changed" + holder.mHeldTask.mDependency);
+                                                            notifyDataSetChanged();
+                                                        }
+                                                    }
+                                                })
+                                        .setNegativeButton("Cancel",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(
+                                                            DialogInterface dialog,
+                                                            int id) {
+                                                        dialog.cancel();
+                                                    }
+                                                });
                                 dependencyBuilder.create().show();
                                 break;
                             case 2:
@@ -201,8 +205,8 @@ public class MyDoItTaskRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItTa
                         }
                     }
                 });
-            alertDialogBuilder.create().show();
-            return true;
+                alertDialogBuilder.create().show();
+                return true;
             }
         });
     }
