@@ -67,6 +67,8 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
 
     /**
      *
+     * Attempts to log a user in.
+     * If the email and password match fields stored within the database, the user is logged in.
      * @param email
      * @param pwd
      */

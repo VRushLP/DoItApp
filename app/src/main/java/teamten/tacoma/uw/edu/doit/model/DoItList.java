@@ -29,16 +29,20 @@ public class DoItList implements Serializable {
         mList = new ArrayList<DoItTask>();
     }
 
+    /**
+     * @return The id of the list, frequently used to retrieve tasks associated with the list.
+     */
     public int getListID() { return this.mListID; }
 
-    public void setListID(int theListID) {
-        this.mListID = theListID;
-    }
-
+    /**
+     * @return The title of the list.
+     */
     public String getTitle() { return this.mTitle; }
 
-    public int getId() {return this.mListID; };
-
+    /**
+     * Sets the title of the list. Ensures the list title is non-null, and not a blank string.
+     * @param theNewTitle
+     */
     public void setTitle(String theNewTitle) {
         if (theNewTitle != null && theNewTitle.length() > 0 && !theNewTitle.equals("")) {
             mTitle = theNewTitle;
@@ -47,12 +51,14 @@ public class DoItList implements Serializable {
         }
     }
 
+    /**
+     * @return All DoItTasks associated with this DoItList.
+     */
     public ArrayList<DoItTask> getTasks() { return this.mList; }
 
-
-    public void setIsDeleted(int mIsDeleted) {
-        this.mIsDeleted = mIsDeleted;
-    }
+    /**
+     * @return whether or not a list is deleted.
+     */
     public int getIsDeleted() { return this.mIsDeleted; }
 
 
@@ -82,10 +88,4 @@ public class DoItList implements Serializable {
         }
         return reason;
     }
-
-    public int addTask(DoItTask theTask){
-        mList.add(theTask);
-        return mList.indexOf(theTask);
-    }
-
 }
