@@ -120,7 +120,7 @@ public class DoItListDisplayFragment extends Fragment {
                     out.add(t);
                 } else {
                     DoItTask temp = checkForTaskByID(t.mDependency);
-                    if (temp.mCheckedOff == 1){
+                    if (temp != null && temp.mCheckedOff == 1){
                         out.add(t);
                     }
                 }
