@@ -34,6 +34,9 @@ Bug Fixes (From Phase 1 feedback)
 Use cases
 ----------------------------------------
 
+For your convenience, there is an account registered as guest@gmail.com.
+
+
 1) Register a user
     Fully implemented. Registration is done via custom accounts, which requires a user to supply
     an email and password. Users can then log in with that custom account.
