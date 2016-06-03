@@ -69,8 +69,6 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
      *
      * Attempts to log a user in.
      * If the email and password match fields stored within the database, the user is logged in.
-     * @param email
-     * @param pwd
      */
     @Override
     public void login (String email, String pwd){
@@ -205,7 +203,7 @@ public class AuthenticationActivity extends AppCompatActivity implements LogInFr
 //                            , Toast.LENGTH_LONG)
 //                            .show();
                     mSharedPreferences.edit().putString(getString(R.string.PREFS_USER_ID), userID).commit();
-                    mSharedPreferences.edit().putBoolean(getString(R.string.PREFS_LOGGEDIN), true).apply();
+                    mSharedPreferences.edit().putBoolean(getString(R.string.PREFS_LOGGEDIN), true).commit();
                     startStationActivity();
                 } else {
                     Toast.makeText(getApplicationContext(), "Failed to retrieve: "

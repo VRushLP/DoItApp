@@ -30,6 +30,11 @@ import teamten.tacoma.uw.edu.doit.authenticate.AuthenticationActivity;
 import teamten.tacoma.uw.edu.doit.model.DoItList;
 import teamten.tacoma.uw.edu.doit.model.DoItTask;
 
+/**
+ * The Station Activity is the primary activity of the DoItApp.
+ * Various action listeners allow users to add, delete, and update lists,
+ * as well as add, edit or delete the tasks those lists contain.
+ */
 public class StationActivity extends AppCompatActivity implements
         StationFragment.OnDoItStationFragmentInteractionListener,
         StationFragment.DeleteListClickListener,
@@ -42,9 +47,9 @@ public class StationActivity extends AppCompatActivity implements
         TaskAddFragment.TaskAddListener {
 
     private static final String TAG = "StationActivity";
-    private String userEmailSharePref;
-    private String userIdSharePref;
-    private int taskViewMode; //verbose by default
+    private String mUserEmailSharePref;
+    private String mUserIdSharePref;
+    private int mTaskViewMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +63,22 @@ public class StationActivity extends AppCompatActivity implements
         setTitle("Station");
         Bundle bundle = getIntent().getExtras();
 
-        // to obtain user's userEmailSharePref to send to station.php (DoItStationFragment)
+        // to obtain user's mUserEmailSharePref to send to station.php (DoItStationFragment)
         SharedPreferences mSharedPreferences =
                 getSharedPreferences(getString(R.string.PREFS_FILE), Context.MODE_PRIVATE);
 
-        userEmailSharePref = mSharedPreferences.getString(getString(R.string.PREFS_USER_EMAIL), null);
-        Log.i(TAG, "StationActivity onCreate email from shared pref: " + userEmailSharePref);
+        mUserEmailSharePref = mSharedPreferences.getString(getString(R.string.PREFS_USER_EMAIL), null);
+        Log.i(TAG, "StationActivity onCreate email from shared pref: " + mUserEmailSharePref);
 
-        userIdSharePref = mSharedPreferences.getString(getString(R.string.PREFS_USER_ID), null);
-        Log.i(TAG, "StationActivity onCreate userID from shared pref: " + userIdSharePref);
+        mUserIdSharePref = mSharedPreferences.getString(getString(R.string.PREFS_USER_ID), null);
+        Log.i(TAG, "StationActivity onCreate userID from shared pref: " + mUserIdSharePref);
 
-        taskViewMode = mSharedPreferences.getInt(getString(R.string.PREFS_VIEW_MODE), 0);
-        Log.i(TAG, "Task View mode: " + taskViewMode);
+        mTaskViewMode = mSharedPreferences.getInt(getString(R.string.PREFS_VIEW_MODE), 0);
+        Log.i(TAG, "Task View mode: " + mTaskViewMode);
 
         Bundle args = new Bundle();
-        args.putString("EMAIL", userEmailSharePref);
-        args.putString("USERID", userIdSharePref);
+        args.putString("EMAIL", mUserEmailSharePref);
+        args.putString("USERID", mUserIdSharePref);
         StationFragment fragment = new StationFragment();
         fragment.setArguments(args);
 
@@ -130,8 +135,8 @@ public class StationActivity extends AppCompatActivity implements
             return true;
         } else if (id == R.id.action_add_list) {
             Bundle userBundleData = new Bundle();
-            userBundleData.putString("EMAIL", userEmailSharePref);
-            userBundleData.putString("USERID", userIdSharePref);
+            userBundleData.putString("EMAIL", mUserEmailSharePref);
+            userBundleData.putString("USERID", mUserIdSharePref);
             userBundleData.putString("TASK_ACTION", "add");
             ListAddFragment listAddFragment = new ListAddFragment();
             listAddFragment.setArguments(userBundleData);
@@ -144,27 +149,22 @@ public class StationActivity extends AppCompatActivity implements
         } else if (id == R.id.action_settings){
             AlertDialog.Builder settingsAlertDialog = new AlertDialog.Builder(this);
             settingsAlertDialog.setTitle(R.string.settings)
-                    .setItems(R.array.view_types, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+                .setItems(R.array.view_types, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
 
-                            getSharedPreferences(getString(R.string.PREFS_FILE), 0).edit()
-                                    .putInt(getString(R.string.PREFS_VIEW_MODE), which).apply();
-                            taskViewMode = which;
+                        getSharedPreferences(getString(R.string.PREFS_FILE), 0).edit()
+                                .putInt(getString(R.string.PREFS_VIEW_MODE), which).apply();
+                        mTaskViewMode = which;
 
-                            Log.i(TAG, "Selected"+ which);
-                            Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
-                            Log.i(TAG, "Current Fragment: " + f.getClass().getCanonicalName());
-                            if (f instanceof DoItListDisplayFragment){
-                                if(taskViewMode == DoItListDisplayFragment.VERBOSE_VEW){
-                                    ((DoItListDisplayFragment) f).setVerboseRecyclerView();
-                                } else{
-                                    ((DoItListDisplayFragment) f).setCompactRecyclerView();
-                                }
-                            }
+                        Log.i(TAG, "Selected"+ which);
+                        Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
+                        Log.i(TAG, "Current Fragment: " + f.getClass().getCanonicalName());
+                        if (f instanceof DoItListDisplayFragment){
+                            ((DoItListDisplayFragment) f).refreshView();
                         }
-                    });
+                    }
+                });
             settingsAlertDialog.show();
-
         }  else if (id == R.id.action_share) {
 //            Toast.makeText(this, "Share button clicked",
 //                    Toast.LENGTH_SHORT)
@@ -174,7 +174,13 @@ public class StationActivity extends AppCompatActivity implements
             // set the type
             shareIntent.setType("text/plain");
             // build message to be shared
-            String shareMessage = "Don't let your dreams be dreams. Just Do It!";
+            String shareMessage = "Don't let your dreams be dreams. Just Do It!\n";
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.station_container);
+            Log.i(TAG, "Current Fragment: " + f.getClass().getCanonicalName());
+            if (f instanceof DoItListDisplayFragment){
+                shareMessage += ((DoItListDisplayFragment) f).getStringOfTasks();
+            }
+
             // add message
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
             // start the chooser for sharing
@@ -200,7 +206,7 @@ public class StationActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void itemClickedToBeDeleted(DoItList item) {
+    public void deleteDoItList(DoItList item) {
         String listURL = "http://cssgate.insttech.washington.edu/~_450atm10/android/station.php?cmd=";
         listURL += "delete";
         listURL += "&listID=" + item.getListID();

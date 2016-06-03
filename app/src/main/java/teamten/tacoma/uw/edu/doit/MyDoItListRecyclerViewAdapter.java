@@ -16,6 +16,9 @@ import teamten.tacoma.uw.edu.doit.model.DoItList;
 
 import java.util.List;
 
+/**
+ * An adapter to efficiently display DoItLists. Implements multiple listeners for interaction.
+ */
 public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItListRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "DoItListRecyclerView";
@@ -95,7 +98,6 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                                                 if (newTitle.length() > 0 && !newTitle.equals("") ) {
                                                     // query database
                                                     mListTitleListener.updateListTitle(holder.mListItem.getListID(), newTitle);
-//
                                                     holder.mListItem.setTitle(newTitle);
                                                     notifyDataSetChanged();
                                                 } else {
@@ -116,7 +118,7 @@ public class MyDoItListRecyclerViewAdapter extends RecyclerView.Adapter<MyDoItLi
                         case 1:
                             listOfListsData.remove(position);
                             notifyItemRemoved(position);
-                            mDeleteListListener.itemClickedToBeDeleted(holder.mListItem);
+                            mDeleteListListener.deleteDoItList(holder.mListItem);
                             break;
                         case 2:
                             System.out.println("Dialog button clicked: Cancel");
